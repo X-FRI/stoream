@@ -1,0 +1,1 @@
+let banner = "Stoream WebUI"
