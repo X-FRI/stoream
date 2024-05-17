@@ -16,6 +16,9 @@ jobs:
         scala: [3.3.1]
         java: [graal_22.3.0@17]
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: ./stoream-engine
     steps:
       - name: Checkout current branch (full)
         uses: actions/checkout@v3
@@ -42,8 +45,6 @@ jobs:
 
       - name: Build
         run: sbt compile
-        working-directory: ./stoream-engine
 
       - name: Test
         run: sbt test
-        working-directory: ./stoream-engine

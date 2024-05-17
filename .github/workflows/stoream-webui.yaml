@@ -5,6 +5,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./stoream-webui
+
     strategy:
       matrix:
         node-version: [20]
@@ -21,10 +25,9 @@ jobs:
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
-      working-directory: ./stoream-webui
+
     - name: Rescript build
       run: pnpm res:build
-      working-directory: ./stoream-webui
+
     - name: Rescript build
       run: pnpm build
-      working-directory: ./stoream-webui
