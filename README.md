@@ -9,14 +9,13 @@
 - Issues: https://github.com/x-fri/stoream/issues
 - Contribution: https://github.com/x-fri/stoream/pulls
 
-| 模块           | 状态                                                                                                                                                                          |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| stoream-engine | [![stoream-engine](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml) |
-| stoream-webui  | [![stoream-webui](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml)    |
+  | 模块           | 状态                                                                                                                                                                          |
+  | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | stoream-engine | [![stoream-engine](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml) |
+  | stoream-webui  | [![stoream-webui](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml)    |
 
 ## 开发文档
 
-### 前端
 
 | 语言       | 版本  |
 | ---------- | ----- |
@@ -28,6 +27,37 @@
 | ------ | ------------- |
 | NodeJS | 20.13.1 (LTS) |
 | Pnpm   | v9.1.1        |
+
+对于 NodeJS，在 *nix 操作系统上推荐使用 [NVM](https://github.com/nvm-sh/nvm) 管理版本:
+> NVM: Node Version Manager - POSIX-compliant bash script to manage multiple active node.js versions 
+
+```shell
+# 使用 curl 安装：
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+# 或 wget:
+
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
+
+然后安装 NodeJS 20.13.1:
+
+```shell
+nvm install 20
+```
+
+再通过 npm 安装 pnpm:
+
+```shell
+# 可选，换源: npm config set registry https://registry.npmmirror.com
+npm install -g pnpm
+# 可选，换源: pnpm config set registry https://registry.npmmirror.com
+```
+
+至此，`stoream-webui` 开发工具链已经配置完成，可以进入 `stoream-webui` 目录并执行 `pnpm install && pnpm dev` 进行开发。
+
+#### 依赖信息
 
 | 依赖                        | 版本      |
 | --------------------------- | --------- |
@@ -55,6 +85,42 @@
 | 工具链 | 版本   |
 | ------ | ------ |
 | SBT    | v1.9.9 |
+
+对于 Java 21，这里推荐使用 GraalVM，如果你已经有 Java 21 的环境，可以忽略此步骤:
+
+```shell
+# 通过 wget 下载
+wget https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz
+
+# 或 通过 curl
+curl https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz
+
+# 其他操作系统用户可访问: https://www.graalvm.org/downloads/#
+```
+
+本项目后端使用 Java + Scala 混合开发并使用 [sbt](https://www.scala-sbt.org/) 进行构建，可以通过 [coursier](https://get-coursier.io/docs/cli-installation) 一次性安装好环境:
+
+```shell
+# 在 Linux 上：
+curl -fL "https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz" | gzip -d > cs
+
+# 在 Windows 上 (Powershell)：
+Invoke-WebRequest -Uri "https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-win32.zip" -OutFile "cs-x86_64-pc-win32.zip"
+Expand-Archive -Path "cs-x86_64-pc-win32.zip" -DestinationPath .
+Rename-Item -Path "cs-x86_64-pc-win32.exe" -NewName "cs.exe"
+Remove-Item -Path "cs-x86_64-pc-win32.zip"
+.\cs setup
+
+# 在 Windows 上 (CMD):
+curl -fLo cs-x86_64-pc-win32.zip https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-win32.zip
+tar -xf cs-x86_64-pc-win32.zip
+move cs-x86_64-pc-win32.exe cs.exe
+.\cs setup
+```
+
+至此，`stoream-engine` 开发工具链已经配置完成，可以进入 `stoream-engine` 目录执行 `sbt` 进行开发。
+
+#### 依赖信息
 
 | 依赖                | 版本   |
 | ------------------- | ------ |
