@@ -12,7 +12,7 @@
 | 模块           | 状态                                                                                                                                                                          |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | stoream-engine | [![stoream-engine](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml) |
-| stoream-webui | [![stoream-webui](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml) |
+| stoream-webui  | [![stoream-webui](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml)    |
 
 ## 开发文档
 
@@ -31,6 +31,7 @@
 
 | 依赖                        | 版本      |
 | --------------------------- | --------- |
+| @geist-ui/core              | ^2.3.8"   |
 | @testing-library/jest-dom   | ^5.17.0   |
 | @testing-library/react      | ^13.4.0   |
 | @testing-library/user-event | ^13.5.0   |
