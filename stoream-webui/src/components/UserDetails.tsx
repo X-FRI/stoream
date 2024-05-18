@@ -1,15 +1,19 @@
 import About from './About'
 import React from 'react'
-import { Avatar, Drawer } from '@geist-ui/core'
+import { Avatar, Drawer, User } from '@geist-ui/core'
 
 function UserDetails() {
     const [userDetailsComponent, updateUserDetailsComponent] = React.useState(false)
     return (
         <>
-            <Avatar text='M' onClick={() => updateUserDetailsComponent(true)} />
+            <User src="/src/assets/logo.png" name="Muqiu Han" onClick={() => updateUserDetailsComponent(true)} />
             <Drawer visible={userDetailsComponent} onClose={() => updateUserDetailsComponent(false)} placement="left">
-                <Drawer.Title>Drawer</Drawer.Title>
-                <Drawer.Subtitle>This is a drawer</Drawer.Subtitle>
+                <Drawer.Title>
+                    <Avatar src="/src/assets/logo.png" />
+                </Drawer.Title>
+                <Drawer.Subtitle>
+                    Muqiu Han
+                </Drawer.Subtitle>
                 <Drawer.Content>
                     <About />
                 </Drawer.Content>
