@@ -8,7 +8,9 @@ function Starter() {
                     <Text h4 my={0}>Stoream WebUI</Text>
                     <Text>极简主义者的网盘系统</Text>
                     <Card.Footer>
-                        <Link color target="_blank" href="https://github.com/x-fri/stoream">Visit source code on GitHub.</Link>
+                        <Link icon block underline color href="https://github.com/x-fri/stoream">
+                            Visit source code on GitHub.
+                        </Link>
                     </Card.Footer>
                 </Card>
             </Grid>
@@ -17,7 +19,9 @@ function Starter() {
                     <Text h4 my={0}>Stoream WebUI</Text>
                     <Text>极简主义者的网盘系统</Text>
                     <Card.Footer>
-                        <Link target="_blank" href="http://101.42.54.166/plugins/gitiles/stoream">Visit source code on Gerrit.</Link>
+                        <Link icon block underline color href="http://101.42.54.166/plugins/gitiles/stoream">
+                            Visit source code on Gerrit.
+                        </Link>
                     </Card.Footer>
                 </Card>
             </Grid>
