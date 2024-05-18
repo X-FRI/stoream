@@ -61,7 +61,8 @@ npm install -g pnpm
 
 | 依赖                        | 版本      |
 | --------------------------- | --------- |
-| @geist-ui/core              | ^2.3.8"   |
+| @geist-ui/core              | ^2.3.8    |
+| @geist-ui/icons 	      | ^1.0.2    |
 | @testing-library/jest-dom   | ^5.17.0   |
 | @testing-library/react      | ^13.4.0   |
 | @testing-library/user-event | ^13.5.0   |
@@ -73,7 +74,6 @@ npm install -g pnpm
 | react-dom                   | ^18.3.1   |
 | react-scripts               | "5.0.1    |
 | typescript                  | ^4.9.5    |
-| web-vitals                  | ^2.1.     |
 
 ### 后端
 

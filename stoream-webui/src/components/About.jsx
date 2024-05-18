@@ -1,6 +1,6 @@
 import { Card, Grid, Link, Text } from '@geist-ui/core'
 
-function Starter() {
+function About() {
     return (
         <Grid.Container gap={1.5}>
             <Grid xs={12} justify="center">
@@ -29,4 +29,4 @@ function Starter() {
     )
 }
 
-export default Starter
+export default About
