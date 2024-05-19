@@ -1,4 +1,4 @@
-import Tree from "@geist-ui/core/esm/tree/tree"
+import { Tree } from "@geist-ui/core"
 
 const Folders = () => {
     /*
@@ -9,25 +9,21 @@ const Folders = () => {
     */
     const folderTree = [
         {
-            name: 'bin',
+            name: 'Home',
             path: '/bin',
             sub: [
-                { name: 'subBin', path: '/bin/subBin' },
-                { name: 'subDocs', path: '/bin/subDocs' },
+                { name: 'Document', path: '/bin/subBin', sub : [
+                    { name: 'Books', path: '/bin/subBin'}
+                ] },
+                { name: 'Test', path: '/bin/subDocs' },
             ]
         },
         { name: 'docs', path: '/docs' },
     ]
 
-    const handleClick = (path) => {
-        console.log(path)
-        // window.location.href = `/${path}`
-        window.location.href = `/`
-    }
-
     const mapFolder = (folder) => {
         if (folder.sub === undefined) {
-            return <Tree.Folder name={folder.name} onClick={() => handleClick(folder.path)} />
+            return <Tree.Folder name={folder.name} onClick={() => console.log(folder.path)} />
         } else {
             const subFolder = folder.sub.map(mapFolder)
             return (

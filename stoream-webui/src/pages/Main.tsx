@@ -12,17 +12,25 @@ const Main = ({ hidden }) => {
             <Page dotBackdrop width="95%" padding={0}>
                 <UserDetails />
 
-                <Grid.Container justify='center' marginTop={2}>
-                    <Grid xs={24}>
-                        <Header />
+                <Spacer h={2} />
+                <Grid.Container>
+                    <Grid xs={4}>
+                        <Folders />
                     </Grid>
-                    <Spacer inline h={2} />
-                    <Grid xs={24}>
-                        {content}
-                    </Grid>
-                    <Spacer inline h={4} />
-                    <Grid xs={24} justify='center'>
-                        <Pagination count={20} initialPage={1} />
+                    <Grid xs={20}>
+                        <Grid.Container justify='center'>
+                            <Grid xs={24}>
+                                <Header />
+                            </Grid>
+                            <Spacer inline h={2} />
+                            <Grid xs={24}>
+                                {content}
+                            </Grid>
+                            <Spacer inline h={4} />
+                            <Grid xs={24} justify='center'>
+                                <Pagination count={20} initialPage={1} />
+                            </Grid>
+                        </Grid.Container>
                     </Grid>
                 </Grid.Container>
             </Page>
