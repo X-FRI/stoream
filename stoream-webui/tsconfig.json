@@ -21,6 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
     "allowJs": true,
+    "strictNullChecks": false
     
   },
   "include": ["src"],

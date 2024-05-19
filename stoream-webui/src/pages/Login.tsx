@@ -44,8 +44,8 @@ const Login = () => {
     const [MainHidden, setMainHidden] = React.useState(true)
     const [LoginHidden, setLoginHidden] = React.useState(false)
     const { visible, setVisible, bindings } = useModal()
-    const usernameRef = React.useRef(null)
-    const passwordRef = React.useRef(null)
+    const usernameRef: any = React.useRef("")
+    const passwordRef: any = React.useRef("")
 
     return (
         <>

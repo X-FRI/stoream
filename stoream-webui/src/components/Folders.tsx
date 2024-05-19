@@ -15,9 +15,18 @@ const Folders = () => {
                     name: 'Document', path: '/bin/subBin', sub: [
                         { name: 'Books', path: '/bin/subBin' }
                     ]
-                }
+                },
+                { name: 'Videos' },
+                { name: 'Pictures' },
+                { name: 'Workspace' },
+                { name: 'Applications' },
+                { name: 'Music' },
+                { name: 'Mail' }
             ]
-        }
+        },
+        { name: 'User' },
+        { name: 'Softwares' },
+
     ]
 
     const mapFolder = (folder) => {
