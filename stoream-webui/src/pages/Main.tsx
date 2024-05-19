@@ -2,8 +2,11 @@ import { Grid, Page, Pagination, Spacer } from "@geist-ui/core"
 import UserDetails from "../components/UserDetails"
 import Header from "../components/Header"
 import Files from "../components/Files"
+import Folders from "../components/Folders"
 
 const Main = ({ hidden }) => {
+    const uri = window.location.pathname
+    const content = (uri === '/' ? <Files /> : <Folders />)
     return (
         <div hidden={hidden}>
             <Page dotBackdrop width="95%" padding={0}>
@@ -15,7 +18,7 @@ const Main = ({ hidden }) => {
                     </Grid>
                     <Spacer inline h={2} />
                     <Grid xs={24}>
-                        <Files />
+                        {content}
                     </Grid>
                     <Spacer inline h={4} />
                     <Grid xs={24} justify='center'>
