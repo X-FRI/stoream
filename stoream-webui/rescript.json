@@ -10,9 +10,18 @@
   },
   "suffix": ".res.mjs",
   "bs-dependencies": [
-    "@rescript/core"
+    "@rescript/core",
+    "@rescript/react"
   ],
   "bsc-flags": [
     "-open RescriptCore"
-  ]
+  ],
+  "jsx": {
+    "version": 4
+  },
+  "gentypeconfig": {
+    "module": "esmodule",
+    "moduleResolution": "node",
+    "generatedFileExtension": ".gen.tsx"
+  }
 }
