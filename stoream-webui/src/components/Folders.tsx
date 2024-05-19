@@ -10,15 +10,14 @@ const Folders = () => {
     const folderTree = [
         {
             name: 'Home',
-            path: '/bin',
             sub: [
-                { name: 'Document', path: '/bin/subBin', sub : [
-                    { name: 'Books', path: '/bin/subBin'}
-                ] },
-                { name: 'Test', path: '/bin/subDocs' },
+                {
+                    name: 'Document', path: '/bin/subBin', sub: [
+                        { name: 'Books', path: '/bin/subBin' }
+                    ]
+                }
             ]
-        },
-        { name: 'docs', path: '/docs' },
+        }
     ]
 
     const mapFolder = (folder) => {

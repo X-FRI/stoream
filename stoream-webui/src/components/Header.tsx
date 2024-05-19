@@ -1,5 +1,5 @@
-import { Breadcrumbs, Button, Grid, Spacer } from "@geist-ui/core";
-import { Upload, FilePlus } from '@geist-ui/icons'
+import { Breadcrumbs, Button, Grid, Spacer, Tooltip } from "@geist-ui/core";
+import { Upload, FolderPlus } from '@geist-ui/icons'
 
 function Header() {
     return (
@@ -14,9 +14,13 @@ function Header() {
                 </Grid>
 
                 <Grid xs={4} justify="right">
-                    <Button auto scale={0.25} icon={<Upload size={15} />} />
+                    <Tooltip text="Upload file">
+                        <Button auto scale={0.25} icon={<Upload size={15} />} />
+                    </Tooltip>
                     <Spacer inline w={.5} />
-                    <Button auto scale={0.25} icon={<FilePlus size={15} />} />
+                    <Tooltip text="New folder">
+                        <Button auto scale={0.25} icon={<FolderPlus size={15} />} />
+                    </Tooltip>
                 </Grid>
             </Grid.Container>
         </>
