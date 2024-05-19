@@ -1,4 +1,4 @@
-import { Button, Display, Grid, Image, Input, Modal, Page, Spacer, useModal } from "@xfri/geist-ui-core";
+import { Button, Display, Grid, Image, Input, Modal, Page, Spacer, useModal } from "@geist-ui/core";
 import { User, LogIn } from '@geist-ui/icons'
 import React from "react";
 import { RequestLogin, t as LoginUser } from "../model/User.gen.tsx"

@@ -18,7 +18,6 @@ function Files() {
     return (
         <>
             <Table data={data}>
-
                 <Table.Column prop="name" label="name" />
                 <Table.Column prop="size" label="size" />
                 <Table.Column prop="date" label="date" />
