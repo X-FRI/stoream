@@ -3,22 +3,33 @@ import { LogIn, User } from "@geist-ui/icons"
 import React from "react";
 import { RequestLogin, t as LoginUser } from "../model/User.gen.tsx"
 
-const login = (user, setErrorMessage, setErrorMessageTitle, setErrorModalVisible) => {
-    let result = RequestLogin.request(user)
-    if (result.TAG === "Error") {
-        setErrorMessageTitle("There was a problem during login")
-        setErrorModalVisible(true)
-        if (result._0 === "UsernameIsEmpty") {
-            setErrorMessage("The username is empty!")
-        } else if (result._0 === "PasswordIsEmpty") {
-            setErrorMessage("The password is empty!")
-        } else {
-            setErrorMessage("Unknown error")
-        }
-        return false
-    } else {
-        return true
-    }
+const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalVisible, setMainHidden, setLoginHidden) => {
+    await
+        RequestLogin
+            .request(user)
+            .then(result => {
+                if (result.TAG === "Error") {
+                    setErrorMessageTitle("There was a problem during login")
+                    setErrorModalVisible(true)
+                    if (result._0 === "UsernameIsEmpty") {
+                        setErrorMessage("The username is empty!")
+                    } else if (result._0 === "PasswordIsEmpty") {
+                        setErrorMessage("The password is empty!")
+                    } else if (result._0 === "WrongPassword") {
+                        setErrorMessage("wrong user name or password")
+                    } else {
+                        setErrorMessage("Unknown error")
+                    }
+                } else {
+                    setMainHidden(false)
+                    setLoginHidden(true)
+                }
+            })
+            .catch(reason => {
+                setErrorMessageTitle("There was a problem during login")
+                setErrorMessage(String(reason))
+                setErrorModalVisible(true)
+            })
 }
 
 const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible, setMainHidden, setLoginHidden }) => {
@@ -47,23 +58,21 @@ const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible, setMainH
                         type="secondary"
                         scale={0.85}
                         loading={loginButtonLoading}
-                        onClick={() => {
+                        onClick={async () => {
                             setLoginButtonLoading(true)
-                            if (login(
+                            await login(
                                 {
                                     username: usernameRef.current.value,
                                     password: passwordRef.current.value
                                 },
                                 setErrorMessage,
                                 setErrorMessageTitle,
-                                setVisible
-                            )) {
-                                setMainHidden(false)
-                                setLoginHidden(true)
-                            }
+                                setVisible,
+                                setMainHidden,
+                                setLoginHidden
+                            )
                             setLoginButtonLoading(false)
-                        }}
-                    >
+                        }}>
                         Login
                     </Button>
                 </Grid>
