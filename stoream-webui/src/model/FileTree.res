@@ -1,8 +1,7 @@
 @genType
-type rec t = array<file>
-and file = {
+type rec t = {
   name: string,
-  sub: t,
+  sub: array<t>,
   path: string,
 }
 

@@ -10,15 +10,9 @@ function UserDetails() {
                 A dumb panda
             </User>
             <Drawer visible={userDetailsComponent} onClose={() => updateUserDetailsComponent(false)} placement="bottom">
-                <Drawer.Title>
-                    <Avatar src="/src/assets/logo.png" />
-                </Drawer.Title>
-                <Drawer.Subtitle>
-                    Muqiu Han
-                </Drawer.Subtitle>
-                <Drawer.Content>
-                    <About />
-                </Drawer.Content>
+                <Drawer.Title> <Avatar src="/src/assets/logo.png" /> </Drawer.Title>
+                <Drawer.Subtitle> Muqiu Han </Drawer.Subtitle>
+                <Drawer.Content> <About /> </Drawer.Content>
             </Drawer>
         </>
     )
