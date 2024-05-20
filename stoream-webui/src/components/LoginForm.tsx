@@ -53,6 +53,7 @@ const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible, setMainH
                 </Grid>
                 <Spacer h={2} />
                 <Grid xs={24} justify="center" alignContent="center" alignItems="center">
+                    {/* @ts-ignore comment */}
                     <Button
                         icon={<LogIn />}
                         type="secondary"

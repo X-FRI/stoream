@@ -11,6 +11,7 @@ const Main = ({ hidden }) => {
             <Page width="80%">
                 <Grid.Container gap={1}>
                     <Grid xs> <DiskCapacity /> </Grid>
+                    {/* @ts-ignore comment */}
                     <Grid xs={5} justify="right"> <UserDetails /> </Grid>
                     <Grid xs={24}> <Header /> </Grid>
                     <Spacer h={2} />

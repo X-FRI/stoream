@@ -22,7 +22,8 @@
   },
   "gentypeconfig": {
     "module": "esmodule",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "shims": true,
     "generatedFileExtension": ".gen.tsx"
   }
 }
