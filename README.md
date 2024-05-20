@@ -41,13 +41,13 @@ This project is mainly constructed using the following technologies:
 
 #### WebUI
 
-- For NodeJS, we recommend using [NVM](https://github.com/nvm-sh/nvm) to manage versions (If you already have a NodeJS environment, you can skip this step):
+For NodeJS, we recommend using [NVM](https://github.com/nvm-sh/nvm) to manage versions (If you already have a NodeJS environment, you can skip this step):
 
 ```shell
 nvm install 20
 ```
 
-This project is built using [pnpm](https://pnpm.io/) (If you don’t want to use pnpm, you can skip this step and use npm directly):
+This project is built using [pnpm](https://pnpm.io/), so:
 
 ```shell
 npm install -g pnpm
@@ -60,7 +60,30 @@ pnpm dev
 ```
 
 #### Engine
-...
+
+For Rust, we recommend using [rustup](https://rustup.rs/) to manage its toolchain.
+
+Then use the following command to install the latest stable rust:
+
+```
+rustup install stable
+```
+
+If you have installed Rust before and want to update to the latest stable version, you can use the following command:
+
+```
+rustup update
+```
+
+> [!NOTE]
+> *OPTIONAL*: In addition, we also use [UPX](https://upx.github.io/) to > optimize the size of the executable file. Most Linux distributions can > be installed through the package manager, such as on openSUSE:
+> ```
+> zypper in upx
+> ```
+> then
+> ```
+> upx --best --lzma target/release/stoream-engine
+> ```
 
 ## [LICENSE](./LICENSE)
 
