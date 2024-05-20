@@ -1,6 +1,7 @@
 import { Tree } from "@geist-ui/core"
-import { TestData } from "../model/FileTree.gen.tsx"
+import { RequestPath } from "../model/FileTree.gen.tsx"
 import { t as Folder } from "../model/FileTree.gen.tsx"
+import React, { useState } from "react"
 
 const mapFolder = (folder: Folder) => {
     if (folder.sub === undefined) {
@@ -16,7 +17,14 @@ const mapFolder = (folder: Folder) => {
 }
 
 const FileTree = () => {
-    const content = TestData.data.map(mapFolder)
+    const [content, setContent] = useState(null)
+    React.useEffect(() => {
+        RequestPath.request("").then(content => {
+            setContent(content)
+            setContent(mapFolder(content))
+    })
+    }, [content])
+
     return (
         <>
             <Tree>
