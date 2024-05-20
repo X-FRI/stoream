@@ -24,24 +24,24 @@ dependencies:
     specifier: ^0.8.3
     version: 0.8.3
   react:
-    specifier: ^18.2.0
+    specifier: ^18.3.1
     version: 18.3.1
   react-dom:
-    specifier: ^18.2.0
+    specifier: ^18.3.1
     version: 18.3.1(react@18.3.1)
 
 devDependencies:
   '@types/react':
-    specifier: ^18.2.66
+    specifier: ^18.3.2
     version: 18.3.2
   '@types/react-dom':
-    specifier: ^18.2.22
+    specifier: ^18.3.0
     version: 18.3.0
   '@typescript-eslint/eslint-plugin':
-    specifier: ^7.2.0
+    specifier: ^7.9.0
     version: 7.9.0(@typescript-eslint/parser@7.9.0)(eslint@8.57.0)(typescript@5.4.5)
   '@typescript-eslint/parser':
-    specifier: ^7.2.0
+    specifier: ^7.9.0
     version: 7.9.0(eslint@8.57.0)(typescript@5.4.5)
   '@vitejs/plugin-react':
     specifier: ^4.2.1
@@ -50,19 +50,19 @@ devDependencies:
     specifier: ^8.57.0
     version: 8.57.0
   eslint-plugin-react-hooks:
-    specifier: ^4.6.0
+    specifier: ^4.6.2
     version: 4.6.2(eslint@8.57.0)
   eslint-plugin-react-refresh:
-    specifier: ^0.4.6
+    specifier: ^0.4.7
     version: 0.4.7(eslint@8.57.0)
   rescript:
     specifier: ^11.1.0
     version: 11.1.0
   typescript:
-    specifier: ^5.2.2
+    specifier: ^5.4.5
     version: 5.4.5
   vite:
-    specifier: ^5.2.0
+    specifier: ^5.2.11
     version: 5.2.11
 
 packages:
@@ -1063,7 +1063,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001620
-      electron-to-chromium: 1.4.773
+      electron-to-chromium: 1.4.774
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.0)
     dev: true
@@ -1166,8 +1166,8 @@ packages:
       esutils: 2.0.3
     dev: true
 
-  /electron-to-chromium@1.4.773:
-    resolution: {integrity: sha512-87eHF+h3PlCRwbxVEAw9KtK3v7lWfc/sUDr0W76955AdYTG4bV/k0zrl585Qnj/skRMH2qOSiE+kqMeOQ+LOpw==}
+  /electron-to-chromium@1.4.774:
+    resolution: {integrity: sha512-132O1XCd7zcTkzS3FgkAzKmnBuNJjK8WjcTtNuoylj7MYbqw5eXehjQ5OK91g0zm7OTKIPeaAG4CPoRfD9M1Mg==}
     dev: true
 
   /esbuild@0.20.2:

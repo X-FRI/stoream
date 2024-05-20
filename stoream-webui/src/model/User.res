@@ -39,7 +39,7 @@ module LoginResponse = {
 
 @genType
 module RequestLogin: {
-  let request: t => RescriptCore.Promise.t<result<Js.Json.t, Errors.t>>
+  let request: t => promise<result<Js.Json.t, Errors.t>>
 } = {
   open Fetch
 
