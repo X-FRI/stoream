@@ -16,6 +16,7 @@
 | Module | Status                                                                                                                                                                     |
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | WebUI  | [![stoream-webui](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml) |
+| Engine | [![Test Rust project](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml) |
 
 </center>
 

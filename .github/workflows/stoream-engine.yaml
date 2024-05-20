@@ -1,11 +1,11 @@
-name: Test Rust project
+name: stoream-engine
 on: [push]
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        working-directory: ./stoream-webui
+        working-directory: ./stoream-engine
 
     strategy:
       matrix:
