@@ -2,7 +2,7 @@ import { Capacity, Card, Divider, Grid, Page, Pagination, Spacer, Tooltip, useTh
 import UserDetails from "../components/UserDetails"
 import Header from "../components/Header"
 import Files from "../components/Files"
-import Folders from "../components/Folders"
+import Folders from "../components/FileTree"
 
 const Main = ({ hidden }) => {
     const theme = useTheme()
