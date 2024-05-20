@@ -11,7 +11,8 @@
   "suffix": ".res.mjs",
   "bs-dependencies": [
     "@rescript/core",
-    "@rescript/react"
+    "@rescript/react",
+    "@glennsl/rescript-fetch"
   ],
   "bsc-flags": [
     "-open RescriptCore"
@@ -21,7 +22,8 @@
   },
   "gentypeconfig": {
     "module": "esmodule",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "shims": true,
     "generatedFileExtension": ".gen.tsx"
   }
 }

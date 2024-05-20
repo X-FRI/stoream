@@ -9,13 +9,8 @@ module Errors = {
   type t =
     | UsernameIsEmpty
     | PasswordIsEmpty
-
-  let toString = error => {
-    switch error {
-    | UsernameIsEmpty => "The username is empty!"
-    | PasswordIsEmpty => "The password is empty!"
-    }
-  }
+    | WrongPassword
+    | RequestError
 }
 
 @genType
@@ -32,9 +27,22 @@ module Encrypted = {
 }
 
 @genType
+module LoginResponse = {
+  let status = response => {
+    response
+    ->Js.Json.decodeObject
+    ->Option.flatMap(response => {
+      response->Js_dict.get("status")
+    })
+  }
+}
+
+@genType
 module RequestLogin: {
-  let request: t => result<t, Errors.t>
+  let request: t => RescriptCore.Promise.t<result<Js.Json.t, Errors.t>>
 } = {
+  open Fetch
+
   /// Check whether the logged in expression is legal.
   let check = user => {
     if Js.String.length(user.username) == 0 {
@@ -47,9 +55,26 @@ module RequestLogin: {
   }
 
   let request = user => {
-    check(user)->Result.map(user => {
-      // login logic
-      user
-    })
+    switch check(user)->Result.map(Encrypted.encryptedUser) {
+    | Ok(user) =>
+      Fetch.fetch(
+        "http://localhost:9993/login?username=" ++ user.username ++ "&password=" ++ user.password,
+        {mode: #cors},
+      )
+      ->Promise.then(Response.json)
+      ->Promise.thenResolve(response => {
+        response
+        ->LoginResponse.status
+        ->Option.map(status => {
+          switch status {
+          | Js.Json.String("OK") => Ok(response)
+          | Js.Json.String("ERR") => Error(Errors.WrongPassword)
+          | _ => Error(Errors.RequestError)
+          }
+        })
+        ->Option.getOr(Error(Errors.RequestError))
+      })
+    | Error(e) => Promise.resolve(Error(e))
+    }
   }
 }

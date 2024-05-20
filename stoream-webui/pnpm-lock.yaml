@@ -11,6 +11,9 @@ dependencies:
   '@geist-ui/icons':
     specifier: ^1.0.2
     version: 1.0.2(@geist-ui/core@2.3.8)(react@18.3.1)
+  '@glennsl/rescript-fetch':
+    specifier: ^0.2.0
+    version: 0.2.0
   '@rescript/core':
     specifier: ^1.3.0
     version: 1.3.0(rescript@11.1.0)
@@ -559,6 +562,10 @@ packages:
     dependencies:
       '@geist-ui/core': 2.3.8(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
+    dev: false
+
+  /@glennsl/rescript-fetch@0.2.0:
+    resolution: {integrity: sha512-0tsEqJ/6/WBm02prM4RYG+qpnNTaB8QKKIeQHXdDaE4C5YfA/nzjxMNW3CjsGIaEgyrAmmIXFS0kx24UjvOI6A==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
