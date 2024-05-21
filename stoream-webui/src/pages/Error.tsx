@@ -26,6 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import { Card, Divider, Grid, Page, Spacer } from "@geist-ui/core";
 import { useRouteError } from "react-router-dom";
 
 const Error = () => {
@@ -33,15 +34,26 @@ const Error = () => {
     console.log(error)
 
     return (
-        <>
-            <h1>Oops!</h1>
-            <p>Sorry, an unexpected error has occurred.</p>
-            <p>
-                <i>{
-                    error.statusText || error.message
-                }</i>
-            </p>
-        </>
+        <Page width="80%">
+            <Spacer h={10} />
+            <Spacer w={10} />
+            <Card shadow type="error">
+                <Grid.Container>
+                    <Grid xs={24} justify="center"><h1>Oops!</h1></Grid>
+                    <Divider h="1px" my={0} />
+                    <Grid xs={24} justify="center"><p>Sorry, an unexpected error has occurred.</p></Grid>
+                    <Divider h="1px" my={0} />
+                    <Grid xs={24} justify="center">
+                        <p>
+                            <i>{
+                                error.statusText || error.message
+                            }</i>
+                        </p>
+                    </Grid>
+                </Grid.Container>
+            </Card>
+            <Spacer w={10} />
+        </Page>
     )
 }
 

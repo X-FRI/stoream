@@ -41,6 +41,7 @@ const login = async (user, setToast, navigate) => {
                 if (result.TAG === "Error") {
                     setToast({ text: toString(result._0), type: "error" })
                 } else {
+                    setToast({ text: "Login successfull ", type: "success" })
                     navigate("/files")
                 }
             })
