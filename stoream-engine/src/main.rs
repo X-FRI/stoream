@@ -31,7 +31,6 @@ use tower_http::cors::{Any, CorsLayer};
 
 mod server;
 mod storage;
-mod user;
 
 #[tokio::main]
 async fn main() {
@@ -47,10 +46,12 @@ async fn main() {
         tokio::net::TcpListener::bind("localhost:9993")
             .await
             .unwrap(),
-        Router::new().route(
-            "/login",
-            routing::get(server::login::login).layer(cors.clone()),
-        ), // .route("/path", get(path).layer(cors)),
+        Router::new()
+            .route(
+                "/login",
+                routing::get(server::login::login).layer(cors.clone()),
+            )
+            .route("/filetree", routing::get(server::filetree::get).layer(cors)),
     );
     info!("stoream engine started at http://localhost:9993");
 

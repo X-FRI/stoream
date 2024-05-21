@@ -1,5 +1,4 @@
-use serde::{Deserialize, Serialize};
-
+use crate::server::request::path::Path;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -27,15 +26,18 @@ use serde::{Deserialize, Serialize};
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use super::file::Files;
+use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
+use colog::log::info;
+use serde_json::json;
 
-pub type DirectoryList = Vec<Directory>;
+use crate::storage::{filesystem::FileSystem, Storage};
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Directory {
-    pub dirname: String,
-    pub path: String,
-    pub size: u64,
-    pub files: Files,
-    pub sub: DirectoryList,
+pub async fn get(Query(path): Query<Path>) -> impl IntoResponse {
+    info!("request file tree: {}", path.path);
+
+    let storage = Box::new(FileSystem {
+        root: path.path.clone(),
+    });
+
+    (StatusCode::OK, Json(json!(storage.ls(path.path))))
 }

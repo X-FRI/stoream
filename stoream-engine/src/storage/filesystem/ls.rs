@@ -62,7 +62,7 @@ fn build_directory_structure(path: &Path) -> io::Result<Directory> {
 }
 
 impl Storage for FileSystem {
-    fn ls(path: String) -> super::directory::Directory {
+    fn ls(self, path: String) -> super::directory::Directory {
         build_directory_structure(Path::new(path.as_str())).unwrap()
     }
 }

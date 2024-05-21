@@ -31,8 +31,8 @@ pub mod directory;
 pub mod file;
 pub mod filesystem;
 
-trait Storage {
+pub trait Storage {
     /// Similar to the ls command in POSIX systems, returns all files and directories under path.
     /// TODO: Handle the situation when path is not a directory.
-    fn ls(path: String) -> Directory;
+    fn ls(self, path: String) -> Directory;
 }
