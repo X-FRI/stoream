@@ -89,7 +89,6 @@ async fn path(Query(path): Query<Path>) -> impl IntoResponse {
 
 async fn login(Query(user): Query<User>) -> impl IntoResponse {
     info!("{:?}", user);
-    sleep(Duration::from_secs(3));
     info!("request login {}", user.username);
     if user.username == "admin" && user.password == format!("{:x}", md5::compute("admin")) {
         info!("login to user {} successfully", user.username);

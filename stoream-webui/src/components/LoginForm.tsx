@@ -2,9 +2,9 @@ import { Button, Grid, Input, Spacer } from "@geist-ui/core"
 import { LogIn, User } from "@geist-ui/icons"
 import React from "react";
 import { RequestLogin, t as LoginUser } from "../model/User.gen.tsx"
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalVisible) => {
+const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalVisible, navigate) => {
     await
         RequestLogin
             .request(user)
@@ -22,7 +22,7 @@ const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalV
                         setErrorMessage("Unknown error")
                     }
                 } else {
-                    redirect("http://localhost:5173/details")
+                    navigate("/files")
                 }
             })
             .catch(reason => {
@@ -36,6 +36,7 @@ const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible }) => {
     const [loginButtonLoading, setLoginButtonLoading] = React.useState(false);
     const usernameRef: any = React.useRef("")
     const passwordRef: any = React.useRef("")
+    const navigate = useNavigate()
 
     return (
         <>
@@ -70,7 +71,8 @@ const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible }) => {
                                 },
                                 setErrorMessage,
                                 setErrorMessageTitle,
-                                setVisible
+                                setVisible,
+                                navigate,
                             )
                             setLoginButtonLoading(false)
                         }}>
