@@ -1,4 +1,4 @@
-import { Link, Table } from "@geist-ui/core"
+import { Card, Grid, Link, Pagination, Spacer, Table } from "@geist-ui/core"
 
 function Files() {
     const data = [
@@ -66,11 +66,22 @@ function Files() {
     ]
     return (
         <>
-            <Table hover data={data}>
-                <Table.Column prop="name" label="name" />
-                <Table.Column prop="size" label="size" />
-                <Table.Column prop="date" label="date" />
-            </Table>
+            <Card shadow>
+                <Grid.Container gap={1}>
+                    <Grid xs={24}>
+                        <Table hover data={data}>
+                            <Table.Column prop="name" label="name" />
+                            <Table.Column prop="size" label="size" />
+                            <Table.Column prop="date" label="date" />
+                        </Table>
+                    </Grid>
+                    <Spacer inline h={4} />
+                    <Grid xs={24} justify='center'>
+                        <Pagination count={20} initialPage={1} />
+                    </Grid>
+                </Grid.Container>
+            </Card>
+
         </>
     )
 }

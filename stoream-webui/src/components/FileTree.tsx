@@ -1,5 +1,4 @@
 import { Tree } from "@geist-ui/core"
-import { TestData } from "../model/FileTree.gen.tsx"
 import { t as Folder } from "../model/FileTree.gen.tsx"
 
 const mapFolder = (folder: Folder) => {
@@ -15,12 +14,11 @@ const mapFolder = (folder: Folder) => {
     }
 }
 
-const FileTree = () => {
-    const content = TestData.data.map(mapFolder)
+const FileTree = ({content}) => {
     return (
         <>
             <Tree>
-                {content}
+                {mapFolder(content)}
             </Tree>
         </>
     )

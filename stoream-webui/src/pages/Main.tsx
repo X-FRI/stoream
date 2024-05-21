@@ -4,10 +4,13 @@ import UserDetails from "../components/UserDetails"
 import Header from "../components/Header"
 import Files from "../components/Files"
 import FileTree from "../components/FileTree"
+import { useLoaderData } from "react-router-dom"
 
-const Main = ({ hidden }) => {
+const Main = () => {
+    const content = useLoaderData()
+
     return (
-        <div hidden={hidden}>
+        <>
             <Page width="80%">
                 <Grid.Container gap={1}>
                     <Grid xs> <DiskCapacity /> </Grid>
@@ -16,25 +19,13 @@ const Main = ({ hidden }) => {
                     <Grid xs={24}> <Header /> </Grid>
                     <Spacer h={2} />
                     <Grid.Container gap={1} >
-                        <Grid> <Card shadow paddingRight={5}> <FileTree /> </Card> </Grid>
+                        <Grid> <Card shadow paddingRight={5}> <FileTree content={content} /> </Card> </Grid>
                         <Spacer w={3} />
-                        <Grid xs>
-                            <Card shadow>
-                                <Grid.Container gap={1}>
-                                    <Grid xs={24}>
-                                        <Files />
-                                    </Grid>
-                                    <Spacer inline h={4} />
-                                    <Grid xs={24} justify='center'>
-                                        <Pagination count={20} initialPage={1} />
-                                    </Grid>
-                                </Grid.Container>
-                            </Card>
-                        </Grid>
+                        <Grid xs> <Files /> </Grid>
                     </Grid.Container>
                 </Grid.Container>
             </Page>
-        </div>
+        </>
     )
 }
 
