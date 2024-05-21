@@ -1,3 +1,4 @@
+use crate::server::request::path::Path;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -25,17 +26,18 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
+use colog::log::info;
+use serde_json::json;
 
-@genType.as("FileTree_t")
-type rec t = {
-  name: string,
-  size: int,
-  sub: array<t>,
-  path: string,
-  files: array<file>,
-}
-and file = {
-  filename: string,
-  filepath: string,
-  filesize: int,
+use crate::storage::{filesystem::FileSystem, Storage};
+
+pub async fn get(Query(path): Query<Path>) -> impl IntoResponse {
+    info!("request file tree: {}", path.path);
+
+    let storage = Box::new(FileSystem {
+        root: path.path.clone(),
+    });
+
+    (StatusCode::OK, Json(json!(storage.ls(path.path))))
 }

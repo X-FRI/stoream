@@ -25,17 +25,30 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
+use colog::log::{error, info};
+use serde_json::json;
 
-@genType.as("FileTree_t")
-type rec t = {
-  name: string,
-  size: int,
-  sub: array<t>,
-  path: string,
-  files: array<file>,
-}
-and file = {
-  filename: string,
-  filepath: string,
-  filesize: int,
+use crate::server::request::user::User;
+
+pub async fn login(Query(user): Query<User>) -> impl IntoResponse {
+    info!("request login {}", user.username);
+
+    if user.username == "admin" && user.password == format!("{:x}", md5::compute("admin")) {
+        info!("login to user {} successfully", user.username);
+        (
+            StatusCode::OK,
+            Json(json!({
+                "status": "OK",
+            })),
+        )
+    } else {
+        error!("login to user {} failed, wrong password", user.username);
+        (
+            StatusCode::OK,
+            Json(json!({
+                "status": "ERR"
+            })),
+        )
+    }
 }

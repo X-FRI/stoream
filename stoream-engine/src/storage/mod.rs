@@ -25,17 +25,14 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+use self::directory::Directory;
 
-@genType.as("FileTree_t")
-type rec t = {
-  name: string,
-  size: int,
-  sub: array<t>,
-  path: string,
-  files: array<file>,
-}
-and file = {
-  filename: string,
-  filepath: string,
-  filesize: int,
+pub mod directory;
+pub mod file;
+pub mod filesystem;
+
+pub trait Storage {
+    /// Similar to the ls command in POSIX systems, returns all files and directories under path.
+    /// TODO: Handle the situation when path is not a directory.
+    fn ls(self, path: String) -> Directory;
 }

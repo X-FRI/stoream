@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -25,17 +27,15 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+use super::file::Files;
 
-@genType.as("FileTree_t")
-type rec t = {
-  name: string,
-  size: int,
-  sub: array<t>,
-  path: string,
-  files: array<file>,
-}
-and file = {
-  filename: string,
-  filepath: string,
-  filesize: int,
+pub type DirectoryList = Vec<Directory>;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Directory {
+    pub dirname: String,
+    pub path: String,
+    pub size: u64,
+    pub files: Files,
+    pub sub: DirectoryList,
 }

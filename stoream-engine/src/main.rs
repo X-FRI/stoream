@@ -1,33 +1,36 @@
-use std::fs;
-
-use axum::{
-    extract::Query,
-    http::{HeaderValue, StatusCode},
-    response::IntoResponse,
-    routing::get,
-    Json, Router,
-};
-use colog::log::{error, info};
-use serde::{Deserialize, Serialize};
-use serde_json::json;
+/// Copyright (c) 2024 The X-Files Research Institute
+///
+/// All rights reserved.
+///
+/// Redistribution and use in source and binary forms, with or without modification,
+/// are permitted provided that the following conditions are met:
+///
+///     * Redistributions of source code must retain the above copyright notice,
+///       this list of conditions and the following disclaimer.
+///     * Redistributions in binary form must reproduce the above copyright notice,
+///       this list of conditions and the following disclaimer in the documentation
+///       and/or other materials provided with the distribution.
+///     * Neither the name of Stoream nor the names of its contributors
+///       may be used to endorse or promote products derived from this software
+///       without specific prior written permission.
+///
+/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+/// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+/// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+/// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+/// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+/// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+/// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+/// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+/// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+/// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+/// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+use axum::{http::HeaderValue, routing, Router};
+use colog::log::info;
 use tower_http::cors::{Any, CorsLayer};
 
-#[derive(Serialize, Deserialize, Debug)]
-struct User {
-    username: String,
-    password: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct Path {
-    path: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct Folder {
-    name: String,
-    path: String,
-}
+mod server;
+mod storage;
 
 #[tokio::main]
 async fn main() {
@@ -44,55 +47,13 @@ async fn main() {
             .await
             .unwrap(),
         Router::new()
-            .route("/login", get(login).layer(cors.clone()))
-            .route("/path", get(path).layer(cors)),
+            .route(
+                "/login",
+                routing::get(server::login::login).layer(cors.clone()),
+            )
+            .route("/filetree", routing::get(server::filetree::get).layer(cors)),
     );
     info!("stoream engine started at http://localhost:9993");
 
     server.await.unwrap();
-}
-
-fn get_dir_list(path: String) -> Vec<Folder> {
-    fs::read_dir(path)
-        .unwrap()
-        .filter(move |file| {
-            file.as_ref()
-                .map(|file| std::fs::metadata(file.path()).unwrap())
-                .map(|metadata| metadata.is_dir())
-                .unwrap()
-        })
-        .map(|dir| dir.unwrap())
-        .map(|dir_entry| Folder {
-            name: dir_entry.file_name().to_str().unwrap().to_string(),
-            path: dir_entry.path().to_str().unwrap().to_string(),
-        })
-        .collect::<Vec<_>>()
-}
-
-async fn path(Query(path): Query<Path>) -> impl IntoResponse {
-    info!("request path {}", path.path);
-
-    (StatusCode::OK, Json(json!(get_dir_list(path.path))))
-}
-
-async fn login(Query(user): Query<User>) -> impl IntoResponse {
-    info!("{:?}", user);
-    info!("request login {}", user.username);
-    if user.username == "admin" && user.password == format!("{:x}", md5::compute("admin")) {
-        info!("login to user {} successfully", user.username);
-        (
-            StatusCode::OK,
-            Json(json!({
-                "status": "OK",
-            })),
-        )
-    } else {
-        error!("login to user {} failed, wrong password", user.username);
-        (
-            StatusCode::OK,
-            Json(json!({
-                "status": "ERR"
-            })),
-        )
-    }
 }
