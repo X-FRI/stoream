@@ -16,19 +16,11 @@ const mapFolder = (folder: Folder) => {
     }
 }
 
-const FileTree = () => {
-    const [content, setContent] = useState(null)
-    React.useEffect(() => {
-        RequestPath.request("").then(content => {
-            setContent(content)
-            setContent(mapFolder(content))
-    })
-    }, [content])
-
+const FileTree = ({content}) => {
     return (
         <>
             <Tree>
-                {content}
+                {mapFolder(content)}
             </Tree>
         </>
     )

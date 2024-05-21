@@ -2,8 +2,9 @@ import { Button, Grid, Input, Spacer } from "@geist-ui/core"
 import { LogIn, User } from "@geist-ui/icons"
 import React from "react";
 import { RequestLogin, t as LoginUser } from "../model/User.gen.tsx"
+import { redirect } from "react-router-dom";
 
-const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalVisible, setMainHidden, setLoginHidden) => {
+const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalVisible) => {
     await
         RequestLogin
             .request(user)
@@ -21,8 +22,7 @@ const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalV
                         setErrorMessage("Unknown error")
                     }
                 } else {
-                    setMainHidden(false)
-                    setLoginHidden(true)
+                    redirect("http://localhost:5173/details")
                 }
             })
             .catch(reason => {
@@ -32,7 +32,7 @@ const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalV
             })
 }
 
-const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible, setMainHidden, setLoginHidden }) => {
+const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible }) => {
     const [loginButtonLoading, setLoginButtonLoading] = React.useState(false);
     const usernameRef: any = React.useRef("")
     const passwordRef: any = React.useRef("")
@@ -70,9 +70,7 @@ const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible, setMainH
                                 },
                                 setErrorMessage,
                                 setErrorMessageTitle,
-                                setVisible,
-                                setMainHidden,
-                                setLoginHidden
+                                setVisible
                             )
                             setLoginButtonLoading(false)
                         }}>
