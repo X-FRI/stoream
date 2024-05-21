@@ -1,26 +1,18 @@
 import { Button, Grid, Input, Spacer } from "@geist-ui/core"
-import { LogIn, User } from "@geist-ui/icons"
+import { LogIn, User as UserIcon } from "@geist-ui/icons"
 import React from "react";
-import { RequestLogin, t as LoginUser } from "../model/User.gen.tsx"
 import { useNavigate } from "react-router-dom";
+import { User as RequestUser } from "../model/Request.gen.tsx"
 
 const login = async (user, setErrorMessage, setErrorMessageTitle, setErrorModalVisible, navigate) => {
     await
-        RequestLogin
+        RequestUser
             .request(user)
             .then(result => {
                 if (result.TAG === "Error") {
-                    setErrorMessageTitle("There was a problem during login")
+                    setErrorMessageTitle(result._0.TAG)
+                    setErrorMessage(result)
                     setErrorModalVisible(true)
-                    if (result._0 === "UsernameIsEmpty") {
-                        setErrorMessage("The username is empty!")
-                    } else if (result._0 === "PasswordIsEmpty") {
-                        setErrorMessage("The password is empty!")
-                    } else if (result._0 === "WrongPassword") {
-                        setErrorMessage("wrong user name or password")
-                    } else {
-                        setErrorMessage("Unknown error")
-                    }
                 } else {
                     navigate("/files")
                 }
@@ -44,7 +36,7 @@ const LoginForm = ({ setErrorMessage, setErrorMessageTitle, setVisible }) => {
                 <Grid xs={24} justify="space-around" alignContent="space-around" alignItems="baseline">
                     <Spacer w={0.5} />
                     {/* @ts-ignore comment */}
-                    <Input iconRight={<User />} clearable label="username" placeholder="" ref={usernameRef} />
+                    <Input iconRight={<UserIcon />} clearable label="username" placeholder="" ref={usernameRef} />
                     <Spacer w={0.5} />
                 </Grid>
                 <Spacer h={1} />

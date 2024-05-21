@@ -1,9 +1,4 @@
-use std::{
-    env,
-    fs::{self, Metadata},
-    thread::sleep,
-    time::Duration,
-};
+use std::fs;
 
 use axum::{
     extract::Query,
@@ -77,14 +72,7 @@ fn get_dir_list(path: String) -> Vec<Folder> {
 async fn path(Query(path): Query<Path>) -> impl IntoResponse {
     info!("request path {}", path.path);
 
-    (
-        StatusCode::OK,
-        Json(json!(if path.path.is_empty() {
-            get_dir_list((env::args().collect::<Vec<String>>()[1]).clone())
-        } else {
-            get_dir_list(path.path)
-        })),
-    )
+    (StatusCode::OK, Json(json!(get_dir_list(path.path))))
 }
 
 async fn login(Query(user): Query<User>) -> impl IntoResponse {
