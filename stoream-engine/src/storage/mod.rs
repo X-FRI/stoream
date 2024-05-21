@@ -25,34 +25,14 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use axum::{http::HeaderValue, routing, Router};
-use colog::log::info;
-use tower_http::cors::{Any, CorsLayer};
+use self::directory::Directory;
 
-mod server;
-mod storage;
-mod user;
+pub mod directory;
+pub mod file;
+pub mod filesystem;
 
-#[tokio::main]
-async fn main() {
-    colog::init();
-
-    let cors = CorsLayer::new()
-        .allow_methods(Any)
-        .allow_headers(Any)
-        .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap());
-
-    info!("starting stoream engine...");
-    let server = axum::serve(
-        tokio::net::TcpListener::bind("localhost:9993")
-            .await
-            .unwrap(),
-        Router::new().route(
-            "/login",
-            routing::get(server::login::login).layer(cors.clone()),
-        ), // .route("/path", get(path).layer(cors)),
-    );
-    info!("stoream engine started at http://localhost:9993");
-
-    server.await.unwrap();
+trait Storage {
+    /// Similar to the ls command in POSIX systems, returns all files and directories under path.
+    /// TODO: Handle the situation when path is not a directory.
+    fn ls(path: String) -> Directory;
 }

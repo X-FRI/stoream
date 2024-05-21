@@ -1,10 +1,10 @@
 /// Copyright (c) 2024 The X-Files Research Institute
-///
+/// 
 /// All rights reserved.
-///
+/// 
 /// Redistribution and use in source and binary forms, with or without modification,
 /// are permitted provided that the following conditions are met:
-///
+/// 
 ///     * Redistributions of source code must retain the above copyright notice,
 ///       this list of conditions and the following disclaimer.
 ///     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
 ///     * Neither the name of Stoream nor the names of its contributors
 ///       may be used to endorse or promote products derived from this software
 ///       without specific prior written permission.
-///
+/// 
 /// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 /// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 /// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -25,34 +25,31 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use axum::{http::HeaderValue, routing, Router};
-use colog::log::info;
-use tower_http::cors::{Any, CorsLayer};
 
-mod server;
-mod storage;
-mod user;
+use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
+use colog::log::{error, info};
+use serde_json::json;
 
-#[tokio::main]
-async fn main() {
-    colog::init();
+use crate::user::User;
 
-    let cors = CorsLayer::new()
-        .allow_methods(Any)
-        .allow_headers(Any)
-        .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap());
-
-    info!("starting stoream engine...");
-    let server = axum::serve(
-        tokio::net::TcpListener::bind("localhost:9993")
-            .await
-            .unwrap(),
-        Router::new().route(
-            "/login",
-            routing::get(server::login::login).layer(cors.clone()),
-        ), // .route("/path", get(path).layer(cors)),
-    );
-    info!("stoream engine started at http://localhost:9993");
-
-    server.await.unwrap();
+pub async fn login(Query(user): Query<User>) -> impl IntoResponse {
+    info!("{:?}", user);
+    info!("request login {}", user.username);
+    if user.username == "admin" && user.password == format!("{:x}", md5::compute("admin")) {
+        info!("login to user {} successfully", user.username);
+        (
+            StatusCode::OK,
+            Json(json!({
+                "status": "OK",
+            })),
+        )
+    } else {
+        error!("login to user {} failed, wrong password", user.username);
+        (
+            StatusCode::OK,
+            Json(json!({
+                "status": "ERR"
+            })),
+        )
+    }
 }
