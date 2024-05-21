@@ -26,25 +26,27 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Grid } from "@geist-ui/core";
+import { Button, Grid, useToasts } from "@geist-ui/core";
 import { Upload, FolderPlus } from '@geist-ui/icons'
 
-function Header() {
+const Header = () => {
+
     return (
         <>
             <Grid.Container gap={1}>
                 <Grid>
-                    {/* @ts-ignore comment */}
+                    {/* @ts-ignore */}
                     <Button shadow type="secondary" icon={<Upload size={15} />}>
                         Upload file
                     </Button>
                 </Grid>
                 <Grid>
-                    {/* @ts-ignore comment */}
+                    {/* @ts-ignore */}
                     <Button shadow type="secondary" icon={<FolderPlus size={15} />}>
                         Create folder
                     </Button>
                 </Grid>
+
             </Grid.Container>
         </>
     )

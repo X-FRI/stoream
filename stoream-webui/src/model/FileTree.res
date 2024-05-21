@@ -1,10 +1,10 @@
 /// Copyright (c) 2024 The X-Files Research Institute
-/// 
+///
 /// All rights reserved.
-/// 
+///
 /// Redistribution and use in source and binary forms, with or without modification,
 /// are permitted provided that the following conditions are met:
-/// 
+///
 ///     * Redistributions of source code must retain the above copyright notice,
 ///       this list of conditions and the following disclaimer.
 ///     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
 ///     * Neither the name of Stoream nor the names of its contributors
 ///       may be used to endorse or promote products derived from this software
 ///       without specific prior written permission.
-/// 
+///
 /// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 /// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 /// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -29,28 +29,13 @@
 @genType.as("FileTree_t")
 type rec t = {
   name: string,
+  size: int,
   sub: array<t>,
   path: string,
+  files: array<file>,
 }
-
-@genType
-let from_json = folder => {
-  let object = folder->Js.Json.decodeObject
-
-  object
-  ->Option.map(folder => {
-    switch (folder->Js_dict.get("name"), folder->Js_dict.get("path")) {
-    | (Some(Js.Json.String(name)), Some(Js.Json.String(path))) => Ok(name, path)
-    | _ => Error(Errors.Request(Errors.Request.RequestError))
-    }
-  })
-  ->Option.map(info => {
-    info->Result.map(((name, path)) => {
-      name,
-      path,
-      sub: [],
-    })
-  })
-  ->Option.getExn
-  ->Result.getExn
+and file = {
+  filename: string,
+  filepath: string,
+  filesize: int,
 }

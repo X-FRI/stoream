@@ -34,7 +34,7 @@ function About() {
             <Text h4 my={0}>Stoream WebUI</Text>
             <Text>极简主义者的网盘系统</Text>
             <Card.Footer>
-                {/* @ts-ignore comment */}
+                {/* @ts-ignore */}
                 <Link icon block underline color href="https://github.com/x-fri/stoream">
                     Visit source code on GitHub.
                 </Link>

@@ -46,7 +46,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           { path: "/login", element: <Login />, errorElement: <Error /> },
           {
             path: "/files", element: <Main />, errorElement: <Error />, loader: async () => {
-              await loadFolder("")
+              return await loadFolder("/home/muqiu/Documents/Note")
             }
           }
         ])

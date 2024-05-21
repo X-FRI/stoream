@@ -32,30 +32,23 @@ import { FileTree as RequestFileTree } from "../model/Request.gen.tsx"
 
 const mapFolder = (folder: Folder) => {
     if (folder.sub === undefined) {
-        return <Tree.Folder name={folder.name} onClick={() => console.log(folder.path)} />
+        return <Tree.Folder name={folder.name} />
     } else {
         const subFolder = folder.sub.map(mapFolder)
         return (
-            <Tree.Folder name={folder.name}>
+            <Tree.Folder name={folder.name} extra={folder.files.length + " files"}>
                 {subFolder}
             </Tree.Folder>
         )
     }
 }
 
-const loadFolder = async (path: string) => {
-    let fileTree = await RequestFileTree.request(path)
-    if (fileTree.TAG === "Ok") {
-        return fileTree._0
-    } else {
-        console.log(fileTree._0)
-    }
-}
+const loadFolder = async (path: string) => { return await RequestFileTree.request(path) }
 
 const FileTree = ({ content }) => {
     return (
         <>
-            <Tree initialExpand>
+            <Tree>
                 {mapFolder(content)}
             </Tree>
         </>

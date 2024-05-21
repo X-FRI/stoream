@@ -62,20 +62,20 @@ const LoginForm = () => {
             <Grid.Container width="100%">
                 <Grid xs={24} justify="space-around" alignContent="space-around" alignItems="baseline">
                     <Spacer w={0.5} />
-                    {/* @ts-ignore comment */}
+                    {/* @ts-ignore */}
                     <Input iconRight={<UserIcon />} clearable label="username" placeholder="" ref={usernameRef} />
                     <Spacer w={0.5} />
                 </Grid>
                 <Spacer h={1} />
                 <Grid xs={24} justify="center" alignContent="center" alignItems="center">
                     <Spacer w={0.5} />
-                    {/* @ts-ignore comment */}
+                    {/* @ts-ignore */}
                     <Input.Password clearable label="password" placeholder="" ref={passwordRef} />
                     <Spacer w={0.5} />
                 </Grid>
                 <Spacer h={2} />
                 <Grid xs={24} justify="center" alignContent="center" alignItems="center">
-                    {/* @ts-ignore comment */}
+                    {/* @ts-ignore */}
                     <Button
                         icon={<LogIn />}
                         type="secondary"

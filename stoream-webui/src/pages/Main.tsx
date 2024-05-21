@@ -33,6 +33,7 @@ import Header from "../components/Header"
 import Files from "../components/Files"
 import FileTree from "../components/FileTree"
 import { useLoaderData } from "react-router-dom"
+import React from "react"
 
 const Main = () => {
     const content = useLoaderData()
@@ -42,12 +43,12 @@ const Main = () => {
             <Page width="80%">
                 <Grid.Container gap={1}>
                     <Grid xs> <DiskCapacity /> </Grid>
-                    {/* @ts-ignore comment */}
+                    {/* @ts-ignore */}
                     <Grid xs={5} justify="right"> <UserDetails /> </Grid>
                     <Grid xs={24}> <Header /> </Grid>
                     <Spacer h={2} />
-                    <Grid.Container gap={1} >
-                        <Grid> <Card shadow paddingRight={5}> <FileTree content={content} /> </Card> </Grid>
+                    <Grid.Container gap={1}>
+                        <Grid xs> <Card shadow paddingRight={5}> <FileTree content={content} /> </Card> </Grid>
                         <Spacer w={3} />
                         <Grid xs> <Files /> </Grid>
                     </Grid.Container>
