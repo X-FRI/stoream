@@ -28,7 +28,7 @@
 
 import { Grid, Page, Spacer, useTheme } from "@geist-ui/core"
 import { make as Capacity} from "../components/Capacity.res.mjs"
-import UserDetails from "../components/UserDetails"
+import { make as UserDetails} from "../components/UserDetails.res.mjs"
 import Header from "../components/Header"
 import Files from "../components/Files"
 import FileTree from "../components/FileTree"
