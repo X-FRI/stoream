@@ -28,8 +28,10 @@
 
 import { Button, Grid, useToasts } from "@geist-ui/core";
 import { Upload, FolderPlus } from '@geist-ui/icons'
+import AlignJustify from '@geist-ui/icons/alignJustify'
+import List from '@geist-ui/icons/list'
 
-const Header = () => {
+const Header = ({ explorer, setExplorer }) => {
 
     return (
         <>
@@ -47,6 +49,19 @@ const Header = () => {
                     </Button>
                 </Grid>
 
+                <Grid>
+                    {/* @ts-ignore */}
+                    <Button
+                        shadow
+                        type="secondary"
+                        icon={explorer == "tree" ? <List /> : <AlignJustify />}
+                        onClick={() => {
+                            setExplorer(explorer == "tree" ? "list" : "tree")
+                        }}
+                    >
+                        Explorer view: {explorer}
+                    </Button>
+                </Grid>
             </Grid.Container>
         </>
     )

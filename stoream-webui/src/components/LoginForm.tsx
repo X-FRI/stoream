@@ -30,20 +30,15 @@ import { Button, Grid, Input, Spacer, useToasts } from "@geist-ui/core"
 import { LogIn, User as UserIcon } from "@geist-ui/icons"
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { User as RequestUser } from "../model/Request.gen.tsx"
-import { toString } from "../model/Errors.gen.tsx"
+import { User as RequestUser } from "../model/Request.res.mjs"
 
 const login = async (user, setToast, navigate) => {
     await
         RequestUser
             .request(user)
-            .then(result => {
-                if (result.TAG === "Error") {
-                    setToast({ text: toString(result._0), type: "error" })
-                } else {
-                    setToast({ text: "Login successfull ", type: "success" })
-                    navigate("/files")
-                }
+            .then(_ => {
+                setToast({ text: "Login to " + user.username + " successfull ", type: "success" })
+                navigate("/files")
             })
             .catch(reason => {
                 setToast({ text: String(reason), type: "error" })

@@ -29,7 +29,7 @@
     "src"
   ],
   "exclude": [
-    "src/model/*.gen.tsx"
+    "src/model/*.res.mjs"
   ],
   "references": [
     {

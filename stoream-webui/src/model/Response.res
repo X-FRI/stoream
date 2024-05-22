@@ -26,132 +26,77 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-@genType
+
+let parseInt = (response: Js_dict.t<_>, key: string): int => {
+  switch response->Js_dict.get(key)->Option.getExn {
+  | Js.Json.Number(int) => int->Float.toInt
+  | _ => failwith("Cannot parse " ++ key ++ " to number")
+  }
+}
+
+
+let parseString = (response: Js_dict.t<_>, key: string): string => {
+  switch response->Js_dict.get(key)->Option.getExn {
+  | Js.Json.String(str) => str
+  | _ => failwith("Cannot parse " ++ key ++ " to string")
+  }
+}
+
+
 module User = {
   /// Get the status value from the response returned by engine
-  let status = (response: Js.Json.t): result<string, Errors.t> => {
+  let status = (response: Js.Json.t): string => {
     switch response
     ->Js.Json.decodeObject
-    ->Option.flatMap(response => {
-      response
-      ->Js_dict.get("status")
-      ->Option.flatMap(status => {
-        switch status {
-        | Js.Json.String(status) => Some(status)
-        | _ => None
-        }
-      })
-    }) {
-    | Some(status) => Ok(status)
-    | None => Error(Errors.User(Errors.User.CannotGetTheStatus))
+    ->Option.getExn
+    ->Js_dict.get("status")
+    ->Option.getExn {
+    | Js.Json.String(status) => status
+    | _ => failwith("The status is not string")
     }
   }
 }
 
-@genType
+
+module File = {
+
+  let parse = (response: Js_dict.t<_>): File.t => {
+    open File
+    {
+      filename: response->parseString("filename"),
+      filepath: response->parseString("path"),
+      filesize: response->parseInt("size"),
+    }
+  }
+}
+
+
 module FileTree = {
-  @genType.import("./FileTree.gen.tsx")
-  type t
 
-  /// Get the file name in the path.
-  /// NOTE: Backslashes may be used as path separators in the paths returned by engine on Windows.
-  let basename = (path: string): result<string, Errors.t> => {
-    let path_array = String.split(path, "/")
-    Array.reverse(path_array)
-    switch path_array[0] {
-    | Some(path) => Ok(path)
-    | None => Error(Errors.FileTree(Errors.FileTree.CannotGetTheBasename(path)))
-    }
-  }
-
-  let dirname = (response: Js_dict.t<_>): result<string, Errors.t> => {
-    switch response->Js_dict.get("dirname")->Option.getExn {
-    | Js.Json.String(dirname) => Ok(dirname)
-    | _ => Error(Errors.Request(Errors.Request.RequestError))
-    }
-  }
-
-  let path = (response: Js_dict.t<_>): result<string, Errors.t> => {
-    switch response->Js_dict.get("path")->Option.getExn {
-    | Js.Json.String(path) => Ok(path)
-    | _ => Error(Errors.Request(Errors.Request.RequestError))
-    }
-  }
-
-  let size = (response: Js_dict.t<_>): result<int, Errors.t> => {
-    switch response->Js_dict.get("size")->Option.getExn {
-    | Js.Json.Number(size) => Ok(size->Float.toInt)
-    | _ => Error(Errors.Request(Errors.Request.RequestError))
-    }
-  }
-
-  let filename = (response: Js_dict.t<_>): result<string, Errors.t> => {
-    switch response->Js_dict.get("filename")->Option.getExn {
-    | Js.Json.String(filename) => Ok(filename)
-    | _ => Error(Errors.Request(Errors.Request.RequestError))
-    }
-  }
-
-  let file = (response: Js_dict.t<_>): result<FileTree.file, Errors.t> => {
-    open FileTree
-    response
-    ->filename
-    ->Result.flatMap(filename =>
-      response
-      ->path
-      ->Result.flatMap(filepath =>
-        response->size->Result.map(filesize => {filename, filepath, filesize})
-      )
-    )
-  }
-
-  let files = (response: Js_dict.t<_>): result<array<FileTree.file>, Errors.t> => {
+  let files = (response: Js_dict.t<_>) => {
     switch response->Js_dict.get("files")->Option.getExn {
     | Js.Json.Array(files) =>
-      Ok(
-        files
-        ->Array.map(files => Js.Json.decodeObject(files)->Option.getExn)
-        ->Array.map(file)
-        ->Array.map(Result.getExn),
-      )
-    | _ => Error(Errors.Request(Errors.Request.RequestError))
+      files
+      ->Array.map(files => Js.Json.decodeObject(files)->Option.getExn)
+      ->Array.map(File.parse)
+    | _ => failwith("Cannot parse files from response: " ++ Js.String.make(response))
     }
   }
 
   /// Convert the response returned by engine to FileTree.t
   let rec parse = (response: Js_dict.t<_>): FileTree.t => {
     open FileTree
-
-    response
-    ->dirname
-    ->Result.flatMap(name =>
-      response
-      ->path
-      ->Result.flatMap(path =>
-        response
-        ->size
-        ->Result.flatMap(
-          size =>
-            response
-            ->files
-            ->Result.map(
-              files => {
-                name,
-                path,
-                files,
-                size,
-                sub: {
-                  response
-                  ->Js_dict.get("sub")
-                  ->Option.getExn
-                  ->Js.Json.decodeArray
-                  ->Option.getExn
-                  ->Array.map(v => Js.Json.decodeObject(v)->Option.getExn->parse)
-                },
-              },
-            ),
-        )
-      )
-    )->Result.getExn
+    {
+      name: response->parseString("dirname"),
+      path: response->parseString("path"),
+      size: response->parseInt("size"),
+      files: response->files,
+      sub: response
+      ->Js_dict.get("sub")
+      ->Option.getExn
+      ->Js.Json.decodeArray
+      ->Option.getExn
+      ->Array.map(v => Js.Json.decodeObject(v)->Option.getExn->parse),
+    }
   }
 }

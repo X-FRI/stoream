@@ -26,18 +26,20 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Tree, useToasts } from "@geist-ui/core"
-import { t as Folder } from "../model/FileTree.gen.tsx"
-import { FileTree as RequestFileTree } from "../model/Request.gen.tsx"
+import { Card, Tooltip, Tree } from "@geist-ui/core"
+import { FileTree as RequestFileTree } from "../model/Request.res.mjs"
 
-const mapFolder = (folder: Folder) => {
+const mapFolder = (folder) => {
     if (folder.sub === undefined) {
         return <Tree.Folder name={folder.name} />
     } else {
         const subFolder = folder.sub.map(mapFolder)
         return (
-            <Tree.Folder name={folder.name} extra={folder.files.length + " files"}>
+            <Tree.Folder name={folder.name} extra={folder.files.length + " files, " + folder.sub.length + " directories"}>
                 {subFolder}
+                {folder.files.map(file =>
+                    <Tree.File name={file.filename} extra={(file.filesize / 1024) + " kb"} />
+                )}
             </Tree.Folder>
         )
     }
@@ -48,9 +50,13 @@ const loadFolder = async (path: string) => { return await RequestFileTree.reques
 const FileTree = ({ content }) => {
     return (
         <>
-            <Tree>
-                {mapFolder(content)}
-            </Tree>
+            <Card shadow>
+                <Tooltip text={"size: " + (content.size / 1024) + " kb"} type="success">
+                    <Tree>
+                        {mapFolder(content)}
+                    </Tree>
+                </Tooltip>
+            </Card>
         </>
     )
 }

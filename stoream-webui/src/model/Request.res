@@ -26,10 +26,8 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-@genType
+
 module FileTree = {
-  @genType.import("./FileTree.gen.tsx")
-  type t
 
   let request = async (path: string): FileTree.t => {
     await Fetch.fetch("http://localhost:9993/filetree?path=" ++ path, {mode: #cors})
@@ -40,44 +38,44 @@ module FileTree = {
   }
 }
 
-@genType
+
 module User = {
-  @genType.import("./User.gen.tsx")
-  type t
 
   open User
 
   /// Check whether the logged in expression is legal.
-  let check = (user: User.t): result<User.t, Errors.t> => {
+  let check = (user: User.t): User.t => {
     if Js.String.length(user.username) == 0 {
-      Error(Errors.User(Errors.User.UsernameIsEmpty))
+      failwith("The username is empty")
     } else if Js.String.length(user.password) == 0 {
-      Error(Errors.User(Errors.User.PasswordIsEmpty))
+      failwith("The password is empty")
     } else {
-      Ok(user)
+      user
     }
   }
 
-  let request = async (user: User.t): result<User.t, Errors.t> => {
-    switch check(user)->Result.map(Encrypted.encryptedUser) {
-    | Error(e) => Error(e)
-    | Ok(user) =>
-      await Fetch.fetch(
-        "http://localhost:9993/login?username=" ++ user.username ++ "&password=" ++ user.password,
-        {mode: #cors},
-      )
-      ->Promise.then(Fetch.Response.json)
-      ->Promise.thenResolve(response => {
-        response
-        ->Response.User.status
-        ->Result.flatMap(status => {
-          switch status {
-          | "OK" => Ok(user)
-          | "ERR" => Error(Errors.User(Errors.User.WrongPassword))
-          | _ => Error(Errors.Request(Errors.Request.RequestError))
-          }
+  let request = async (user: User.t): unit => {
+    await check(user)
+    ->Encrypted.encryptedUser
+    ->(
+      async user =>
+        await Fetch.fetch(
+          "http://localhost:9993/login?username=" ++ user.username ++ "&password=" ++ user.password,
+          {mode: #cors},
+        )
+        ->Promise.then(Fetch.Response.json)
+        ->Promise.thenResolve(response => {
+          response
+          ->Response.User.status
+          ->(
+            status => {
+              switch status {
+              | "OK" => ()
+              | _ => failwith("Wrong username or password")
+              }
+            }
+          )
         })
-      })
-    }
+    )
   }
 }

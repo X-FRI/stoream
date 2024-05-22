@@ -26,16 +26,10 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-@genType.as("FileTree_t")
 type rec t = {
   name: string,
   size: int,
   sub: array<t>,
   path: string,
-  files: array<file>,
-}
-and file = {
-  filename: string,
-  filepath: string,
-  filesize: int,
+  files: array<File.t>,
 }
