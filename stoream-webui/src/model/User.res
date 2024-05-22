@@ -37,7 +37,7 @@ module Encrypted = {
   @module("js-md5") external md5: string => string = "md5"
 
   /// The user's password is encrypted by this function and sent to the engine.
-  let encryptedUser = user => {
+  let encryptedUser = (user: t) : t => {
     {
       username: user.username,
       password: md5(user.password),
