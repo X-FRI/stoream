@@ -45,18 +45,21 @@ module Drawer = {
   ) => React.element = "Drawer"
 
   module Title = {
-    @module("@geist-ui/core/esm/modal/modal-title") @react.component
-    external make: (~children: React.element) => React.element = "default"
+    @scope("Drawer")
+    @module("@geist-ui/core") @react.component
+    external make: (~children: React.element) => React.element = "Title"
   }
 
   module Subtitle = {
-    @module("@geist-ui/core/esm/modal/modal-subtitle") @react.component
-    external make: (~children: React.element) => React.element = "default"
+    @scope("Drawer")
+    @module("@geist-ui/core") @react.component
+    external make: (~children: React.element) => React.element = "Subtitle"
   }
 
   module Content = {
-    @module("@geist-ui/core/esm/modal/modal-content") @react.component
-    external make: (~children: React.element) => React.element = "default"
+    @scope("Drawer")
+    @module("@geist-ui/core") @react.component
+    external make: (~children: React.element) => React.element = "Content"
   }
 }
 
@@ -65,8 +68,9 @@ module Card = {
   external make: (~children: React.element, ~width: string) => React.element = "Card"
 
   module Footer = {
-    @module("@geist-ui/core/esm/card/card-footer") @react.component
-    external make: (~children: React.element) => React.element = "default"
+    @scope("Card")
+    @module("@geist-ui/core") @react.component
+    external make: (~children: React.element) => React.element = "Footer"
   }
 }
 

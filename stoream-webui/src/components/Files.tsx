@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Breadcrumbs, Card, Grid, Pagination, Table } from "@geist-ui/core"
+import { Breadcrumbs, Card, Grid, Pagination, Table, Text } from "@geist-ui/core"
 import React from "react"
 import { useLoaderData } from "react-router-dom"
 
@@ -64,10 +64,8 @@ const Files = () => {
     const [path, setPath] = React.useState(renderPath(content))
     const [files, setFiles] = React.useState(render(content, setPath))
 
-    return (
-        <>
-            <Card shadow>
-                <Grid.Container gap={1}>
+    /**
+     * <Grid.Container gap={1}>
                     <Grid xs={24}>
                         <Breadcrumbs>
                             {path}
@@ -83,8 +81,15 @@ const Files = () => {
                         <Pagination count={20} initialPage={1} />
                     </Grid>
                 </Grid.Container>
-            </Card>
+     */
 
+    return (
+        <>
+            <Card shadow type="error">
+                <Text h1>
+                    List views are not currently supported
+                </Text>
+            </Card>
         </>
     )
 }
