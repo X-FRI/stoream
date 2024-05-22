@@ -26,8 +26,8 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Grid, Page, Pagination, Spacer, Tooltip, useTheme } from "@geist-ui/core"
-import DiskCapacity from "../components/Capacity"
+import { Grid, Page, Spacer, useTheme } from "@geist-ui/core"
+import { make as Capacity} from "../components/Capacity.res.mjs"
 import UserDetails from "../components/UserDetails"
 import Header from "../components/Header"
 import Files from "../components/Files"
@@ -38,12 +38,13 @@ import React from "react"
 const Main = () => {
     const content = useLoaderData()
     const [explorer, setExplorer] = React.useState("tree")
+    const theme = useTheme()
 
     return (
         <>
             <Page width="80%">
                 <Grid.Container gap={1}>
-                    <Grid xs> <DiskCapacity /> </Grid>
+                    <Grid xs> <Capacity color={theme.palette.error} /> </Grid>
                     {/* @ts-ignore */}
                     <Grid xs={5} justify="right"> <UserDetails /> </Grid>
                     <Grid xs={24}> <Header explorer={explorer} setExplorer={setExplorer} /> </Grid>

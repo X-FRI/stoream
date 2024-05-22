@@ -30,7 +30,7 @@ import { Button, Grid, Input, Spacer, useToasts } from "@geist-ui/core"
 import { LogIn, User as UserIcon } from "@geist-ui/icons"
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { User as RequestUser } from "../model/Request.gen.tsx"
+import { User as RequestUser } from "../model/Request.res.mjs"
 
 const login = async (user, setToast, navigate) => {
     await

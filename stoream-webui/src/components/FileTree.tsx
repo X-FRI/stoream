@@ -26,11 +26,10 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Tooltip, Tree, useToasts } from "@geist-ui/core"
-import { t as Folder } from "../model/FileTree.gen.tsx"
-import { FileTree as RequestFileTree } from "../model/Request.gen.tsx"
+import { Card, Tooltip, Tree } from "@geist-ui/core"
+import { FileTree as RequestFileTree } from "../model/Request.res.mjs"
 
-const mapFolder = (folder: Folder) => {
+const mapFolder = (folder) => {
     if (folder.sub === undefined) {
         return <Tree.Folder name={folder.name} />
     } else {

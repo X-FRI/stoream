@@ -26,10 +26,8 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-@genType
+
 module FileTree = {
-  @genType.import("./FileTree.gen.tsx")
-  type t
 
   let request = async (path: string): FileTree.t => {
     await Fetch.fetch("http://localhost:9993/filetree?path=" ++ path, {mode: #cors})
@@ -40,10 +38,8 @@ module FileTree = {
   }
 }
 
-@genType
+
 module User = {
-  @genType.import("./User.gen.tsx")
-  type t
 
   open User
 

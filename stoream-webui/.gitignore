@@ -27,4 +27,4 @@ dist-ssr
 .bsb.lock
 
 *.mjs
-*.gen.tsx
+*.res.mjs

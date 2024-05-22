@@ -26,7 +26,23 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-@genType
+
+let parseInt = (response: Js_dict.t<_>, key: string): int => {
+  switch response->Js_dict.get(key)->Option.getExn {
+  | Js.Json.Number(int) => int->Float.toInt
+  | _ => failwith("Cannot parse " ++ key ++ " to number")
+  }
+}
+
+
+let parseString = (response: Js_dict.t<_>, key: string): string => {
+  switch response->Js_dict.get(key)->Option.getExn {
+  | Js.Json.String(str) => str
+  | _ => failwith("Cannot parse " ++ key ++ " to string")
+  }
+}
+
+
 module User = {
   /// Get the status value from the response returned by engine
   let status = (response: Js.Json.t): string => {
@@ -41,40 +57,28 @@ module User = {
   }
 }
 
-@genType
-module FileTree = {
-  @genType.import("./FileTree.gen.tsx")
-  type t
 
-  let parseInt = (response: Js_dict.t<_>, key: string): int => {
-    switch response->Js_dict.get(key)->Option.getExn {
-    | Js.Json.Number(int) => int->Float.toInt
-    | _ => failwith("Cannot parse " ++ key ++ " to number")
-    }
-  }
+module File = {
 
-  let parseString = (response: Js_dict.t<_>, key: string): string => {
-    switch response->Js_dict.get(key)->Option.getExn {
-    | Js.Json.String(str) => str
-    | _ => failwith("Cannot parse " ++ key ++ " to string")
-    }
-  }
-
-  let file = (response: Js_dict.t<_>): FileTree.file => {
-    open FileTree
+  let parse = (response: Js_dict.t<_>): File.t => {
+    open File
     {
       filename: response->parseString("filename"),
       filepath: response->parseString("path"),
       filesize: response->parseInt("size"),
     }
   }
+}
 
-  let files = (response: Js_dict.t<_>): array<FileTree.file> => {
+
+module FileTree = {
+
+  let files = (response: Js_dict.t<_>) => {
     switch response->Js_dict.get("files")->Option.getExn {
     | Js.Json.Array(files) =>
       files
       ->Array.map(files => Js.Json.decodeObject(files)->Option.getExn)
-      ->Array.map(file)
+      ->Array.map(File.parse)
     | _ => failwith("Cannot parse files from response: " ++ Js.String.make(response))
     }
   }

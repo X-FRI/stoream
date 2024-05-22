@@ -23,9 +23,6 @@
   "gentypeconfig": {
     "module": "esmodule",
     "moduleResolution": "bundler",
-    "shims": {
-      "Js": "Js"
-    },
     "generatedFileExtension": ".gen.tsx"
   }
 }
