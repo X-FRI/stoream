@@ -26,20 +26,23 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/Login";
+import { Grid, GridItem } from "@chakra-ui/react";
+import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RouterProvider
-      router={createBrowserRouter([
-        {
-          path: "/login",
-          element: <Login />,
-        },
-      ])}
-    />
-  </React.StrictMode>,
-);
+const Header = () => {
+  return (
+    <>
+      <Grid  templateColumns='repeat(5, 1fr)' gap={4}>
+        <GridItem colSpan={2} h='10' bg='tomato' >
+          <CircularProgress value={80} />
+        </GridItem>
+
+        <GridItem colStart={8} colEnd={12} h='10' bg='papayawhip'>
+          <CircularProgress value={80} />
+        </GridItem>
+      </Grid>
+    </>
+  );
+};
+
+export default Header;

@@ -26,20 +26,8 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/Login";
+const Main = () => {
+  return <></>;
+};
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RouterProvider
-      router={createBrowserRouter([
-        {
-          path: "/login",
-          element: <Login />,
-        },
-      ])}
-    />
-  </React.StrictMode>,
-);
+export default Main;

@@ -13,7 +13,10 @@
     "res:dev": "rescript -w"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@glennsl/rescript-fetch": "^0.2.0",
+    "@mui/material": "6.0.0-alpha.8",
     "@rescript/core": "^1.3.0",
     "@rescript/react": "^0.12.1",
     "baseui": "0.0.0-next-6fabc7134",
