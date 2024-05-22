@@ -26,18 +26,11 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Route, Router } from 'react-router-dom';
-import Login from './pages/Login';
-import Main from './pages/Main'
-
 function App() {
-  const page = (isLogin) => {
-    return isLogin ? <Main /> : <Login />
-  }
 
   return (
     <>
-      {page(false)}
+
     </>
   )
 }

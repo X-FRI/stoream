@@ -28,16 +28,10 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Error from './pages/Error.tsx'
-import { make as Login} from './pages/Login.res.mjs'
-import Main from './pages/Main.tsx'
-import { loadFolder } from './components/FileTree.tsx'
 import { Client as Styletron } from "styletron-engine-monolithic";
 import { Provider as StyletronProvider } from "styletron-react";
 import { LightTheme, BaseProvider, styled } from "baseui";
-import { StatefulInput } from "baseui/input";
 
 const engine = new Styletron();
 
@@ -55,13 +49,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Centered>
           <RouterProvider router={
             createBrowserRouter([
-              // { path: "/", element: <App />, errorElement: <Error /> },
-              { path: "/login", element: <Login />},
-              // {
-              //   path: "/files", element: <Main />, errorElement: <Error />, loader: async () => {
-              //     return await loadFolder("/home/muqiu/Documents/Note")
-              //   }
-              // }
             ])
           } />
         </Centered>
