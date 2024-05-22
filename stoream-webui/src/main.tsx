@@ -29,28 +29,43 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { CssBaseline, GeistProvider } from '@geist-ui/core'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Error from './pages/Error.tsx'
-import Login from './pages/Login.tsx'
+import { make as Login} from './pages/Login.res.mjs'
 import Main from './pages/Main.tsx'
 import { loadFolder } from './components/FileTree.tsx'
+import { Client as Styletron } from "styletron-engine-monolithic";
+import { Provider as StyletronProvider } from "styletron-react";
+import { LightTheme, BaseProvider, styled } from "baseui";
+import { StatefulInput } from "baseui/input";
+
+const engine = new Styletron();
+
+const Centered = styled("div", {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%",
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <GeistProvider>
-      <CssBaseline />
-      <RouterProvider router={
-        createBrowserRouter([
-          { path: "/", element: <App />, errorElement: <Error /> },
-          { path: "/login", element: <Login />, errorElement: <Error /> },
-          {
-            path: "/files", element: <Main />, errorElement: <Error />, loader: async () => {
-              return await loadFolder("/home/muqiu/Documents/Note")
-            }
-          }
-        ])
-      } />
-    </GeistProvider>
+    <StyletronProvider value={engine}>
+      <BaseProvider theme={LightTheme}>
+        <Centered>
+          <RouterProvider router={
+            createBrowserRouter([
+              // { path: "/", element: <App />, errorElement: <Error /> },
+              { path: "/login", element: <Login />},
+              // {
+              //   path: "/files", element: <Main />, errorElement: <Error />, loader: async () => {
+              //     return await loadFolder("/home/muqiu/Documents/Note")
+              //   }
+              // }
+            ])
+          } />
+        </Centered>
+      </BaseProvider>
+    </StyletronProvider>
   </React.StrictMode>,
 )

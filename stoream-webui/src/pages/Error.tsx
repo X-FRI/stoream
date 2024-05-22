@@ -26,7 +26,6 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Divider, Grid, Page, Spacer } from "@geist-ui/core";
 import { useRouteError } from "react-router-dom";
 
 const Error = () => {
@@ -34,7 +33,8 @@ const Error = () => {
     console.log(error)
 
     return (
-        <Page width="80%">
+        /**
+         * <Page width="80%">
             <Spacer h={10} />
             <Spacer w={10} />
             <Card shadow type="error">
@@ -54,6 +54,8 @@ const Error = () => {
             </Card>
             <Spacer w={10} />
         </Page>
+         */
+        <></>
     )
 }
 

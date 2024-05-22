@@ -13,15 +13,16 @@
     "res:dev": "rescript -w"
   },
   "dependencies": {
-    "@geist-ui/core": "^2.3.8",
-    "@geist-ui/icons": "^1.0.2",
     "@glennsl/rescript-fetch": "^0.2.0",
     "@rescript/core": "^1.3.0",
     "@rescript/react": "^0.12.1",
+    "baseui": "0.0.0-next-6fabc7134",
     "js-md5": "^0.8.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "styletron-engine-monolithic": "^1.0.0",
+    "styletron-react": "^6.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.2",

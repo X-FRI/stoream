@@ -35,12 +35,16 @@ const mapFolder = (folder) => {
     } else {
         const subFolder = folder.sub.map(mapFolder)
         return (
-            <Tree.Folder name={folder.name} extra={folder.files.length + " files, " + folder.sub.length + " directories"}>
-                {subFolder}
-                {folder.files.map(file =>
-                    <Tree.File name={file.filename} extra={(file.filesize / 1024) + " kb"} />
-                )}
-            </Tree.Folder>
+            
+                <Tree.Folder name={folder.name} extra={folder.files.length + " files, " + folder.sub.length + " directories"}>
+                    <Tooltip text={"size: " + (folder.size / 1024) + " kb"} type="success" placement="left">
+                        {subFolder}
+                    </Tooltip>
+                    {folder.files.map(file =>
+                        <Tree.File name={file.filename} extra={(file.filesize / 1024) + " kb"} />
+                    )}
+                </Tree.Folder>
+            
         )
     }
 }
@@ -52,7 +56,7 @@ const FileTree = ({ content }) => {
         <>
             <Card shadow>
                 <Tooltip text={"size: " + (content.size / 1024) + " kb"} type="success">
-                    <Tree>
+                    <Tree initialExpand>
                         {mapFolder(content)}
                     </Tree>
                 </Tooltip>
