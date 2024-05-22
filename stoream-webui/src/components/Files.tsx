@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Grid, Link, Pagination, Spacer, Table } from "@geist-ui/core"
+import { Breadcrumbs, Card, Grid, Link, Pagination, Spacer, Table } from "@geist-ui/core"
 
 function Files() {
     const data = [
@@ -96,6 +96,13 @@ function Files() {
         <>
             <Card shadow>
                 <Grid.Container gap={1}>
+                    <Grid xs={24}>
+                        <Breadcrumbs>
+                            <Breadcrumbs.Item>Home</Breadcrumbs.Item>
+                            <Breadcrumbs.Item href="">Inbox</Breadcrumbs.Item>
+                            <Breadcrumbs.Item>Page</Breadcrumbs.Item>
+                        </Breadcrumbs>
+                    </Grid>
                     <Grid xs={24}>
                         <Table hover data={data}>
                             <Table.Column prop="name" label="name" />

@@ -37,6 +37,7 @@ import React from "react"
 
 const Main = () => {
     const content = useLoaderData()
+    const [explorer, setExplorer] = React.useState("tree")
 
     return (
         <>
@@ -45,12 +46,14 @@ const Main = () => {
                     <Grid xs> <DiskCapacity /> </Grid>
                     {/* @ts-ignore */}
                     <Grid xs={5} justify="right"> <UserDetails /> </Grid>
-                    <Grid xs={24}> <Header /> </Grid>
+                    <Grid xs={24}> <Header explorer={explorer} setExplorer={setExplorer} /> </Grid>
                     <Spacer h={2} />
                     <Grid.Container gap={1}>
-                        <Grid xs> <Card shadow paddingRight={5}> <FileTree content={content} /> </Card> </Grid>
-                        <Spacer w={3} />
-                        <Grid xs> <Files /> </Grid>
+                        <Grid xs justify="center">
+                            {
+                                explorer == "tree" ? <FileTree content={content} /> : <Files />
+                            }
+                        </Grid>
                     </Grid.Container>
                 </Grid.Container>
             </Page>
