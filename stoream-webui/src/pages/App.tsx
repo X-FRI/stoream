@@ -26,8 +26,21 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import { Container, Grid, GridCol } from "@mantine/core";
+import Header from "../components/Header";
+import Operations from "../components/Operations";
+import Files from "../components/Files";
+
 function App() {
-  return <></>;
+  return (
+    <Container>
+      <Grid>
+        <GridCol span={12}> <Header /> </GridCol>
+        <GridCol span={12}> <Operations /> </GridCol>
+        <GridCol span={12}> <Files /> </GridCol>
+      </Grid>
+    </Container>
+  );
 }
 
 export default App;

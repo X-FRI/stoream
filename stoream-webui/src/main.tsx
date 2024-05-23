@@ -35,8 +35,10 @@ import { Notifications } from '@mantine/notifications';
 
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/charts/styles.css';
+
 import Error from "./pages/Error";
-import App from "./App";
+import App from "./pages/App";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

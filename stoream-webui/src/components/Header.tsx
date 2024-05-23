@@ -26,12 +26,88 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import { Avatar, Center, Container, Divider, Drawer, Grid, GridCol, Group, RingProgress, Text } from "@mantine/core";
+import { useDisclosure } from '@mantine/hooks';
+import { DonutChart, Sparkline } from '@mantine/charts';
+
+export const fileTypeDetails = [
+  { name: 'Document', value: 400, color: 'indigo.6' },
+  { name: 'Image', value: 300, color: 'yellow.6' },
+  { name: 'Video', value: 300, color: 'teal.6' },
+  { name: 'Picture', value: 200, color: 'gray.6' },
+];
 
 const Header = () => {
+  const [fileDetailsState, setFileDetailsState] = useDisclosure(false);
+  
   return (
-    <>
+    <Container>
+      <Grid>
+        <Grid.Col>
+          <Group justify="space-between" mt="md" mb="xs">
+            <RingProgress
+              onClick={() => setFileDetailsState.open()}
+              size={100}
+              thickness={12}
+              roundCaps
+              label={
+                <Text c="blue" fw={700} ta="center" size="xl">
+                  40%
+                </Text>
+              }
+              sections={[
+                { value: 40, color: 'blue' },
+              ]}
+            />
 
-    </>
+            <Drawer
+              opened={fileDetailsState}
+              onClose={setFileDetailsState.close}
+              offset={8}
+              title="Details"
+              overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+              radius={"md"}
+            >
+              <Grid justify="center">
+                <GridCol span={12}>
+                  <Center>
+                    <DonutChart
+                      data={fileTypeDetails}
+                      withLabelsLine
+                      withLabels
+                      chartLabel={"File Types"}
+                    />
+                  </Center>
+                </GridCol>
+                <GridCol span={12}>
+                  <Center>
+                    <Sparkline
+                      w={"100%"}
+                      h={"10em"}
+                      data={[10, 20, 40, 20, 40, 10, 50]}
+                      curveType="natural"
+                      color="blue"
+                      fillOpacity={0.6}
+                      strokeWidth={2}
+                    />
+                  </Center>
+                  <Divider my="md" />
+                  <GridCol span={12}>
+                    <Center>
+                      <Text>Capacity Trends</Text>
+                    </Center>
+                  </GridCol>
+                </GridCol>
+              </Grid>
+            </Drawer>
+
+            <Avatar color="red" size={"lg"} alt="">
+              MH
+            </Avatar>
+          </Group>
+        </Grid.Col>
+      </Grid>
+    </Container>
   );
 };
 
