@@ -26,8 +26,14 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Container, Group, Input } from "@mantine/core"
+import { Button, Container, Group, rem } from "@mantine/core"
 import { SearchIcon } from "./Icons";
+import { Spotlight, SpotlightActionData, spotlight } from '@mantine/spotlight';
+import { flatFile } from "../model/Directory.res.mjs";
+import { useLoaderData } from "react-router-dom";
+import { File } from "../model/File.gen";
+import React from "react";
+import { stringOfFileSize } from "../model/File.res.mjs";
 
 /** Operations is a series of operation components under the 
   * Header component on the homepage, such as uploading files, 
@@ -35,12 +41,34 @@ import { SearchIcon } from "./Icons";
   * 
   * TODO: This component is not yet complete */
 const Operations = () => {
+    const files: File[] = flatFile(useLoaderData())
+    const [queryFilename, setQueryFilename] = React.useState('');
+
+    const items: SpotlightActionData[] =
+        files
+            .filter((file: File) => file.filename.includes(queryFilename.toLowerCase().trim()))
+            .map((file: File) => ({ id: file.filename, label: file.filepath, description: stringOfFileSize(file.filesize) }));
+
     return (
         <Container>
             <Group justify="flex-start">
-                <Button> Upload </Button>
-                <Button> Create </Button>
-                <Input placeholder="Search" leftSection={<SearchIcon size={"1em"} />} />
+                <Button bg="black" style={{boxShadow: "1px 1px 3px black"}}> Upload </Button>
+                <Button bg="black" style={{boxShadow: "1px 1px 3px black"}}> Create </Button>
+                <Button bg="black" style={{boxShadow: "1px 1px 3px black"}} onClick={spotlight.open}>Search</Button>
+                <Spotlight
+                    actions={items}
+                    shadow="lg"
+                    nothingFound="Nothing found..."
+                    highlightQuery
+                    scrollable
+                    query={queryFilename}
+                    onQueryChange={setQueryFilename}
+                    limit={7}
+                    searchProps={{
+                        leftSection: <SearchIcon style={{ width: rem(20), height: rem(20) }} stroke={"1.5"} />,
+                        placeholder: 'Search files...',
+                    }}
+                />
             </Group>
         </Container>
     )

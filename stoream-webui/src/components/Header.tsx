@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Avatar, Card, Container, Drawer, Grid, Group, Skeleton, Space, Stack, Title } from "@mantine/core";
+import { Avatar, Card, Container, Drawer, Grid, Group, Skeleton, Space, Stack } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import About from "./About";
 import FileTypes from "./FileTypes";
@@ -50,7 +50,6 @@ const Header: React.FC<HeaderProps> = ({dir}) => {
         <Grid.Col>
           <Group justify="space-between" mt="md" mb="xs">
             <FileTypes dir={dir} />
-            <Title order={2}> Stoream </Title>
             <Avatar color="red" size={"xl"} alt="" src={"/src/assets/logo.png"} onClick={() => setUserDetailsState.open()} />
             <Drawer
               opened={userDetailsState}

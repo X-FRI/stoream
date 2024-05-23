@@ -26,11 +26,12 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Container, ScrollArea, Stack, Table } from "@mantine/core";
+import { Card, Container, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
-import { slice } from "../model/Directory.res.mjs"
+import { slice, stringOfDirectorySize } from "../model/Directory.res.mjs"
+import { stringOfFileSize } from "../model/File.res.mjs"
 import { Directory } from "../model/Directory.gen"
 import React from "react";
 
@@ -77,7 +78,9 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
             DEFAULT_BREADCRUMBS
                 .concat(titles.map((title, index) => {
                     return { title: title, path: "/home/muqiu/Documents/Note/" + titles.slice(0, index + 1).join("/") }
-                }))
+                }
+            )
+        )
 
         newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
         console.log(newBreadcrumbs)
@@ -97,15 +100,15 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
             <Table.Tr key={dir.name} style={{ cursor: "pointer" }} onClick={() => {
                 updateBreadcrumbs(dir.path)
             }}>
-                <Table.Td>{dir.name}</Table.Td>
+                <Table.Td><Text fz="sm" lh="xs" c="blue">{dir.name}</Text></Table.Td>
                 <Table.Td>{dir.files.length}</Table.Td>
-                <Table.Td>{(dir.size / 1024).toFixed()}</Table.Td>
+                <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
             <Table.Tr style={{ cursor: "pointer" }} key={file.filename}>
-                <Table.Td>{file.filename}</Table.Td>
+                <Table.Td><Text fz="sm" lh="xs" c="black">{file.filename}</Text></Table.Td>
                 <Table.Td>0</Table.Td>
-                <Table.Td>{(file.filesize / 1024).toFixed()}</Table.Td>
+                <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
             </Table.Tr>
         ))
     }
@@ -128,17 +131,24 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                     }</Breadcrumbs>
                     <ScrollArea h={500}>
                         <Table captionSide="bottom" highlightOnHover>
-                            <Table.Caption>Files in {"/home/muqiu/Documents/Note"}</Table.Caption>
+                            <Table.Caption>Files in {breadcrumbs[breadcrumbs.length - 1].path}</Table.Caption>
                             <Table.Thead>
                                 <Table.Tr>
                                     <Table.Th>Name</Table.Th>
                                     <Table.Th>Files</Table.Th>
-                                    <Table.Th>Size (KB)</Table.Th>
+                                    <Table.Th>Size</Table.Th>
                                 </Table.Tr>
                             </Table.Thead>
                             <Table.Tbody>
                                 {render()}
                             </Table.Tbody>
+                            <Table.Tfoot>
+                                <Table.Tr>
+                                    <Table.Th>Name</Table.Th>
+                                    <Table.Th>Files</Table.Th>
+                                    <Table.Th>Size</Table.Th>
+                                </Table.Tr>
+                            </Table.Tfoot>
                         </Table>
                     </ScrollArea>
                 </Stack>

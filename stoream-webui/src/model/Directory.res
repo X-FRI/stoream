@@ -35,6 +35,37 @@ type rec t = {
   files: array<File.t>,
 }
 
+let findFile = (dir: t, filename: string): array<File.t> => {
+  let rec __find = (dir: t, files: array<File.t>): array<File.t> => {
+    switch dir.files->Array.find(file => file.filename == filename) {
+    | Some(file) => files->Array.concat([file])
+    | None =>
+      if dir.sub->Array.length == 0 {
+        []
+      } else {
+        dir.sub
+        ->Array.map(sub => __find(sub, files)->Array.concat(files))
+        ->Array.flat
+      }
+    }
+  }
+
+  __find(dir, [])
+}
+
+let flatFile = (dir: t): array<File.t> => {
+  let rec __flat = (dir: t, files: array<File.t>): array<File.t> => {
+    dir.files->Array.concat(
+      dir.sub
+      ->Array.map(sub => __flat(sub, files)->Array.concat(files))
+      ->Array.flat,
+    )
+  }
+  __flat(dir, [])
+}
+
+let stringOfDirectorySize = File.stringOfFileSize
+
 /** Slice the dir tree structure based on the provided path */
 let slice = (dir: t, path: string): t => {
   if dir.path == path {
@@ -48,10 +79,13 @@ let slice = (dir: t, path: string): t => {
         if dir.name == path {
           dir
         } else {
-          __slice(switch dir.sub->Array.find(sub => sub.name == path) {
+          __slice(
+            switch dir.sub->Array.find(sub => sub.name == path) {
             | Some(dir) => dir
             | None => Js.Exn.raiseError("Cannot get the directory content: " ++ dir.path)
-          }, progres + 1)
+            },
+            progres + 1,
+          )
         }
       }
     }
