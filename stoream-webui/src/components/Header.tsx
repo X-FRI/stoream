@@ -26,21 +26,11 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Grid, GridItem } from "@chakra-ui/react";
-import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
 
 const Header = () => {
   return (
     <>
-      <Grid  templateColumns='repeat(5, 1fr)' gap={4}>
-        <GridItem colSpan={2} h='10' bg='tomato' >
-          <CircularProgress value={80} />
-        </GridItem>
 
-        <GridItem colStart={8} colEnd={12} h='10' bg='papayawhip'>
-          <CircularProgress value={80} />
-        </GridItem>
-      </Grid>
     </>
   );
 };

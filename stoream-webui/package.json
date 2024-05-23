@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "rescript build && tsc && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "res:build": "rescript",
@@ -13,19 +13,13 @@
     "res:dev": "rescript -w"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@glennsl/rescript-fetch": "^0.2.0",
-    "@mui/material": "6.0.0-alpha.8",
-    "@rescript/core": "^1.3.0",
-    "@rescript/react": "^0.12.1",
-    "baseui": "0.0.0-next-6fabc7134",
+    "@mantine/core": "^7.9.2",
+    "@mantine/hooks": "^7.9.2",
+    "@mantine/notifications": "^7.9.2",
     "js-md5": "^0.8.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1",
-    "styletron-engine-monolithic": "^1.0.0",
-    "styletron-react": "^6.1.1"
+    "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.2",
@@ -36,7 +30,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "rescript": "^11.1.0",
+    "postcss": "^8.4.38",
+    "postcss-preset-mantine": "^1.15.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.11"
   }
