@@ -26,26 +26,29 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { User } from "../model/User"
+import * as Request from "../model/Request.res.mjs"
 import React from "react";
 import { Stack, Input, Button, Title, Card, Space } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [usernameInputError, setUsernameInputError] = React.useState(false);
   const [passwordInputError, setPasswordInputError] = React.useState(false);
+  const navigate = useNavigate()
 
   const login = async (): Promise<void> => {
     if (username.length == 0) return setUsernameInputError(true)
     if (password.length == 0) return setPasswordInputError(true)
-    else return await new User(username, password).requestLogin().then(() => {
+    else return await Request.User.request({ username, password }).then(() => {
       notifications.show({
         title: "login successful",
         message: "Successfully logged in to user " + username,
         color: "green"
       })
+      navigate("/")
     }).catch(reason => {
       notifications.show({
         title: "An error occurred during login",
@@ -56,30 +59,30 @@ const Login = () => {
   };
 
   return (
-      <Stack align="center" justify="center" gap="xl">
-        <Space h="xl" />
-    <Space h="xl" />
-    <Space h="xl" />
-      <Card shadow="sm" padding="1g" radius="md" withBorder style={{width: "20em"}}>
-          <Stack style={{margin: "10% 10% 10% 10%"}} align="center" justify="center" gap="xl">
+    <Stack align="center" justify="center" gap="xl">
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
+      <Card shadow="sm" padding="1g" radius="md" withBorder style={{ width: "20em" }}>
+        <Stack style={{ margin: "10% 10% 10% 10%" }} align="center" justify="center" gap="xl">
           <Title order={2}>Login to Stoream</Title>
-          <Input 
+          <Input
             error={usernameInputError}
             placeholder="Username"
-            style={{width: "15em"}}
+            style={{ width: "15em" }}
             onChange={(value) => {
               setUsername(value.target.value)
               setUsernameInputError(false)
             }} />
-          <Input error={passwordInputError} placeholder="Password" type="password" style={{width: "15em"}} onChange={(value) => {
-             setPassword(value.target.value)
-             setPasswordInputError(false)
+          <Input error={passwordInputError} placeholder="Password" type="password" style={{ width: "15em" }} onChange={(value) => {
+            setPassword(value.target.value)
+            setPasswordInputError(false)
           }} />
           <Button onClick={async () => await login()}> Login </Button>
-          </Stack>
-          </Card>
-            
-      </Stack>
+        </Stack>
+      </Card>
+
+    </Stack>
   );
 };
 

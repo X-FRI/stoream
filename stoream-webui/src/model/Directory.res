@@ -26,28 +26,10 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/Login";
-import { MantineProvider } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
-
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <MantineProvider>
-    <Notifications position="top-right" zIndex={1000} />
-    <RouterProvider
-      router={createBrowserRouter([
-        {
-          path: "/",
-          element: <Login />,
-        },
-      ])}
-    />
-    </MantineProvider>
-  </React.StrictMode>,
-);
+type rec t = {
+  name: string,
+  size: int,
+  sub: array<t>,
+  path: string,
+  files: array<File.t>,
+}

@@ -26,28 +26,20 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/Login";
-import { MantineProvider } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
+@genType.as("User")
+type t = {
+  username: string,
+  password: string,
+}
 
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
+module Encrypted = {
+  @module("js-md5") external md5: string => string = "md5"
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <MantineProvider>
-    <Notifications position="top-right" zIndex={1000} />
-    <RouterProvider
-      router={createBrowserRouter([
-        {
-          path: "/",
-          element: <Login />,
-        },
-      ])}
-    />
-    </MantineProvider>
-  </React.StrictMode>,
-);
+  /// The user's password is encrypted by this function and sent to the engine.
+  let encryptedUser = (user: t): t => {
+    {
+      username: user.username,
+      password: md5(user.password),
+    }
+  }
+}
