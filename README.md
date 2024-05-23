@@ -25,10 +25,9 @@
 This project is mainly constructed using the following technologies:
 
 ### WebUI
-- <a href="https://rescript-lang.org"> <img src="./stoream-webui/src/assets/rescript-logo.svg" height="20px"> Fast, Simple, Fully Typed JavaScript from the Future </a>
-- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/src/assets/typescript-logo.svg" height="20px"> TypeScript is JavaScript with syntax for types. </a>
-- <a href="https://react.dev/"> <img src="./stoream-webui/src/assets/react-logo.svg" height="20px"> The library for web and native user interfaces </a>
-- <a href="https://geist-ui.dev/"> <img src="./stoream-webui/src/assets/geist-ui.png" height="20px"> An open source design system for building modern websites and applications. </a>
+- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/src/assets/typescript-logo.svg" height="20px"> TypeScript: JavaScript with syntax for types. </a>
+- <a href="https://react.dev/"> <img src="./stoream-webui/src/assets/react-logo.svg" height="20px"> React: The library for web and native user interfaces </a>
+- <a href="https://mantine.dev/"> <img src="./stoream-webui/src/assets/mantine-logo.svg" height="20px"> A fully featured React components library </a>
 
 ### Engine
 - <a href="https://www.rust-lang.org/"> <img src="./stoream-webui/src/assets/rust-logo.svg" height="20px"> A language empowering everyone to build reliable and efficient software. </a>
