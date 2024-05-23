@@ -13,9 +13,9 @@
 
 <center>
 
-| Module | Status                                                                                                                                                                     |
-| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WebUI  | [![stoream-webui](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml) |
+| Module | Status                                                                                                                                                                           |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WebUI  | [![stoream-webui](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-webui.yaml)       |
 | Engine | [![Test Rust project](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml/badge.svg)](https://github.com/X-FRI/stoream/actions/workflows/stoream-engine.yaml) |
 
 </center>
@@ -25,7 +25,8 @@
 This project is mainly constructed using the following technologies:
 
 ### WebUI
-- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/src/assets/typescript-logo.svg" height="20px"> TypeScript: JavaScript with syntax for types. </a>
+- <a href="https://rescript-lang.org/"> <img src="./stoream-webui/src/assets/rescript-logo.svg" height="20px"> Fast, Simple, Fully Typed JavaScript from the Future </a>
+- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/src/assets/typescript-logo.svg" height="20px"> JavaScript with syntax for types. </a>
 - <a href="https://react.dev/"> <img src="./stoream-webui/src/assets/react-logo.svg" height="20px"> React: The library for web and native user interfaces </a>
 - <a href="https://mantine.dev/"> <img src="./stoream-webui/src/assets/mantine-logo.svg" height="20px"> A fully featured React components library </a>
 
