@@ -36,6 +36,12 @@ interface FileTypesProps {
     dir: Directory
 }
 
+/** FileTypes itself does not render information about file types,
+  * but rather renders the ratio of total file size to free space.
+  * However, it can be clicked to display a Drawer to display
+  * detailed information about file types. 
+  * 
+  * TODO: This component is not yet complete */
 const FileTypes: React.FC<FileTypesProps> = ({ dir }) => {
     const [fileDetailsState, setFileDetailsState] = useDisclosure(false);
 

@@ -34,6 +34,7 @@ type t =
   | Audio
   | Other
 
+/** Proportion of file types, unit is quantity */
 @genType.as("FileTypeProportion")
 type proportion = {
   image: int,

@@ -35,6 +35,7 @@ type rec t = {
   files: array<File.t>,
 }
 
+/** Slice the dir tree structure based on the provided path */
 let slice = (dir: t, path: string): t => {
   if dir.path == path {
     dir
@@ -47,7 +48,10 @@ let slice = (dir: t, path: string): t => {
         if dir.name == path {
           dir
         } else {
-          __slice(dir.sub->Array.find(sub => sub.name == path)->Option.getExn, progres + 1)
+          __slice(switch dir.sub->Array.find(sub => sub.name == path) {
+            | Some(dir) => dir
+            | None => Js.Exn.raiseError("Cannot get the directory content: " ++ dir.path)
+          }, progres + 1)
         }
       }
     }
@@ -55,6 +59,7 @@ let slice = (dir: t, path: string): t => {
   }
 }
 
+/** Calculate the file type proportion of all files in dir */
 let calculateFileTypeProportion = (dir: t) => {
   let rec __calculateFileTypeProportion = (
     ~init: FileType.proportion={image: 0, document: 0, video: 0, audio: 0, other: 0},

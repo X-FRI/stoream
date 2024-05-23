@@ -26,6 +26,9 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/** Custom svg icons are here 
+  * 
+  * SEE: https://www.svgrepo.com */
 interface AddressBookIconProps extends React.ComponentPropsWithoutRef<'svg'> {
     size?: number | string;
 }

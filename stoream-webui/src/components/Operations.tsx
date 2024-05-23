@@ -29,6 +29,11 @@
 import { Button, Container, Group, Input } from "@mantine/core"
 import { SearchIcon } from "./Icons";
 
+/** Operations is a series of operation components under the 
+  * Header component on the homepage, such as uploading files, 
+  * searching for files, etc.
+  * 
+  * TODO: This component is not yet complete */
 const Operations = () => {
     return (
         <Container>

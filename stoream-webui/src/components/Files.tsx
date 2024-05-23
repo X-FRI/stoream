@@ -34,6 +34,10 @@ import { slice } from "../model/Directory.res.mjs"
 import { Directory } from "../model/Directory.gen"
 import React from "react";
 
+/** Before loading the Files component, its need to request the directory tree
+  * under the path specified by the configuration file from the engine.
+  * This function will be called by react-router-dom in the loader.
+  * The return value can be obtained through useLoaderData. */
 export const fetch = async (): Promise<Directory | void> => {
     return await Request.Directory.request("/home/muqiu/Documents/Note").catch(reason => {
         notifications.show({
@@ -48,25 +52,45 @@ interface FilesProps {
     dir: Directory
 }
 
+/** Files is a file list view component used to display the contents of dir
+  * dir is passed in from the outside. This value is usually the return value of fetch. */
 const Files: React.FC<FilesProps> = ({ dir }) => {
+
+    /* Breadcrumbs is used to display the path of the current file list
+     * and is bound to the rendering function of the file list.
+     * If breadcrumbs is updated, it will cause the file list to re-render the content in the new path. */
     const DEFAULT_BREADCRUMBS = [{ title: 'Note', path: "/home/muqiu/Documents/Note" }]
     const [breadcrumbs, setBreadcrumbs] = React.useState(DEFAULT_BREADCRUMBS)
 
+    /* Used to update breadcrumbs.
+     * Clicking the path in breadcrumbs should call this function to update.
+     * This function will recalculate the path in breadcrumbs. 
+     * 
+     * Note: Please do not call setBreadcrumbs directly */
     const updateBreadcrumbs = (path: string) => {
-        setBreadcrumbs(
+        const titles = path
+            .split("/home/muqiu/Documents/Note")[1]
+            .split("/")
+            .slice(1);
+
+        const newBreadcrumbs =
             DEFAULT_BREADCRUMBS
-                .concat(path
-                    .split("/home/muqiu/Documents/Note")[1]
-                    .split("/")
-                    .slice(1)
-                    .map(title => ({ title: title, path: path }))))
+                .concat(titles.map((title, index) => {
+                    return { title: title, path: "/home/muqiu/Documents/Note/" + titles.slice(0, index + 1).join("/") }
+                }))
+
+        newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
+        console.log(newBreadcrumbs)
+        setBreadcrumbs(newBreadcrumbs)
     }
 
+    /* Used to render the content in the path 
+     * pointed to by the last (i.e. latest) value of breadcrumbs. */
     const render = () => {
         const realtimeDir: Directory = (() => {
             if (breadcrumbs.length == 1)
                 return dir
-            else return slice(dir, breadcrumbs[1].path.split("/home/muqiu/Documents/Note")[1])
+            else return slice(dir, breadcrumbs[breadcrumbs.length - 1].path.split("/home/muqiu/Documents/Note")[1])
         })()
 
         return realtimeDir.sub.map(dir =>
@@ -95,9 +119,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                             <Anchor key={index} onClick={() => {
                                 if (item.path === "/home/muqiu/Documents/Note") setBreadcrumbs(DEFAULT_BREADCRUMBS)
                                 else {
-                                    console.log(item)
                                     updateBreadcrumbs(item.path)
-                                    console.log(breadcrumbs)
                                 }
                             }}>
                                 {item.title}

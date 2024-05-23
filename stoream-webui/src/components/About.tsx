@@ -28,6 +28,7 @@
 
 import { Badge, Card, Container, Group, Image, SimpleGrid, Text } from "@mantine/core";
 
+/// Image files used in About component
 const images = [
     "/src/assets/rescript-logo.svg",
     "/src/assets/typescript-logo.svg",
@@ -36,6 +37,8 @@ const images = [
     "/src/assets/mantine-logo.svg",
 ];
 
+/** About component is used to display information related to the project,
+  * currently it is a card */
 const About = () => {
     return (
         <Container>

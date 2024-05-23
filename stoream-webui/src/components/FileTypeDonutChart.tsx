@@ -35,6 +35,8 @@ interface FileTypeDonutChartProps {
     proportion: FileTypeProportion
 }
 
+/** FileTypeDountChart is used to render the proportion of different file types
+  * The proportion parameter is the file proportion data calculated externally. */
 const FileTypeDonutChart: React.FC<FileTypeDonutChartProps> = ({ proportion }) => {
     const fileTypeDetails = [
         { name: 'Document', value: proportion.document, color: 'indigo.6' },

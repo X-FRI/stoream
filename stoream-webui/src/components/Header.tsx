@@ -37,6 +37,10 @@ interface HeaderProps {
   dir: Directory
 }
 
+/** Header is used to render information about the proportion,
+  * current user, etc. of the home page header.
+  * 
+  * TODO: Optimized rendering of users and user details */
 const Header: React.FC<HeaderProps> = ({dir}) => {
   const [userDetailsState, setUserDetailsState] = useDisclosure(false);
 
