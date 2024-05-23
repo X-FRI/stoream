@@ -35,25 +35,49 @@ type rec t = {
   files: array<File.t>,
 }
 
-let rec calculateFileTypeProportion = (
-  ~init: FileType.proportion={image: 0, document: 0, video: 0, audio: 0, other: 0},
-  dir: t,
-): FileType.proportion => {
-  open FileType
-
-  let _calculate = (~init: FileType.proportion, files: array<File.t>) => {
-    files->Array.reduce(init, (proportion, file) => {
-      switch FileType.Suffix.getType(file.filename) {
-      | FileType.Image => {...proportion, image: proportion.image + 1}
-      | FileType.Document => {...proportion, document: proportion.document + 1}
-      | FileType.Video => {...proportion, video: proportion.video + 1}
-      | FileType.Audio => {...proportion, audio: proportion.audio + 1}
-      | FileType.Other => {...proportion, other: proportion.other + 1}
+let slice = (dir: t, path: string): t => {
+  if dir.path == path {
+    dir
+  } else {
+    let path = path->String.split("/")->Array.sliceToEnd(~start=1)
+    let rec __slice = (dir: t, progres: int): t => {
+      switch path[progres] {
+      | None => dir
+      | Some(path) =>
+        if dir.name == path {
+          dir
+        } else {
+          __slice(dir.sub->Array.find(sub => sub.name == path)->Option.getExn, progres + 1)
+        }
       }
+    }
+    __slice(dir, 0)
+  }
+}
+
+let calculateFileTypeProportion = (dir: t) => {
+  let rec __calculateFileTypeProportion = (
+    ~init: FileType.proportion={image: 0, document: 0, video: 0, audio: 0, other: 0},
+    dir: t,
+  ): FileType.proportion => {
+    open FileType
+
+    let __calculateFiles = (~init: FileType.proportion, files: array<File.t>) => {
+      files->Array.reduce(init, (proportion, file) => {
+        switch FileType.Suffix.getType(file.filename) {
+        | FileType.Image => {...proportion, image: proportion.image + 1}
+        | FileType.Document => {...proportion, document: proportion.document + 1}
+        | FileType.Video => {...proportion, video: proportion.video + 1}
+        | FileType.Audio => {...proportion, audio: proportion.audio + 1}
+        | FileType.Other => {...proportion, other: proportion.other + 1}
+        }
+      })
+    }
+
+    dir.sub->Array.reduce(init, (proportion, dir) => {
+      __calculateFileTypeProportion(~init=__calculateFiles(~init=proportion, dir.files), dir)
     })
   }
 
-  dir.sub->Array.reduce(init, (proportion, dir) => {
-    calculateFileTypeProportion(~init=_calculate(~init=proportion, dir.files), dir)
-  })
+  __calculateFileTypeProportion(dir)
 }
