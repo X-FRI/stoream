@@ -26,24 +26,45 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Container, Grid, GridCol } from "@mantine/core";
-import Header from "../components/Header";
-import Operations from "../components/Operations";
-import Files from "../components/Files";
-import { useLoaderData } from "react-router-dom";
+@genType.as("FileType")
+type t =
+  | Image
+  | Document
+  | Video
+  | Audio
+  | Other
 
-function App() {
-  const dir: any = useLoaderData()
-
-  return (
-    <Container>
-      <Grid display={"flex"} style={{height: "100vh", justifyContent: "center", alignItems: "center"}}>
-        <GridCol span={12}> <Header dir={dir}  /> </GridCol>
-        <GridCol span={12}> <Operations /> </GridCol>
-        <GridCol span={12}> <Files dir={dir} /> </GridCol>
-      </Grid>
-    </Container>
-  );
+/** Proportion of file types, unit is quantity */
+@genType.as("FileTypeProportion")
+type proportion = {
+  image: int,
+  document: int,
+  video: int,
+  audio: int,
+  other: int,
 }
 
-export default App;
+module Suffix = {
+  let image = Set.fromArray(["png", "jpg", "jpeg", "webp", "svg", "gif"])
+  let document = Set.fromArray(["pdf", "doc", "docx", "md", "tex", "epub"])
+  let video = Set.fromArray(["mkv", "mp4"])
+  let audio = Set.fromArray(["mp3", "aac", "wav"])
+
+  let getType = (filename: string): t => {
+    switch filename->String.split(".")->Array.last {
+    | None => Other
+    | Some(suffix) =>
+      if Set.has(image, suffix) {
+        Image
+      } else if Set.has(document, suffix) {
+        Document
+      } else if Set.has(video, suffix) {
+        Video
+      } else if Set.has(audio, suffix) {
+        Audio
+      } else {
+        Other
+      }
+    }
+  }
+}

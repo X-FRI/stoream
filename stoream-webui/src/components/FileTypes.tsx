@@ -26,24 +26,44 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Container, Grid, GridCol } from "@mantine/core";
-import Header from "../components/Header";
-import Operations from "../components/Operations";
-import Files from "../components/Files";
-import { useLoaderData } from "react-router-dom";
+import { RingProgress, Text } from "@mantine/core"
+import { useDisclosure } from "@mantine/hooks";
+import FileTypeDetails from "./FileTypeDetails";
+import { Directory } from "../model/Directory.gen";
+import React from "react";
 
-function App() {
-  const dir: any = useLoaderData()
-
-  return (
-    <Container>
-      <Grid display={"flex"} style={{height: "100vh", justifyContent: "center", alignItems: "center"}}>
-        <GridCol span={12}> <Header dir={dir}  /> </GridCol>
-        <GridCol span={12}> <Operations /> </GridCol>
-        <GridCol span={12}> <Files dir={dir} /> </GridCol>
-      </Grid>
-    </Container>
-  );
+interface FileTypesProps {
+    dir: Directory
 }
 
-export default App;
+/** FileTypes itself does not render information about file types,
+  * but rather renders the ratio of total file size to free space.
+  * However, it can be clicked to display a Drawer to display
+  * detailed information about file types. 
+  * 
+  * TODO: This component is not yet complete */
+const FileTypes: React.FC<FileTypesProps> = ({ dir }) => {
+    const [fileDetailsState, setFileDetailsState] = useDisclosure(false);
+
+    return (
+        <>
+            <RingProgress
+                onClick={() => setFileDetailsState.open()}
+                size={100}
+                thickness={5}
+                roundCaps
+                label={
+                    <Text c="black" fw={700} ta="center" size="xl">
+                        40%
+                    </Text>
+                }
+                sections={[
+                    { value: 40, color: 'blue' },
+                ]}
+            />
+            <FileTypeDetails dir={dir} state={fileDetailsState} setState={setFileDetailsState} />
+        </>
+    )
+}
+
+export default FileTypes

@@ -26,24 +26,36 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Container, Grid, GridCol } from "@mantine/core";
-import Header from "../components/Header";
-import Operations from "../components/Operations";
-import Files from "../components/Files";
-import { useLoaderData } from "react-router-dom";
+import { DonutChart } from "@mantine/charts"
+import React from "react"
 
-function App() {
-  const dir: any = useLoaderData()
+import { FileTypeProportion } from "../model/FileType.gen"
 
-  return (
-    <Container>
-      <Grid display={"flex"} style={{height: "100vh", justifyContent: "center", alignItems: "center"}}>
-        <GridCol span={12}> <Header dir={dir}  /> </GridCol>
-        <GridCol span={12}> <Operations /> </GridCol>
-        <GridCol span={12}> <Files dir={dir} /> </GridCol>
-      </Grid>
-    </Container>
-  );
+interface FileTypeDonutChartProps {
+    proportion: FileTypeProportion
 }
 
-export default App;
+/** FileTypeDountChart is used to render the proportion of different file types
+  * The proportion parameter is the file proportion data calculated externally. */
+const FileTypeDonutChart: React.FC<FileTypeDonutChartProps> = ({ proportion }) => {
+    const fileTypeDetails = [
+        { name: 'Document', value: proportion.document, color: 'indigo.6' },
+        { name: 'Image', value: proportion.image, color: 'yellow.6' },
+        { name: 'Video', value: proportion.video, color: 'teal.6' },
+        { name: 'Audio', value: proportion.audio, color: 'blue.6' },
+        { name: 'Other', value: proportion.other, color: 'gray.6' },
+    ];
+
+    return (
+        <>
+            <DonutChart
+                data={fileTypeDetails}
+                withLabelsLine
+                withLabels
+                chartLabel={"File Types"}
+            />
+        </>
+    )
+}
+
+export default FileTypeDonutChart

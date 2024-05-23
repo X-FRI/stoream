@@ -1,11 +1,43 @@
+/// Copyright (c) 2024 The X-Files Research Institute
+///
+/// All rights reserved.
+///
+/// Redistribution and use in source and binary forms, with or without modification,
+/// are permitted provided that the following conditions are met:
+///
+///     * Redistributions of source code must retain the above copyright notice,
+///       this list of conditions and the following disclaimer.
+///     * Redistributions in binary form must reproduce the above copyright notice,
+///       this list of conditions and the following disclaimer in the documentation
+///       and/or other materials provided with the distribution.
+///     * Neither the name of Stoream nor the names of its contributors
+///       may be used to endorse or promote products derived from this software
+///       without specific prior written permission.
+///
+/// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+/// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+/// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+/// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+/// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+/// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+/// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+/// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+/// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+/// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+/// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import { Card, Container, ScrollArea, Stack, Table } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
+import { slice } from "../model/Directory.res.mjs"
 import { Directory } from "../model/Directory.gen"
 import React from "react";
-import { useLoaderData } from "react-router-dom";
 
+/** Before loading the Files component, its need to request the directory tree
+  * under the path specified by the configuration file from the engine.
+  * This function will be called by react-router-dom in the loader.
+  * The return value can be obtained through useLoaderData. */
 export const fetch = async (): Promise<Directory | void> => {
     return await Request.Directory.request("/home/muqiu/Documents/Note").catch(reason => {
         notifications.show({
@@ -16,34 +48,60 @@ export const fetch = async (): Promise<Directory | void> => {
     })
 }
 
-const Files = () => {
-    const [breadcrumbs, setBreadcrumbs] = React.useState([{ title: 'Note', path: "/home/muqiu/Documents/Note" }])
-    const [files, updateFiles]: any = React.useState(useLoaderData())
+interface FilesProps {
+    dir: Directory
+}
 
+/** Files is a file list view component used to display the contents of dir
+  * dir is passed in from the outside. This value is usually the return value of fetch. */
+const Files: React.FC<FilesProps> = ({ dir }) => {
+
+    /* Breadcrumbs is used to display the path of the current file list
+     * and is bound to the rendering function of the file list.
+     * If breadcrumbs is updated, it will cause the file list to re-render the content in the new path. */
+    const DEFAULT_BREADCRUMBS = [{ title: 'Note', path: "/home/muqiu/Documents/Note" }]
+    const [breadcrumbs, setBreadcrumbs] = React.useState(DEFAULT_BREADCRUMBS)
+
+    /* Used to update breadcrumbs.
+     * Clicking the path in breadcrumbs should call this function to update.
+     * This function will recalculate the path in breadcrumbs. 
+     * 
+     * Note: Please do not call setBreadcrumbs directly */
     const updateBreadcrumbs = (path: string) => {
-        path.split("/home/muqiu/Documents/Note")[1].split("/").map(title => setBreadcrumbs(
-            [
-                { title: 'Note', path: "/home/muqiu/Documents/Note" },
-                { title: title, path: path }
-            ]
-        ))
+        const titles = path
+            .split("/home/muqiu/Documents/Note")[1]
+            .split("/")
+            .slice(1);
+
+        const newBreadcrumbs =
+            DEFAULT_BREADCRUMBS
+                .concat(titles.map((title, index) => {
+                    return { title: title, path: "/home/muqiu/Documents/Note/" + titles.slice(0, index + 1).join("/") }
+                }))
+
+        newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
+        console.log(newBreadcrumbs)
+        setBreadcrumbs(newBreadcrumbs)
     }
 
-    const render = (dir: Directory) => {
-        if (dir.sub === undefined) {
-            return <Table.Tr />
-        }
+    /* Used to render the content in the path 
+     * pointed to by the last (i.e. latest) value of breadcrumbs. */
+    const render = () => {
+        const realtimeDir: Directory = (() => {
+            if (breadcrumbs.length == 1)
+                return dir
+            else return slice(dir, breadcrumbs[breadcrumbs.length - 1].path.split("/home/muqiu/Documents/Note")[1])
+        })()
 
-        return dir.sub.map(dir =>
+        return realtimeDir.sub.map(dir =>
             <Table.Tr key={dir.name} style={{ cursor: "pointer" }} onClick={() => {
                 updateBreadcrumbs(dir.path)
-                updateFiles(render(dir))
             }}>
                 <Table.Td>{dir.name}</Table.Td>
                 <Table.Td>{dir.files.length}</Table.Td>
                 <Table.Td>{(dir.size / 1024).toFixed()}</Table.Td>
             </Table.Tr>
-        ).concat(dir.files.map(file =>
+        ).concat(realtimeDir.files.map(file =>
             <Table.Tr style={{ cursor: "pointer" }} key={file.filename}>
                 <Table.Td>{file.filename}</Table.Td>
                 <Table.Td>0</Table.Td>
@@ -58,7 +116,12 @@ const Files = () => {
                 <Stack>
                     <Breadcrumbs>{
                         breadcrumbs.map((item, index) => (
-                            <Anchor key={index} onClick={() => { console.log(item.path) }}>
+                            <Anchor key={index} onClick={() => {
+                                if (item.path === "/home/muqiu/Documents/Note") setBreadcrumbs(DEFAULT_BREADCRUMBS)
+                                else {
+                                    updateBreadcrumbs(item.path)
+                                }
+                            }}>
                                 {item.title}
                             </Anchor>
                         ))
@@ -74,7 +137,7 @@ const Files = () => {
                                 </Table.Tr>
                             </Table.Thead>
                             <Table.Tbody>
-                                {render(files)}
+                                {render()}
                             </Table.Tbody>
                         </Table>
                     </ScrollArea>
