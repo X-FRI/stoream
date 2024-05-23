@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Avatar, Center, Container, Divider, Drawer, Grid, GridCol, Group, RingProgress, Text } from "@mantine/core";
+import { Avatar, Center, Container, Divider, Drawer, Grid, GridCol, Group, RingProgress, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { DonutChart, Sparkline } from '@mantine/charts';
 
@@ -39,7 +39,8 @@ export const fileTypeDetails = [
 
 const Header = () => {
   const [fileDetailsState, setFileDetailsState] = useDisclosure(false);
-  
+  const [userDetailsState, setUserDetailsState] = useDisclosure(false);
+
   return (
     <Container>
       <Grid>
@@ -48,10 +49,10 @@ const Header = () => {
             <RingProgress
               onClick={() => setFileDetailsState.open()}
               size={100}
-              thickness={12}
+              thickness={5}
               roundCaps
               label={
-                <Text c="blue" fw={700} ta="center" size="xl">
+                <Text c="black" fw={700} ta="center" size="xl">
                   40%
                 </Text>
               }
@@ -59,6 +60,8 @@ const Header = () => {
                 { value: 40, color: 'blue' },
               ]}
             />
+
+            <Title order={2}> Stoream </Title>
 
             <Drawer
               opened={fileDetailsState}
@@ -101,9 +104,24 @@ const Header = () => {
               </Grid>
             </Drawer>
 
-            <Avatar color="red" size={"lg"} alt="">
-              MH
-            </Avatar>
+            <Avatar color="red" size={"xl"} alt="" src={"/src/assets/logo.png"} onClick={() => setUserDetailsState.open()} />
+
+            <Drawer
+              opened={userDetailsState}
+              onClose={setUserDetailsState.close}
+              offset={8}
+              title="Details"
+              position="right"
+              overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+              radius={"md"}
+            >
+              <Stack>
+                <Skeleton height={50} circle mb="xl" />
+                <Skeleton height={8} radius="xl" />
+                <Skeleton height={8} mt={6} radius="xl" />
+                <Skeleton height={8} mt={6} width="70%" radius="xl" />
+              </Stack>
+            </Drawer>
           </Group>
         </Grid.Col>
       </Grid>

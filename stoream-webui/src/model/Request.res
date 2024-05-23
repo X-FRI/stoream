@@ -30,7 +30,7 @@
 module Directory = {
 
   let request = async (path: string): Directory.t => {
-    await Fetch.fetch("http://localhost:9993/Directory?path=" ++ path, {mode: #cors})
+    await Fetch.fetch("http://localhost:9993/filetree?path=" ++ path, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse

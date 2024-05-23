@@ -34,7 +34,7 @@ import Files from "../components/Files";
 function App() {
   return (
     <Container>
-      <Grid>
+      <Grid display={"flex"} style={{height: "100vh", justifyContent: "center", alignItems: "center"}}>
         <GridCol span={12}> <Header /> </GridCol>
         <GridCol span={12}> <Operations /> </GridCol>
         <GridCol span={12}> <Files /> </GridCol>

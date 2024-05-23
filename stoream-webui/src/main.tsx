@@ -39,25 +39,27 @@ import '@mantine/charts/styles.css';
 
 import Error from "./pages/Error";
 import App from "./pages/App";
+import { fetch } from "./components/Files";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MantineProvider>
-    <Notifications position="top-right" zIndex={1000} />
-    <RouterProvider
-      router={createBrowserRouter([
-        {
-          path: "/login",
-          element: <Login />,
-          errorElement: <Error />
-        },
-        {
-          path: "/",
-          element: <App />,
-          errorElement: <Error />
-        },
-      ])}
-    />
+      <Notifications position="top-right" zIndex={1000} />
+      <RouterProvider
+        router={createBrowserRouter([
+          {
+            path: "/login",
+            element: <Login />,
+            errorElement: <Error />
+          },
+          {
+            path: "/",
+            element: <App />,
+            errorElement: <Error />,
+            loader: async () => { return await fetch() }
+          },
+        ])}
+      />
     </MantineProvider>
   </React.StrictMode>,
 );
