@@ -30,14 +30,17 @@ import { Container, Grid, GridCol } from "@mantine/core";
 import Header from "../components/Header";
 import Operations from "../components/Operations";
 import Files from "../components/Files";
+import { useLoaderData } from "react-router-dom";
 
 function App() {
+  const dir: any = useLoaderData()
+
   return (
     <Container>
       <Grid display={"flex"} style={{height: "100vh", justifyContent: "center", alignItems: "center"}}>
-        <GridCol span={12}> <Header /> </GridCol>
+        <GridCol span={12}> <Header dir={dir}  /> </GridCol>
         <GridCol span={12}> <Operations /> </GridCol>
-        <GridCol span={12}> <Files /> </GridCol>
+        <GridCol span={12}> <Files dir={dir} /> </GridCol>
       </Grid>
     </Container>
   );

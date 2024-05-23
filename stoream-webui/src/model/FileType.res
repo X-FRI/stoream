@@ -26,34 +26,44 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-@genType.as("Directory")
-type rec t = {
-  name: string,
-  size: int,
-  sub: array<t>,
-  path: string,
-  files: array<File.t>,
+@genType.as("FileType")
+type t =
+  | Image
+  | Document
+  | Video
+  | Audio
+  | Other
+
+@genType.as("FileTypeProportion")
+type proportion = {
+  image: int,
+  document: int,
+  video: int,
+  audio: int,
+  other: int,
 }
 
-let rec calculateFileTypeProportion = (
-  ~init: FileType.proportion={image: 0, document: 0, video: 0, audio: 0, other: 0},
-  dir: t,
-): FileType.proportion => {
-  open FileType
+module Suffix = {
+  let image = Set.fromArray(["png", "jpg", "jpeg", "webp", "svg", "gif"])
+  let document = Set.fromArray(["pdf", "doc", "docx", "md", "tex", "epub"])
+  let video = Set.fromArray(["mkv", "mp4"])
+  let audio = Set.fromArray(["mp3", "aac", "wav"])
 
-  let _calculate = (~init: FileType.proportion, files: array<File.t>) => {
-    files->Array.reduce(init, (proportion, file) => {
-      switch FileType.Suffix.getType(file.filename) {
-      | FileType.Image => {...proportion, image: proportion.image + 1}
-      | FileType.Document => {...proportion, document: proportion.document + 1}
-      | FileType.Video => {...proportion, video: proportion.video + 1}
-      | FileType.Audio => {...proportion, audio: proportion.audio + 1}
-      | FileType.Other => {...proportion, other: proportion.other + 1}
+  let getType = (filename: string): t => {
+    switch filename->String.split(".")->Array.last {
+    | None => Other
+    | Some(suffix) =>
+      if Set.has(image, suffix) {
+        Image
+      } else if Set.has(document, suffix) {
+        Document
+      } else if Set.has(video, suffix) {
+        Video
+      } else if Set.has(audio, suffix) {
+        Audio
+      } else {
+        Other
       }
-    })
+    }
   }
-
-  dir.sub->Array.reduce(init, (proportion, dir) => {
-    calculateFileTypeProportion(~init=_calculate(~init=proportion, dir.files), dir)
-  })
 }

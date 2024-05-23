@@ -32,7 +32,6 @@ import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
 import { Directory } from "../model/Directory.gen"
 import React from "react";
-import { useLoaderData } from "react-router-dom";
 
 export const fetch = async (): Promise<Directory | void> => {
     return await Request.Directory.request("/home/muqiu/Documents/Note").catch(reason => {
@@ -44,9 +43,13 @@ export const fetch = async (): Promise<Directory | void> => {
     })
 }
 
-const Files = () => {
+interface FilesProps {
+    dir: Directory
+}
+
+const Files: React.FC<FilesProps> = ({dir}) => {
     const [breadcrumbs, setBreadcrumbs] = React.useState([{ title: 'Note', path: "/home/muqiu/Documents/Note" }])
-    const [files, updateFiles]: any = React.useState(useLoaderData())
+    const [files, updateFiles]: any = React.useState(dir)
 
     const updateBreadcrumbs = (path: string) => {
         path.split("/home/muqiu/Documents/Note")[1].split("/").map(title => setBreadcrumbs(
