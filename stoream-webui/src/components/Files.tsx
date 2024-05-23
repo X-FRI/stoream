@@ -30,7 +30,8 @@ import { Card, Container, ScrollArea, Stack, Table } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
-import { slice } from "../model/Directory.res.mjs"
+import { slice, stringOfDirectorySize } from "../model/Directory.res.mjs"
+import { stringOfFileSize } from "../model/File.res.mjs"
 import { Directory } from "../model/Directory.gen"
 import React from "react";
 
@@ -77,7 +78,9 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
             DEFAULT_BREADCRUMBS
                 .concat(titles.map((title, index) => {
                     return { title: title, path: "/home/muqiu/Documents/Note/" + titles.slice(0, index + 1).join("/") }
-                }))
+                }
+            )
+        )
 
         newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
         console.log(newBreadcrumbs)
@@ -99,13 +102,13 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
             }}>
                 <Table.Td>{dir.name}</Table.Td>
                 <Table.Td>{dir.files.length}</Table.Td>
-                <Table.Td>{(dir.size / 1024).toFixed()}</Table.Td>
+                <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
             <Table.Tr style={{ cursor: "pointer" }} key={file.filename}>
                 <Table.Td>{file.filename}</Table.Td>
                 <Table.Td>0</Table.Td>
-                <Table.Td>{(file.filesize / 1024).toFixed()}</Table.Td>
+                <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
             </Table.Tr>
         ))
     }

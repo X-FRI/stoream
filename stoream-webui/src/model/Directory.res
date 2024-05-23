@@ -35,6 +35,8 @@ type rec t = {
   files: array<File.t>,
 }
 
+let stringOfDirectorySize = File.stringOfFileSize
+
 /** Slice the dir tree structure based on the provided path */
 let slice = (dir: t, path: string): t => {
   if dir.path == path {
