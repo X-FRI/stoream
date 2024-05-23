@@ -35,6 +35,8 @@ import { Notifications } from '@mantine/notifications';
 
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import Error from "./pages/Error";
+import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -43,8 +45,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <RouterProvider
       router={createBrowserRouter([
         {
-          path: "/",
+          path: "/login",
           element: <Login />,
+          errorElement: <Error />
+        },
+        {
+          path: "/",
+          element: <App />,
+          errorElement: <Error />
         },
       ])}
     />

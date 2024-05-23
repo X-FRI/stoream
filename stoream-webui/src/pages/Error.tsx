@@ -27,13 +27,46 @@
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-import { useRouteError } from "react-router-dom";
+import { Link, useRouteError } from "react-router-dom";
+import { Card, Image, Text, Badge, Button, Group, Container, Space, Title, Center } from '@mantine/core';
 
 const Error = () => {
   const error: any = useRouteError();
-  console.log(error.message);
   return (
-    <></>
+    <Container flex={"center"}>
+      <Space h="lg" />
+      <Space h="lg" />
+      <Space h="lg" />
+      <Space h="lg" />
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card.Section>
+          <Image
+            src="/src/assets/logo.png"
+            height={160}
+            alt="Stoream"
+          />
+        </Card.Section>
+
+        <Group justify="flex-start" mt="md" mb="xs">
+          <Badge color="red" />
+          <Title order={2}>
+            Oops!
+          </Title>
+        </Group>
+
+        <Text size="sm">
+          STOREAM ERROR: {error.statusText || error.message}
+        </Text>
+
+        <Center>
+          <Link to="https://github.com/x-fri/stoream/issues">
+            <Button color="red" mt="md" radius="md">
+              Feedback
+            </Button>
+          </Link>
+        </Center>
+      </Card>
+    </Container>
   );
 };
 
