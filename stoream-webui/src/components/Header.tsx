@@ -26,9 +26,10 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Avatar, Center, Container, Divider, Drawer, Grid, GridCol, Group, RingProgress, Skeleton, Stack, Text, Title } from "@mantine/core";
+import { Avatar, Card, Center, Container, Divider, Drawer, Grid, GridCol, Group, RingProgress, Skeleton, Space, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { DonutChart, Sparkline } from '@mantine/charts';
+import About from "./About";
 
 export const fileTypeDetails = [
   { name: 'Document', value: 400, color: 'indigo.6' },
@@ -116,10 +117,15 @@ const Header = () => {
               radius={"md"}
             >
               <Stack>
-                <Skeleton height={50} circle mb="xl" />
-                <Skeleton height={8} radius="xl" />
-                <Skeleton height={8} mt={6} radius="xl" />
-                <Skeleton height={8} mt={6} width="70%" radius="xl" />
+                <Space h={"md"} />
+                <Card shadow="sm">
+                  <Skeleton height={50} circle mb="xl" />
+                  <Skeleton height={8} radius="xl" />
+                  <Skeleton height={8} mt={6} radius="xl" />
+                  <Skeleton height={8} mt={6} width="70%" radius="xl" />
+                </Card>
+                <Space h={"lg"} />
+                <About />
               </Stack>
             </Drawer>
           </Group>
