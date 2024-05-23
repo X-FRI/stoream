@@ -26,12 +26,11 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Avatar, Card, Container, Drawer, Grid, Group, Skeleton, Space, Stack, Title } from "@mantine/core";
+import { Avatar, Card, Container, Drawer, Grid, Group, Skeleton, Space, Stack } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import About from "./About";
 import FileTypes from "./FileTypes";
 import { Directory } from "../model/Directory.gen";
-import { findFile } from "../model/Directory.res.mjs";
 import React from "react";
 
 interface HeaderProps {

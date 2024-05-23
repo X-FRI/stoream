@@ -30,7 +30,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
-import { createTheme, MantineProvider, virtualColor } from '@mantine/core';
+import { createTheme, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 import '@mantine/core/styles.css';
