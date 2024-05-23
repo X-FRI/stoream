@@ -76,7 +76,7 @@ const FileTypeDetails: React.FC<FileTypeDetailsProps> = ({ state, setState, dir 
                                 h={"10em"}
                                 data={[10, 20, 40, 20, 40, 10, 50]}
                                 curveType="natural"
-                                color="blue"
+                                color="black"
                                 fillOpacity={0.6}
                                 strokeWidth={2}
                             />

@@ -31,6 +31,7 @@ import { useDisclosure } from '@mantine/hooks';
 import About from "./About";
 import FileTypes from "./FileTypes";
 import { Directory } from "../model/Directory.gen";
+import { findFile } from "../model/Directory.res.mjs";
 import React from "react";
 
 interface HeaderProps {
@@ -50,7 +51,6 @@ const Header: React.FC<HeaderProps> = ({dir}) => {
         <Grid.Col>
           <Group justify="space-between" mt="md" mb="xs">
             <FileTypes dir={dir} />
-            <Title order={2}> Stoream </Title>
             <Avatar color="red" size={"xl"} alt="" src={"/src/assets/logo.png"} onClick={() => setUserDetailsState.open()} />
             <Drawer
               opened={userDetailsState}

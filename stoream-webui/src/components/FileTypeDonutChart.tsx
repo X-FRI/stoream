@@ -42,7 +42,7 @@ const FileTypeDonutChart: React.FC<FileTypeDonutChartProps> = ({ proportion }) =
         { name: 'Document', value: proportion.document, color: 'indigo.6' },
         { name: 'Image', value: proportion.image, color: 'yellow.6' },
         { name: 'Video', value: proportion.video, color: 'teal.6' },
-        { name: 'Audio', value: proportion.audio, color: 'blue.6' },
+        { name: 'Audio', value: proportion.audio, color: 'black.6' },
         { name: 'Other', value: proportion.other, color: 'gray.6' },
     ];
 
@@ -50,6 +50,8 @@ const FileTypeDonutChart: React.FC<FileTypeDonutChartProps> = ({ proportion }) =
         <>
             <DonutChart
                 data={fileTypeDetails}
+                strokeWidth={1}
+                tooltipDataSource="segment"
                 withLabelsLine
                 withLabels
                 chartLabel={"File Types"}
