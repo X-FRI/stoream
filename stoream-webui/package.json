@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "rescript build && tsc && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "res:build": "rescript",
@@ -13,15 +13,18 @@
     "res:dev": "rescript -w"
   },
   "dependencies": {
-    "@geist-ui/core": "^2.3.8",
-    "@geist-ui/icons": "^1.0.2",
     "@glennsl/rescript-fetch": "^0.2.0",
+    "@mantine/charts": "^7.9.2",
+    "@mantine/core": "^7.9.2",
+    "@mantine/hooks": "^7.9.2",
+    "@mantine/notifications": "^7.9.2",
     "@rescript/core": "^1.3.0",
     "@rescript/react": "^0.12.1",
     "js-md5": "^0.8.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "recharts": "2"
   },
   "devDependencies": {
     "@types/react": "^18.3.2",
@@ -32,6 +35,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "postcss": "^8.4.38",
+    "postcss-preset-mantine": "^1.15.0",
+    "postcss-simple-vars": "^7.0.1",
     "rescript": "^11.1.0",
     "typescript": "^5.4.5",
     "vite": "^5.2.11"

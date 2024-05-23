@@ -71,7 +71,7 @@ module File = {
 }
 
 
-module FileTree = {
+module Directory = {
 
   let files = (response: Js_dict.t<_>) => {
     switch response->Js_dict.get("files")->Option.getExn {
@@ -83,9 +83,9 @@ module FileTree = {
     }
   }
 
-  /// Convert the response returned by engine to FileTree.t
-  let rec parse = (response: Js_dict.t<_>): FileTree.t => {
-    open FileTree
+  /// Convert the response returned by engine to Directory.t
+  let rec parse = (response: Js_dict.t<_>): Directory.t => {
+    open Directory
     {
       name: response->parseString("dirname"),
       path: response->parseString("path"),

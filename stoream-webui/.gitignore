@@ -26,5 +26,5 @@ dist-ssr
 /lib/
 .bsb.lock
 
-*.mjs
 *.res.mjs
+*.gen.tsx

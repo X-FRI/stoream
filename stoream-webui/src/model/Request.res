@@ -27,35 +27,22 @@
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-module FileTree = {
+module Directory = {
 
-  let request = async (path: string): FileTree.t => {
+  let request = async (path: string): Directory.t => {
     await Fetch.fetch("http://localhost:9993/filetree?path=" ++ path, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
-      response->Js.Json.decodeObject->Option.getExn->Response.FileTree.parse
+      response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
     )
   }
 }
 
-
 module User = {
-
   open User
 
-  /// Check whether the logged in expression is legal.
-  let check = (user: User.t): User.t => {
-    if Js.String.length(user.username) == 0 {
-      failwith("The username is empty")
-    } else if Js.String.length(user.password) == 0 {
-      failwith("The password is empty")
-    } else {
-      user
-    }
-  }
-
   let request = async (user: User.t): unit => {
-    await check(user)
+    await user
     ->Encrypted.encryptedUser
     ->(
       async user =>
