@@ -26,14 +26,16 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Container, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Button, Card, Center, Container, List, ListItem, Modal, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
 import { slice, stringOfDirectorySize } from "../model/Directory.res.mjs"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import { Directory } from "../model/Directory.gen"
+import { nonExistentFile } from "../model/File.res.mjs";
 import React from "react";
+import { useDisclosure } from "@mantine/hooks";
 
 /** Before loading the Files component, its need to request the directory tree
   * under the path specified by the configuration file from the engine.
@@ -62,6 +64,11 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
     const DEFAULT_BREADCRUMBS = [{ title: dir.name, path: dir.path }]
     const [breadcrumbs, setBreadcrumbs] = React.useState(DEFAULT_BREADCRUMBS)
 
+    /* When a file in the list is clicked, a Modal will pop up to confirm the download, 
+     * and its state is controlled by downloadFileModalState. */
+    const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
+    const [downloadFile, setDownloadFile] = React.useState(nonExistentFile)
+
     /* Used to update breadcrumbs.
      * Clicking the path in breadcrumbs should call this function to update.
      * This function will recalculate the path in breadcrumbs. 
@@ -78,11 +85,10 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 .concat(titles.map((title, index) => {
                     return { title: title, path: dir.path + titles.slice(0, index + 1).join("/") }
                 }
-            )
-        )
+                )
+                )
 
         newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
-        console.log(newBreadcrumbs)
         setBreadcrumbs(newBreadcrumbs)
     }
 
@@ -104,7 +110,10 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
-            <Table.Tr style={{ cursor: "pointer" }} key={file.filename}>
+            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={async () => {
+                setDownloadFile(file)
+                setDownloadFileModalState.open()
+            }}>
                 <Table.Td><Text fz="sm" lh="xs" c="black">{file.filename}</Text></Table.Td>
                 <Table.Td>0</Table.Td>
                 <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
@@ -119,7 +128,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                     <Breadcrumbs>{
                         breadcrumbs.map((item, index) => (
                             <Anchor key={index} onClick={() => {
-                                if (item.path === "/home/muqiu/Documents/Note") setBreadcrumbs(DEFAULT_BREADCRUMBS)
+                                if (item.path === dir.path) setBreadcrumbs(DEFAULT_BREADCRUMBS)
                                 else {
                                     updateBreadcrumbs(item.path)
                                 }
@@ -152,6 +161,25 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                     </ScrollArea>
                 </Stack>
             </Card>
+
+            <Modal opened={downloadFileModalState} onClose={setDownloadFileModalState.close} title="Download">
+                <List>
+                    <List.Item>File name: {downloadFile.filename}</List.Item>
+                    <List.Item>File path: {downloadFile.filepath}</List.Item>
+                    <List.Item>File size: {stringOfFileSize(downloadFile.filesize)}</List.Item>
+                </List>
+                <Center>
+                    <Button mt="lg" onClick={async () => {
+                        const link = URL.createObjectURL(await Request.$$File.cat(downloadFile.filepath))
+                        const download = document.createElement("a")
+                        download.href = link
+                        download.download = downloadFile.filename
+                        download.click()
+                        URL.revokeObjectURL(link)
+                        setDownloadFileModalState.close()
+                    }}> Click to download </Button>
+                </Center>
+            </Modal>
         </Container>
     )
 }

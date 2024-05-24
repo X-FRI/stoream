@@ -33,6 +33,12 @@ type t = {
   filesize: int,
 }
 
+let nonExistentFile = {
+  filename: "ERROR",
+  filepath: "ERROR",
+  filesize: 0,
+}
+
 let stringOfFileSize = (filesize: int): string => {
   let carry = filesize->Int.toString->String.length / 3
   switch ["B", "KB", "MB", "GB", "TB"]->Array.at(carry) {

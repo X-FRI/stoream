@@ -26,6 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 module Directory = {
   let tree = async (): Directory.t => {
     await Fetch.fetch(`${Config.value.engine}/tree`, {mode: #cors})
@@ -33,6 +34,16 @@ module Directory = {
     ->Promise.thenResolve(response =>
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
     )
+  }
+}
+
+module File = {
+
+  let cat = async (file: File.t): Fetch.Blob.t => {
+    await Fetch.fetch(
+      `${Config.value.engine}/cat?path=${file.filepath}`,
+      {mode: #cors},
+    )->Promise.then(Fetch.Response.blob)
   }
 }
 
