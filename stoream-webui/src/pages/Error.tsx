@@ -27,11 +27,11 @@
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-import { Link, useRouteError } from "react-router-dom";
-import { Card, Image, Text, Badge, Button, Group, Container, Space, Title, Center, Divider } from '@mantine/core';
+import { Link, useRouteError ,ErrorResponse} from "react-router-dom";
+import { Card, Image, Text, Badge, Button, Group, Container, Space, Title, Center } from '@mantine/core';
 
 const Error = () => {
-  const error: any = useRouteError();
+  const error = useRouteError() as Error & ErrorResponse;
   return (
     <Container flex={"center"}>
       <Space h="lg" />
@@ -54,18 +54,9 @@ const Error = () => {
           </Title>
         </Group>
 
-        <Text size="sm" mb={"lg"}>
+        <Text size="sm">
           STOREAM ERROR: {error.statusText || error.message}
         </Text>
-
-        {error.statusText || error.stack.split("\n").map((msg: string) => {
-          return (
-            <Text size="sm" c="dimmed">
-              {msg}
-              <Divider h={"xs"} />
-            </Text>)
-          })
-        }
 
         <Center>
           <Link to="https://github.com/x-fri/stoream/issues">
