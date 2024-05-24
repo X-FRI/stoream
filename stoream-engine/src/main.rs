@@ -1,5 +1,3 @@
-use crate::config::Config;
-use axum::routing;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -27,11 +25,13 @@ use axum::routing;
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use colog::log::info;
-
 mod config;
 mod server;
 mod storage;
+
+use crate::config::Config;
+use axum::routing;
+use colog::log::info;
 
 #[tokio::main]
 async fn main() {
