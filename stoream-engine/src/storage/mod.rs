@@ -25,14 +25,34 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use self::directory::Directory;
-
 pub mod directory;
 pub mod file;
 pub mod filesystem;
 
+use self::directory::Directory;
+use crate::{config::CONFIG, server::request::Request};
+use serde::{Deserialize, Serialize};
+use tokio_util::io::ReaderStream;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Config {
+    pub typ: StorageType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum StorageType {
+    FileSystem(filesystem::FileSystem),
+}
+
 pub trait Storage {
     /// Similar to the ls command in POSIX systems, returns all files and directories under path.
     /// TODO: Handle the situation when path is not a directory.
-    fn ls(self, path: String) -> Directory;
+    async fn tree(self, path: String) -> Directory;
+    async fn cat(self, path: String) -> ReaderStream<tokio::fs::File>;
+}
+
+pub async fn handlers() -> crate::server::request::Handlers {
+    match unsafe { CONFIG.clone().unwrap().storage.typ } {
+        StorageType::FileSystem(filesystem) => filesystem.handlers().await,
+    }
 }

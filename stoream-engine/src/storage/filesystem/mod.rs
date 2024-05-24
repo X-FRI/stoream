@@ -1,10 +1,4 @@
-
-use serde::{Deserialize, Serialize};
-
-use super::{
-    directory::{self},
-};
-
+mod cat;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -32,9 +26,48 @@ use super::{
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-pub mod ls;
+mod tree;
 
-#[derive(Debug, Serialize, Deserialize)]
+use std::path::Path;
+
+use crate::server::request::Request;
+use crate::storage::Storage;
+use axum::{extract::Query, http::StatusCode, routing, Json};
+use colog::log::info;
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+use tokio_util::io::ReaderStream;
+
+use super::directory::Directory;
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FileSystem {
     pub root: String,
+}
+
+impl Storage for FileSystem {
+    async fn cat(self, path: String) -> ReaderStream<tokio::fs::File> {
+        tokio_util::io::ReaderStream::new(tokio::fs::File::open(path).await.unwrap())
+    }
+
+    async fn tree(self, path: String) -> Directory {
+        info!("tree directory {}", path);
+        tree::build_directory_structure(Path::new(path.as_str())).unwrap()
+    }
+}
+
+impl Request for FileSystem {
+    async fn handlers(self) -> crate::server::request::Handlers {
+        let tree = json!(self.clone().tree(self.root).await);
+        vec![
+            (
+                "/tree",
+                routing::get(move || async { (StatusCode::OK, Json(tree)) }),
+            ),
+            (
+                "/cat",
+                routing::get(move |Query(args): Query<cat::Args>| async { cat::cat(args).await }),
+            ),
+        ]
+    }
 }

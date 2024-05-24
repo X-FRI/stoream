@@ -34,11 +34,17 @@ This project is mainly constructed using the following technologies:
 - <a href="https://www.rust-lang.org/"> <img src="./stoream-webui/src/assets/rust-logo.svg" height="20px"> A language empowering everyone to build reliable and efficient software. </a>
 - [Axum: Ergonomic and modular web framework built with Tokio, Tower, and Hyper](https://github.com/tokio-rs/axum)
 
-> Communication between WebUI and Engine via WebSocket.
-
 ## Docs
 
 ### Developer
+
+1. Fork this repo, then clone your forked repo
+2. Develop on the __dev branch__: `git checkout -b dev`
+3. Create new upstream remote: `git remote add upstream https://github.com/X-FRI`
+4. Synchronize the dev branch of upstream: `git pull upstream dev`
+5. Do your development
+6. Push to your own repo: `git push origin dev`
+7. Submit your PR to the __dev branch__
 
 #### WebUI
 

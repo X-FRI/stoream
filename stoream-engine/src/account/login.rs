@@ -25,10 +25,40 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
+use colog::log::{error, info};
 use serde::{Deserialize, Serialize};
+use serde_json::json;
+
+use crate::config::CONFIG;
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct User {
+pub struct Args {
     pub username: String,
     pub password: String,
+}
+
+pub async fn login(Query(args): Query<Args>) -> impl IntoResponse {
+    info!("request login {}", args.username);
+
+    if unsafe {
+        args.username == CONFIG.clone().unwrap().account.username
+            && args.password == CONFIG.clone().unwrap().account.password
+    } {
+        info!("login to user {} successfully", args.username);
+        (
+            StatusCode::OK,
+            Json(json!({
+                "status": "OK",
+            })),
+        )
+    } else {
+        error!("login to user {} failed, wrong password", args.username);
+        (
+            StatusCode::OK,
+            Json(json!({
+                "status": "ERR"
+            })),
+        )
+    }
 }

@@ -1,0 +1,20 @@
+{
+    "account": {
+        "username": "admin",
+        "password": "21232f297a57a5a743894a0e4a801fc3"
+    },
+    "server": {
+        "host": "localhost",
+        "port": "9993",
+        "cors": [
+            "http://localhost:5173"
+        ]
+    },
+    "storage": {
+        "typ": {
+            "FileSystem": {                
+                "root": "/home/muqiu/Documents/Note"
+            }
+        }
+    }
+}

@@ -33,13 +33,18 @@ type t = {
   filesize: int,
 }
 
+let nonExistentFile = {
+  filename: "ERROR",
+  filepath: "ERROR",
+  filesize: 0,
+}
+
 let stringOfFileSize = (filesize: int): string => {
   let carry = filesize->Int.toString->String.length / 3
   switch ["B", "KB", "MB", "GB", "TB"]->Array.at(carry) {
   | Some(unit) =>
-    (filesize->Int.toFloat /. Math.pow(1000., ~exp=carry->Int.toFloat))->Float.toFixed(~digits=2) ++
-    " " ++
-    unit
+    `${(filesize->Int.toFloat /. Math.pow(1000., ~exp=carry->Int.toFloat))
+        ->Float.toFixed(~digits=2)} ${unit}`
   | None => filesize->Int.toString
   }
 }

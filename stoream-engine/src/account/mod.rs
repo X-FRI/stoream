@@ -25,9 +25,17 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+pub mod login;
+
+use axum::routing;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Path {
-    pub path: String,
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Account {
+    pub username: String,
+    pub password: String,
+}
+
+pub async fn handlers() -> crate::server::request::Handlers {
+    vec![("/login", routing::get(login::login))]
 }

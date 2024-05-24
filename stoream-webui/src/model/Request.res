@@ -28,13 +28,22 @@
 
 
 module Directory = {
-
-  let request = async (path: string): Directory.t => {
-    await Fetch.fetch("http://localhost:9993/filetree?path=" ++ path, {mode: #cors})
+  let tree = async (): Directory.t => {
+    await Fetch.fetch(`${Config.value.engine}/tree`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
     )
+  }
+}
+
+module File = {
+
+  let cat = async (file: File.t): Fetch.Blob.t => {
+    await Fetch.fetch(
+      `${Config.value.engine}/cat?path=${file.filepath}`,
+      {mode: #cors},
+    )->Promise.then(Fetch.Response.blob)
   }
 }
 
@@ -47,7 +56,7 @@ module User = {
     ->(
       async user =>
         await Fetch.fetch(
-          "http://localhost:9993/login?username=" ++ user.username ++ "&password=" ++ user.password,
+          `${Config.value.engine}/login?username=${user.username}&password=${user.password}`,
           {mode: #cors},
         )
         ->Promise.then(Fetch.Response.json)

@@ -25,59 +25,63 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-pub mod request;
+use std::fs;
+use std::io::{self};
+use std::path::Path;
 
-use axum::{http::HeaderValue, routing::MethodRouter, Router};
-use colog::log::info;
-use serde::{Deserialize, Serialize};
-use tower_http::cors::{Any, CorsLayer};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Config {
-    host: String,
-    port: String,
-    cors: Vec<String>,
-}
+use crate::storage::directory::Directory;
+use crate::storage::file::File;
 
-pub struct Server {
-    url: String,
-    cors: CorsLayer,
-    routers: Vec<(&'static str, MethodRouter)>,
-}
-
-impl Config {
-    fn get_cors(self) -> CorsLayer {
-        self.cors.iter().fold(
-            CorsLayer::new().allow_methods(Any).allow_headers(Any),
-            |cors, cor| cors.allow_origin(cor.clone().parse::<HeaderValue>().unwrap()),
-        )
+pub fn get_directory_size(path: &Path) -> io::Result<u64> {
+    let mut total_size = 0;
+    if path.is_file() {
+        return Ok(fs::metadata(path)?.len());
+    } else {
+        for entry in fs::read_dir(path)? {
+            let entry = entry?;
+            let path = entry.path();
+            if path.is_dir() {
+                total_size += get_directory_size(&path)?;
+            } else {
+                total_size += fs::metadata(&path)?.len();
+            }
+        }
     }
-
-    fn get_url(self) -> String {
-        format!("{}:{}", self.host, self.port)
-    }
+    Ok(total_size)
 }
 
-impl Server {
-    pub fn new(config: Config, routers: Vec<(&'static str, MethodRouter)>) -> Self {
-        Self {
-            url: config.clone().get_url(),
-            cors: config.get_cors(),
-            routers,
+pub fn build_directory_structure(path: &Path) -> io::Result<Directory> {
+    let entries = fs::read_dir(path)?;
+    let mut files = vec![];
+    let mut directories = vec![];
+
+    for entry in entries {
+        let entry = entry?;
+        let path = entry.path();
+
+        if path.is_dir() {
+            directories.push(build_directory_structure(&path)?);
+        } else {
+            let metadata = fs::metadata(&path)?;
+            let size = metadata.len();
+            files.push(File {
+                filename: path.file_name().unwrap().to_str().unwrap().to_string(),
+                path: path.to_str().unwrap().to_string(),
+                size,
+            });
         }
     }
 
-    pub async fn start(self) {
-        let server = axum::serve(
-            tokio::net::TcpListener::bind(&self.url).await.unwrap(),
-            self.routers.iter().fold(Router::new(), |routers, router| {
-                routers
-                    .route(router.0, router.1.clone())
-                    .layer(self.cors.clone())
-            }),
-        );
+    let directory_path = path.to_str().unwrap().to_string();
+    let directory_name = path.file_name().unwrap().to_str().unwrap().to_string();
+    let size = get_directory_size(path)?;
 
-        info!("stoream engine started at {}", self.url);
-        server.await.unwrap()
-    }
+    Ok(Directory {
+        dirname: directory_name,
+        path: directory_path,
+        size: size,
+        files: files,
+        sub: directories,
+    })
 }

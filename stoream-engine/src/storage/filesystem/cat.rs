@@ -1,3 +1,7 @@
+use std::path::PathBuf;
+
+use axum::{body::Body, http::header, response::IntoResponse};
+use colog::log::info;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -25,30 +29,38 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
-use colog::log::{error, info};
-use serde_json::json;
+use serde::{Deserialize, Serialize};
 
-use crate::server::request::user::User;
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Args {
+    path: String,
+}
 
-pub async fn login(Query(user): Query<User>) -> impl IntoResponse {
-    info!("request login {}", user.username);
+pub async fn cat(args: Args) -> impl IntoResponse {
+    info!("cat file {}", args.path);
 
-    if user.username == "admin" && user.password == format!("{:x}", md5::compute("admin")) {
-        info!("login to user {} successfully", user.username);
-        (
-            StatusCode::OK,
-            Json(json!({
-                "status": "OK",
-            })),
-        )
-    } else {
-        error!("login to user {} failed, wrong password", user.username);
-        (
-            StatusCode::OK,
-            Json(json!({
-                "status": "ERR"
-            })),
-        )
-    }
+    (
+        [
+            (
+                header::CONTENT_TYPE,
+                "text/plain; charset=utf-8".to_string(),
+            ),
+            (
+                header::CONTENT_DISPOSITION,
+                format!(
+                    "attachment; filename=\"{}\"",
+                    PathBuf::from(&args.path)
+                        .file_name()
+                        .unwrap()
+                        .to_str()
+                        .unwrap()
+                ),
+            ),
+        ],
+        Body::from_stream(tokio_util::io::ReaderStream::new(
+            tokio::fs::File::open(&args.path)
+                .await
+                .expect(format!("Cannot cat the file {}", args.path).as_str()),
+        )),
+    )
 }
