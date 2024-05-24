@@ -25,30 +25,20 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
-use colog::log::{error, info};
-use serde_json::json;
+pub mod login;
 
-use crate::server::request::user::User;
+use crate::server::request::Request;
+use axum::routing;
+use serde::{Deserialize, Serialize};
 
-pub async fn login(Query(user): Query<User>) -> impl IntoResponse {
-    info!("request login {}", user.username);
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Account {
+    pub username: String,
+    pub password: String,
+}
 
-    if user.username == "admin" && user.password == format!("{:x}", md5::compute("admin")) {
-        info!("login to user {} successfully", user.username);
-        (
-            StatusCode::OK,
-            Json(json!({
-                "status": "OK",
-            })),
-        )
-    } else {
-        error!("login to user {} failed, wrong password", user.username);
-        (
-            StatusCode::OK,
-            Json(json!({
-                "status": "ERR"
-            })),
-        )
+impl Request for Account {
+    fn handlers() -> crate::server::request::Handlers {
+        vec![("/login", routing::get(login::login))]
     }
 }

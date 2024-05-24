@@ -1,4 +1,3 @@
-pub mod path;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -26,4 +25,9 @@ pub mod path;
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-pub mod user;
+use axum::routing::MethodRouter;
+pub type Handlers = Vec<(&'static str, MethodRouter)>;
+
+pub trait Request {
+    fn handlers() -> Handlers;
+}

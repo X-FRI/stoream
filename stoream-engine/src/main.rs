@@ -1,3 +1,4 @@
+mod account;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -29,23 +30,21 @@ mod config;
 mod server;
 mod storage;
 
-use crate::config::Config;
-use axum::routing;
+use crate::account::Account;
+use crate::config::{Config, CONFIG};
+use crate::server::request::Request;
 use colog::log::info;
 
 #[tokio::main]
 async fn main() {
     colog::init();
+    Config::init();
+
     info!("starting stoream engine...");
 
-    let config = Config::init();
-
     server::Server::new(
-        config.server,
-        vec![
-            ("/login", routing::get(server::login::login)),
-            ("/filetree", routing::get(server::filetree::get)),
-        ],
+        unsafe { CONFIG.clone().unwrap().server },
+        vec![storage::handlers(), Account::handlers()].concat(),
     )
     .start()
     .await

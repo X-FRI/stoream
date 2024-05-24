@@ -30,23 +30,27 @@ pub mod file;
 pub mod filesystem;
 
 use self::directory::Directory;
+use crate::{config::CONFIG, server::request::Request};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
     pub typ: StorageType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum StorageType {
-    FileSystem(filesystem::Config),
+    FileSystem(filesystem::FileSystem),
 }
 
-pub trait Storage<T>
-where
-    T: Storage<T>,
-{
+pub trait Storage {
     /// Similar to the ls command in POSIX systems, returns all files and directories under path.
     /// TODO: Handle the situation when path is not a directory.
-    fn ls(self, path: String) -> Directory;
+    fn tree(self, path: String) -> Directory;
+}
+
+pub fn handlers() -> crate::server::request::Handlers {
+    match unsafe { CONFIG.clone().unwrap().storage.typ } {
+        StorageType::FileSystem(_) => filesystem::FileSystem::handlers(),
+    }
 }

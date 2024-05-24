@@ -25,7 +25,6 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 use std::fs;
 use std::io::{self};
 use std::path::Path;
@@ -35,6 +34,33 @@ use crate::storage::file::File;
 use crate::storage::Storage;
 
 use super::FileSystem;
+
+use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
+use colog::log::info;
+use serde_json::json;
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Args {
+    pub path: String,
+}
+
+pub async fn tree(Query(args): Query<Args>) -> impl IntoResponse {
+    info!("request file tree: {}", args.path);
+
+    let storage = Box::new(FileSystem {
+        root: args.path.clone(),
+    });
+
+    (StatusCode::OK, Json(json!(storage.tree(args.path))))
+}
+
+impl Storage for FileSystem {
+    fn tree(self, path: String) -> Directory {
+        build_directory_structure(Path::new(path.as_str())).unwrap()
+    }
+}
 
 fn get_directory_size(path: &Path) -> io::Result<u64> {
     let mut total_size = 0;
@@ -87,10 +113,4 @@ fn build_directory_structure(path: &Path) -> io::Result<Directory> {
         files: files,
         sub: directories,
     })
-}
-
-impl Storage<FileSystem> for FileSystem {
-    fn ls(self, path: String) -> Directory {
-        build_directory_structure(Path::new(path.as_str())).unwrap()
-    }
 }

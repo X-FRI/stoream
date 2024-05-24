@@ -25,16 +25,19 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+mod tree;
+
+use crate::server::request::Request;
+use axum::routing;
 use serde::{Deserialize, Serialize};
 
-mod ls;
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct FileSystem {
     pub root: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct FileSystem {
-    pub root: String,
+impl Request for FileSystem {
+    fn handlers() -> crate::server::request::Handlers {
+        vec![("/tree", routing::get(tree::tree))]
+    }
 }

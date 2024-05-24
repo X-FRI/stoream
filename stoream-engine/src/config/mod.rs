@@ -32,27 +32,29 @@ use std::io::ErrorKind;
 use std::path::PathBuf;
 use std::{env, io};
 
-use crate::{server, storage};
+use crate::{account, server, storage};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
+    pub account: account::Account,
     pub server: server::Config,
     pub storage: storage::Config,
 }
 
-impl Config {
-    fn with_log(self) -> Self {
-        self
-    }
+pub static mut CONFIG: Option<Config> = None;
 
-    pub fn init() -> Self {
-        serde_json::from_str::<Config>(
-            fs::read_to_string(get_project_root().unwrap().join("stoream-engine.json"))
-                .unwrap()
-                .as_str(),
-        )
-        .unwrap()
-        .with_log()
+impl Config {
+    pub fn init() {
+        unsafe {
+            CONFIG = Some(
+                serde_json::from_str::<Config>(
+                    fs::read_to_string(get_project_root().unwrap().join("stoream-engine.json"))
+                        .unwrap()
+                        .as_str(),
+                )
+                .unwrap(),
+            )
+        }
     }
 }
 

@@ -25,14 +25,12 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+pub mod request;
+
 use axum::{http::HeaderValue, routing::MethodRouter, Router};
 use colog::log::info;
 use serde::{Deserialize, Serialize};
 use tower_http::cors::{Any, CorsLayer};
-
-pub mod filetree;
-pub mod login;
-pub mod request;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
