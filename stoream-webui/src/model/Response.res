@@ -26,22 +26,19 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 let parseInt = (response: Js_dict.t<_>, key: string): int => {
   switch response->Js_dict.get(key)->Option.getExn {
   | Js.Json.Number(int) => int->Float.toInt
-  | _ => failwith("Cannot parse " ++ key ++ " to number")
+  | _ => failwith(`Cannot parse ${key} to number`)
   }
 }
-
 
 let parseString = (response: Js_dict.t<_>, key: string): string => {
   switch response->Js_dict.get(key)->Option.getExn {
   | Js.Json.String(str) => str
-  | _ => failwith("Cannot parse " ++ key ++ " to string")
+  | _ => failwith(`Cannot parse ${key} to string`)
   }
 }
-
 
 module User = {
   /// Get the status value from the response returned by engine
@@ -57,9 +54,7 @@ module User = {
   }
 }
 
-
 module File = {
-
   let parse = (response: Js_dict.t<_>): File.t => {
     open File
     {
@@ -70,16 +65,14 @@ module File = {
   }
 }
 
-
 module Directory = {
-
   let files = (response: Js_dict.t<_>) => {
     switch response->Js_dict.get("files")->Option.getExn {
     | Js.Json.Array(files) =>
       files
       ->Array.map(files => Js.Json.decodeObject(files)->Option.getExn)
       ->Array.map(File.parse)
-    | _ => failwith("Cannot parse files from response: " ++ Js.String.make(response))
+    | _ => failwith(`Cannot parse files from response: ${Js.String.make(response)}`)
     }
   }
 

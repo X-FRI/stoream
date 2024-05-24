@@ -25,7 +25,7 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use axum::{http::HeaderValue, response::{Html, IntoResponse}, routing, Router};
+use axum::{http::HeaderValue, routing, Router};
 use colog::log::info;
 use tower_http::cors::{Any, CorsLayer};
 
@@ -39,8 +39,7 @@ async fn main() {
     let cors = CorsLayer::new()
         .allow_methods(Any)
         .allow_headers(Any)
-        .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap())
-        .allow_origin("http://localhost:9993".parse::<HeaderValue>().unwrap());
+        .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap());
 
     info!("starting stoream engine...");
     let server = axum::serve(
@@ -48,10 +47,6 @@ async fn main() {
             .await
             .unwrap(),
         Router::new()
-            .route(
-                "/",
-                routing::get(site).layer(cors.clone()),
-            )
             .route(
                 "/login",
                 routing::get(server::login::login).layer(cors.clone()),
@@ -61,8 +56,4 @@ async fn main() {
     info!("stoream engine started at http://localhost:9993");
 
     server.await.unwrap();
-}
-
-async fn site() ->  {
-    Html(include_str!("../../stoream-webui/dist/index.html"))
 }

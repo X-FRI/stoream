@@ -26,11 +26,9 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 module Directory = {
-
   let request = async (path: string): Directory.t => {
-    await Fetch.fetch("http://localhost:9993/filetree?path=" ++ path, {mode: #cors})
+    await Fetch.fetch(`${Config.value.engine}/filetree?path=${path}`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
@@ -47,7 +45,7 @@ module User = {
     ->(
       async user =>
         await Fetch.fetch(
-          "http://localhost:9993/login?username=" ++ user.username ++ "&password=" ++ user.password,
+          `${Config.value.engine}/login?username=${user.username}&password=${user.password}`,
           {mode: #cors},
         )
         ->Promise.then(Fetch.Response.json)
