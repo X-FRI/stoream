@@ -1,3 +1,7 @@
+use std::path::PathBuf;
+
+use axum::{body::Body, http::header, response::IntoResponse};
+use colog::log::info;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -25,34 +29,38 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-pub mod directory;
-pub mod file;
-pub mod filesystem;
-
-use self::directory::Directory;
-use crate::{config::CONFIG, server::request::Request};
 use serde::{Deserialize, Serialize};
-use tokio_util::io::ReaderStream;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Config {
-    pub typ: StorageType,
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Args {
+    path: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum StorageType {
-    FileSystem(filesystem::FileSystem),
-}
+pub async fn cat(args: Args) -> impl IntoResponse {
+    info!("cat file {}", args.path);
 
-pub trait Storage {
-    /// Similar to the ls command in POSIX systems, returns all files and directories under path.
-    /// TODO: Handle the situation when path is not a directory.
-    async fn tree(self, path: String) -> Directory;
-    async fn cat(self, path: String) -> ReaderStream<tokio::fs::File>;
-}
-
-pub async fn handlers() -> crate::server::request::Handlers {
-    match unsafe { CONFIG.clone().unwrap().storage.typ } {
-        StorageType::FileSystem(filesystem) => filesystem.handlers().await,
-    }
+    (
+        [
+            (
+                header::CONTENT_TYPE,
+                "text/plain; charset=utf-8".to_string(),
+            ),
+            (
+                header::CONTENT_DISPOSITION,
+                format!(
+                    "attachment; filename=\"{}\"",
+                    PathBuf::from(&args.path)
+                        .file_name()
+                        .unwrap()
+                        .to_str()
+                        .unwrap()
+                ),
+            ),
+        ],
+        Body::from_stream(tokio_util::io::ReaderStream::new(
+            tokio::fs::File::open(&args.path)
+                .await
+                .expect(format!("Cannot cat the file {}", args.path).as_str()),
+        )),
+    )
 }

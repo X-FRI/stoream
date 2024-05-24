@@ -42,7 +42,7 @@ async fn main() {
 
     server::Server::new(
         unsafe { CONFIG.clone().unwrap().server },
-        vec![storage::handlers(), account::handlers()].concat(),
+        vec![storage::handlers().await, account::handlers().await].concat(),
     )
     .start()
     .await

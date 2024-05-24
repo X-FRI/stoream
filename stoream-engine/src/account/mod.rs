@@ -36,6 +36,6 @@ pub struct Account {
     pub password: String,
 }
 
-pub fn handlers() -> crate::server::request::Handlers {
+pub async fn handlers() -> crate::server::request::Handlers {
     vec![("/login", routing::get(login::login))]
 }

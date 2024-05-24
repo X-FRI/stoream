@@ -29,19 +29,11 @@ use std::fs;
 use std::io::{self};
 use std::path::Path;
 
+
 use crate::storage::directory::Directory;
 use crate::storage::file::File;
-use crate::storage::Storage;
 
-use super::FileSystem;
-
-impl Storage for FileSystem {
-    fn tree(self, path: String) -> Directory {
-        build_directory_structure(Path::new(path.as_str())).unwrap()
-    }
-}
-
-fn get_directory_size(path: &Path) -> io::Result<u64> {
+pub fn get_directory_size(path: &Path) -> io::Result<u64> {
     let mut total_size = 0;
     if path.is_file() {
         return Ok(fs::metadata(path)?.len());
@@ -59,7 +51,7 @@ fn get_directory_size(path: &Path) -> io::Result<u64> {
     Ok(total_size)
 }
 
-fn build_directory_structure(path: &Path) -> io::Result<Directory> {
+pub fn build_directory_structure(path: &Path) -> io::Result<Directory> {
     let entries = fs::read_dir(path)?;
     let mut files = vec![];
     let mut directories = vec![];

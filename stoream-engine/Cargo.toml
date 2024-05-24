@@ -9,6 +9,7 @@ edition = "2021"
 axum = { version = "0.7.5", features = ["tokio"] }
 serde_json = { version = "1.0.117" }
 tokio = { version = "1.37.0", features = ["full"] }
+tokio-util = { version = "0.7.11", features = ["full"]}
 colog = { git="https://github.com/X-FRI/rust-colog" }
 serde = { version = "1.0.202", features = ["derive"] }
 serde_derive = "1.0.202"
