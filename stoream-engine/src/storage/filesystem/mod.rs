@@ -1,10 +1,3 @@
-
-use serde::{Deserialize, Serialize};
-
-use super::{
-    directory::{self},
-};
-
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -32,7 +25,14 @@ use super::{
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-pub mod ls;
+use serde::{Deserialize, Serialize};
+
+mod ls;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Config {
+    pub root: String,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FileSystem {

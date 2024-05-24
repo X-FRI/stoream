@@ -1,3 +1,5 @@
+use crate::config::Config;
+use axum::routing;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -25,35 +27,26 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use axum::{http::HeaderValue, routing, Router};
 use colog::log::info;
-use tower_http::cors::{Any, CorsLayer};
 
+mod config;
 mod server;
 mod storage;
 
 #[tokio::main]
 async fn main() {
     colog::init();
-
-    let cors = CorsLayer::new()
-        .allow_methods(Any)
-        .allow_headers(Any)
-        .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap());
-
     info!("starting stoream engine...");
-    let server = axum::serve(
-        tokio::net::TcpListener::bind("localhost:9993")
-            .await
-            .unwrap(),
-        Router::new()
-            .route(
-                "/login",
-                routing::get(server::login::login).layer(cors.clone()),
-            )
-            .route("/filetree", routing::get(server::filetree::get).layer(cors)),
-    );
-    info!("stoream engine started at http://localhost:9993");
 
-    server.await.unwrap();
+    let config = Config::init();
+
+    server::Server::new(
+        config.server,
+        vec![
+            ("/login", routing::get(server::login::login)),
+            ("/filetree", routing::get(server::filetree::get)),
+        ],
+    )
+    .start()
+    .await
 }

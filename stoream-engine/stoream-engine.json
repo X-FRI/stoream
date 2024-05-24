@@ -1,0 +1,16 @@
+{
+    "server": {
+        "host": "localhost",
+        "port": "9993",
+        "cors": [
+            "http://localhost:5173"
+        ]
+    },
+    "storage": {
+        "typ": {
+            "FileSystem": {
+                "root": "/home/muqiu/Documents/Note"
+            }
+        }
+    }
+}

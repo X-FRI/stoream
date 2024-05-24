@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -31,7 +33,20 @@ pub mod directory;
 pub mod file;
 pub mod filesystem;
 
-pub trait Storage {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Config {
+    pub typ: StorageType,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub enum StorageType {
+    FileSystem(filesystem::Config),
+}
+
+pub trait Storage<T>
+where
+    T: Storage<T>,
+{
     /// Similar to the ls command in POSIX systems, returns all files and directories under path.
     /// TODO: Handle the situation when path is not a directory.
     fn ls(self, path: String) -> Directory;

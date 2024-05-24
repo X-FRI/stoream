@@ -1,4 +1,3 @@
-pub mod filetree;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -26,5 +25,61 @@ pub mod filetree;
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+use axum::{http::HeaderValue, routing::MethodRouter, Router};
+use colog::log::info;
+use serde::{Deserialize, Serialize};
+use tower_http::cors::{Any, CorsLayer};
+
+pub mod filetree;
 pub mod login;
 pub mod request;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Config {
+    host: String,
+    port: String,
+    cors: Vec<String>,
+}
+
+pub struct Server {
+    url: String,
+    cors: CorsLayer,
+    routers: Vec<(&'static str, MethodRouter)>,
+}
+
+impl Config {
+    fn get_cors(self) -> CorsLayer {
+        self.cors.iter().fold(
+            CorsLayer::new().allow_methods(Any).allow_headers(Any),
+            |cors, cor| cors.allow_origin(cor.clone().parse::<HeaderValue>().unwrap()),
+        )
+    }
+
+    fn get_url(self) -> String {
+        format!("{}:{}", self.host, self.port)
+    }
+}
+
+impl Server {
+    pub fn new(config: Config, routers: Vec<(&'static str, MethodRouter)>) -> Self {
+        Self {
+            url: config.clone().get_url(),
+            cors: config.get_cors(),
+            routers,
+        }
+    }
+
+    pub async fn start(self) {
+        let server = axum::serve(
+            tokio::net::TcpListener::bind(&self.url).await.unwrap(),
+            self.routers.iter().fold(Router::new(), |routers, router| {
+                routers
+                    .route(router.0, router.1.clone())
+                    .layer(self.cors.clone())
+            }),
+        );
+
+        info!("stoream engine started at {}", self.url);
+        server.await.unwrap()
+    }
+}
