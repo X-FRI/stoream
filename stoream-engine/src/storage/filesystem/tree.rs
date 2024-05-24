@@ -35,27 +35,6 @@ use crate::storage::Storage;
 
 use super::FileSystem;
 
-use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
-use colog::log::info;
-use serde_json::json;
-
-use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Args {
-    pub path: String,
-}
-
-pub async fn tree(Query(args): Query<Args>) -> impl IntoResponse {
-    info!("request file tree: {}", args.path);
-
-    let storage = Box::new(FileSystem {
-        root: args.path.clone(),
-    });
-
-    (StatusCode::OK, Json(json!(storage.tree(args.path))))
-}
-
 impl Storage for FileSystem {
     fn tree(self, path: String) -> Directory {
         build_directory_structure(Path::new(path.as_str())).unwrap()

@@ -27,7 +27,6 @@
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 pub mod login;
 
-use crate::server::request::Request;
 use axum::routing;
 use serde::{Deserialize, Serialize};
 
@@ -37,8 +36,6 @@ pub struct Account {
     pub password: String,
 }
 
-impl Request for Account {
-    fn handlers() -> crate::server::request::Handlers {
-        vec![("/login", routing::get(login::login))]
-    }
+pub fn handlers() -> crate::server::request::Handlers {
+    vec![("/login", routing::get(login::login))]
 }

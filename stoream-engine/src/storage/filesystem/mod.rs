@@ -28,8 +28,10 @@
 mod tree;
 
 use crate::server::request::Request;
-use axum::routing;
+use crate::storage::Storage;
+use axum::{http::StatusCode, routing, Json};
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FileSystem {
@@ -37,7 +39,11 @@ pub struct FileSystem {
 }
 
 impl Request for FileSystem {
-    fn handlers() -> crate::server::request::Handlers {
-        vec![("/tree", routing::get(tree::tree))]
+    fn handlers(self) -> crate::server::request::Handlers {
+        let tree = json!(self.clone().tree(self.clone().root));
+        vec![(
+            "/tree",
+            routing::get(move || async { (StatusCode::OK, Json(tree)) }),
+        )]
     }
 }

@@ -51,6 +51,6 @@ pub trait Storage {
 
 pub fn handlers() -> crate::server::request::Handlers {
     match unsafe { CONFIG.clone().unwrap().storage.typ } {
-        StorageType::FileSystem(_) => filesystem::FileSystem::handlers(),
+        StorageType::FileSystem(filesystem) => filesystem.handlers(),
     }
 }

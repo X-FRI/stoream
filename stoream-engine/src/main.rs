@@ -30,9 +30,7 @@ mod config;
 mod server;
 mod storage;
 
-use crate::account::Account;
 use crate::config::{Config, CONFIG};
-use crate::server::request::Request;
 use colog::log::info;
 
 #[tokio::main]
@@ -44,7 +42,7 @@ async fn main() {
 
     server::Server::new(
         unsafe { CONFIG.clone().unwrap().server },
-        vec![storage::handlers(), Account::handlers()].concat(),
+        vec![storage::handlers(), account::handlers()].concat(),
     )
     .start()
     .await

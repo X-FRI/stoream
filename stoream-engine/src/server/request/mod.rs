@@ -29,5 +29,5 @@ use axum::routing::MethodRouter;
 pub type Handlers = Vec<(&'static str, MethodRouter)>;
 
 pub trait Request {
-    fn handlers() -> Handlers;
+    fn handlers(self) -> Handlers;
 }
