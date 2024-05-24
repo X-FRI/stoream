@@ -4,7 +4,7 @@ type t = {engine: string}
 module Import: {
   let value: t
 } = {
-  @module("../stoream.json")
+  @module("../../stoream-webui.json")
   external config: Js.Json.t = "default"
   let stringify = config->Js.Json.stringify
 

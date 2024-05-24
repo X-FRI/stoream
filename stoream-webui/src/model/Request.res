@@ -27,8 +27,8 @@
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 module Directory = {
-  let request = async (path: string): Directory.t => {
-    await Fetch.fetch(`${Config.value.engine}/filetree?path=${path}`, {mode: #cors})
+  let tree = async (): Directory.t => {
+    await Fetch.fetch(`${Config.value.engine}/tree`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
