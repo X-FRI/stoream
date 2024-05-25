@@ -34,6 +34,17 @@ module Directory = {
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
     )
   }
+
+  let capacity = async (): float => {
+    await Fetch.fetch(`${Config.value.engine}/capacity`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response =>
+      switch response->Js.Json.decodeObject->Option.getExn->Js_dict.get("capacity") {
+      | Some(Js.Json.Number(capacity)) => capacity
+      | _ => Js.Exn.raiseError("Cannot get the capacity")
+      }
+    )
+  }
 }
 
 module File = {
