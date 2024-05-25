@@ -41,7 +41,8 @@ interface HeaderProps {
 /** Header is used to render information about the proportion,
   * current user, etc. of the home page header.
   * 
-  * TODO: Optimized rendering of users and user details */
+  * TODO: Optimized rendering of users and user details
+  *       SparkLine in this component is not yet complete */
 const Header: React.FC<HeaderProps> = ({ dir }) => {
   const [userDetailsState, setUserDetailsState] = useDisclosure(false);
 
