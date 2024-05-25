@@ -30,11 +30,13 @@ import { RingProgress, Text } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import FileTypeDetails from "./FileTypeDetails";
 import { Directory } from "../model/Directory.gen";
+import * as Request from "../model/Request.res.mjs"
 import React from "react";
+import { useLoaderData } from "react-router-dom";
+import { LoaderData } from "../model/LoaderData.gen";
 
 interface FileTypesProps {
-    dir: Directory
-}
+    dir: Directory,}
 
 /** FileTypes itself does not render information about file types,
   * but rather renders the ratio of total file size to free space.
@@ -43,22 +45,26 @@ interface FileTypesProps {
   * 
   * TODO: This component is not yet complete */
 const FileTypes: React.FC<FileTypesProps> = ({ dir }) => {
+    const loaderData = useLoaderData() as LoaderData
     const [fileDetailsState, setFileDetailsState] = useDisclosure(false);
+    const [capacity, setCapacity] = React.useState(loaderData.capacity)
 
     return (
         <>
-            <RingProgress
+            <RingProgress            
+                onLoad={async () => setCapacity(await Request.Directory.capacity())}
+                onPointerEnter={async () => setCapacity(await Request.Directory.capacity())}
                 onClick={() => setFileDetailsState.open()}
                 size={100}
                 thickness={5}
                 roundCaps
                 label={
                     <Text c="black" fw={700} ta="center" size="xl">
-                        40%
+                        {(capacity * 100).toFixed(0) + " %"}
                     </Text>
                 }
                 sections={[
-                    { value: 40, color: 'black' },
+                    { value: (capacity * 100), color: 'black' },
                 ]}
             />
             <FileTypeDetails dir={dir} state={fileDetailsState} setState={setFileDetailsState} />

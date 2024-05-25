@@ -29,7 +29,7 @@
 import { Sparkline } from "@mantine/charts"
 import { Center, Container, Divider, Drawer, Grid, GridCol, Text } from "@mantine/core"
 import React from "react";
-import FileTypeDonutChart from "./FileTypeDonutChart";
+import FileTypeDountChart from "./FileTypeDonutChart";
 import { Directory } from "../model/Directory.gen";
 import { calculateFileTypeProportion } from "../model/Directory.res.mjs"
 
@@ -66,25 +66,17 @@ const FileTypeDetails: React.FC<FileTypeDetailsProps> = ({ state, setState, dir 
                 <Grid justify="center">
                     <GridCol span={12}>
                         <Center>
-                            <FileTypeDonutChart proportion={proportion} />
+                            <FileTypeDountChart proportion={proportion} />
                         </Center>
                     </GridCol>
                     <GridCol span={12}>
                         <Center>
-                            <Sparkline
-                                w={"100%"}
-                                h={"10em"}
-                                data={[10, 20, 40, 20, 40, 10, 50]}
-                                curveType="natural"
-                                color="black"
-                                fillOpacity={0.6}
-                                strokeWidth={2}
-                            />
+                            
                         </Center>
                         <Divider my="md" />
                         <GridCol span={12}>
                             <Center>
-                                <Text>Capacity Trends</Text>
+                                <Text></Text>
                             </Center>
                         </GridCol>
                     </GridCol>
