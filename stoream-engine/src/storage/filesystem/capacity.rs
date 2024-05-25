@@ -25,18 +25,13 @@
 /// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-use super::file::Files;
-use serde::{Deserialize, Serialize};
+use crate::{
+    config::CONFIG,
+    storage::directory::{Directory, TREE},
+};
 
-pub type DirectoryList = Vec<Directory>;
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Directory {
-    pub dirname: String,
-    pub path: String,
-    pub size: u64,
-    pub files: Files,
-    pub sub: DirectoryList,
+pub async fn capacity() -> f32 {
+    let capacity = unsafe { CONFIG.clone().unwrap().storage.capacity as f32 };
+    let directory = unsafe { TREE.clone().unwrap() };
+    (directory.size as f32) / 1000_000.0 / capacity
 }
-
-pub static mut TREE: Option<Directory> = None;

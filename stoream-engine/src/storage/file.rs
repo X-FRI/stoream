@@ -29,7 +29,7 @@ use serde::{Deserialize, Serialize};
 
 pub type Files = Vec<File>;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct File {
     pub filename: String,
     pub path: String,

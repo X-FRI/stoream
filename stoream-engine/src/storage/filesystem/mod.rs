@@ -1,3 +1,4 @@
+mod capacity;
 mod cat;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
@@ -27,11 +28,11 @@ mod cat;
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 mod tree;
-
 use std::path::Path;
 
-use crate::server::request::Request;
+use crate::config::CONFIG;
 use crate::storage::Storage;
+use crate::{server::request::Request, storage::directory};
 use axum::{extract::Query, http::StatusCode, routing, Json};
 use colog::log::info;
 use serde::{Deserialize, Serialize};
@@ -52,13 +53,26 @@ impl Storage for FileSystem {
 
     async fn tree(self, path: String) -> Directory {
         info!("tree directory {}", path);
-        tree::build_directory_structure(Path::new(path.as_str())).unwrap()
+        unsafe {
+            directory::TREE =
+                Some(tree::build_directory_structure(Path::new(path.as_str())).unwrap());
+            directory::TREE.clone().unwrap()
+        }
+    }
+
+    async fn capacity(self, directory: Directory) -> f32 {
+        unsafe {
+            directory::TREE =
+                Some(tree::build_directory_structure(Path::new(directory.path.as_str())).unwrap());
+        }
+        capacity::capacity().await
     }
 }
 
 impl Request for FileSystem {
     async fn handlers(self) -> crate::server::request::Handlers {
-        let tree = json!(self.clone().tree(self.root).await);
+        let tree = self.clone().tree(self.root).await;
+
         vec![
             (
                 "/tree",
@@ -67,6 +81,19 @@ impl Request for FileSystem {
             (
                 "/cat",
                 routing::get(move |Query(args): Query<cat::Args>| async { cat::cat(args).await }),
+            ),
+            (
+                "/capacity",
+                routing::get(move || async {
+                    (
+                        StatusCode::OK,
+                        Json(json!(
+                            {
+                                "capacity": capacity::capacity().await
+                            }
+                        )),
+                    )
+                }),
             ),
         ]
     }

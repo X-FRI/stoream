@@ -1,7 +1,3 @@
-use std::path::PathBuf;
-
-use axum::{body::Body, http::header, response::IntoResponse};
-use colog::log::info;
 /// Copyright (c) 2024 The X-Files Research Institute
 ///
 /// All rights reserved.
@@ -30,6 +26,10 @@ use colog::log::info;
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
+
+use axum::{body::Body, http::header, response::IntoResponse};
+use colog::log::info;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Args {
