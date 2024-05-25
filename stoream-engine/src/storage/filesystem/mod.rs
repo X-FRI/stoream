@@ -30,7 +30,6 @@ mod cat;
 mod tree;
 use std::path::Path;
 
-use crate::config::CONFIG;
 use crate::storage::Storage;
 use crate::{server::request::Request, storage::directory};
 use axum::{extract::Query, http::StatusCode, routing, Json};
