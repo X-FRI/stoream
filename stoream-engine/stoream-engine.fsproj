@@ -4,9 +4,13 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>stoream_engine</RootNamespace>
-    <PublishAot>false</PublishAot>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishSingleFile>true</PublishSingleFile>
+    <PublishAot>true</PublishAot>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <PublishSingleFile>false</PublishSingleFile>
+    <PublishLzmaCompressed>true</PublishLzmaCompressed>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <StripSymbols>true</StripSymbols>
     <SelfContained>true</SelfContained>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <PublishTrimmed>true</PublishTrimmed>
@@ -24,6 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="FSharp.Json" Version="0.4.1" />
+    <PackageReference Include="PublishAotCompressed" Version="1.0.3" />
     <PackageReference Include="Suave" Version="2.6.2" />
   </ItemGroup>
 
