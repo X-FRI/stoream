@@ -26,14 +26,14 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Card, Center, Container, List, ListItem, Modal, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Button, Card, Center, Container, List, Modal, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
 import { slice, stringOfDirectorySize } from "../model/Directory.res.mjs"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import { Directory } from "../model/Directory.gen"
-import { nonExistentFile } from "../model/File.res.mjs";
+import { File as File_t } from "../model/File.gen";
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -67,7 +67,32 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
     /* When a file in the list is clicked, a Modal will pop up to confirm the download, 
      * and its state is controlled by downloadFileModalState. */
     const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
-    const [downloadFile, setDownloadFile] = React.useState(nonExistentFile)
+    const [downloadFileModalChildren, setDownloadFileModalChildren] = React.useState(<></>)
+
+    const download = (file: File_t) => {
+        setDownloadFileModalState.open()
+        setDownloadFileModalChildren(
+            <>
+                <List>
+                    <List.Item>File name: {file.filename}</List.Item>
+                    <List.Item>File path: {file.filepath}</List.Item>
+                    <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
+                </List>
+                <Center>
+                    <Button mt="lg" onClick={async () => {
+                        const link = URL.createObjectURL(await Request.$$File.cat(file.filepath))
+                        const download = document.createElement("a")
+                        download.href = link
+                        download.download = file.filename
+                        download.click()
+                        URL.revokeObjectURL(link)
+                        setDownloadFileModalState.close()
+                        download.remove()
+                    }}> Click to download </Button>
+                </Center>
+            </>
+        )
+    }
 
     /* Used to update breadcrumbs.
      * Clicking the path in breadcrumbs should call this function to update.
@@ -110,10 +135,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
-            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={async () => {
-                setDownloadFile(file)
-                setDownloadFileModalState.open()
-            }}>
+            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={() => download(file)}>
                 <Table.Td><Text fz="sm" lh="xs" c="black">{file.filename}</Text></Table.Td>
                 <Table.Td>0</Table.Td>
                 <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
@@ -162,23 +184,17 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 </Stack>
             </Card>
 
-            <Modal opened={downloadFileModalState} onClose={setDownloadFileModalState.close} title="Download">
-                <List>
-                    <List.Item>File name: {downloadFile.filename}</List.Item>
-                    <List.Item>File path: {downloadFile.filepath}</List.Item>
-                    <List.Item>File size: {stringOfFileSize(downloadFile.filesize)}</List.Item>
-                </List>
-                <Center>
-                    <Button mt="lg" onClick={async () => {
-                        const link = URL.createObjectURL(await Request.$$File.cat(downloadFile.filepath))
-                        const download = document.createElement("a")
-                        download.href = link
-                        download.download = downloadFile.filename
-                        download.click()
-                        URL.revokeObjectURL(link)
-                        setDownloadFileModalState.close()
-                    }}> Click to download </Button>
-                </Center>
+            <Modal
+                opened={downloadFileModalState}
+                onClose={setDownloadFileModalState.close}
+                title="Download"
+                size={"auto"}
+                yOffset={"20%"}
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}>
+                {downloadFileModalChildren}
             </Modal>
         </Container>
     )

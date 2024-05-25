@@ -26,7 +26,6 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 module Directory = {
   let tree = async (): Directory.t => {
     await Fetch.fetch(`${Config.value.engine}/tree`, {mode: #cors})
@@ -35,13 +34,25 @@ module Directory = {
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
     )
   }
+
+  let capacity = async (): float => {
+    await Fetch.fetch(`${Config.value.engine}/capacity`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response =>
+      switch response->Js.Json.decodeObject->Option.getExn->Js_dict.get("capacity") {
+      | Some(Js.Json.Number(capacity)) => capacity
+      | _ => Js.Exn.raiseError("Cannot get the capacity")
+      }
+    )
+  }
 }
 
 module File = {
-
   let cat = async (file: File.t): Fetch.Blob.t => {
+    /* The File.t passed from the front end has become filepath for some reason.
+     * Everything is so weird, so I can only file->Js.String.make */
     await Fetch.fetch(
-      `${Config.value.engine}/cat?path=${file.filepath}`,
+      `${Config.value.engine}/cat?path=${file->Js.String.make}`,
       {mode: #cors},
     )->Promise.then(Fetch.Response.blob)
   }

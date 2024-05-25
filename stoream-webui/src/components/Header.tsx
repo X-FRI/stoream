@@ -26,12 +26,13 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Avatar, Card, Container, Drawer, Grid, Group, Skeleton, Space, Stack } from "@mantine/core";
+import { Avatar, Card, Container, Drawer, Grid, GridCol, Group, Skeleton, Space, Stack, Tooltip } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import About from "./About";
 import FileTypes from "./FileTypes";
 import { Directory } from "../model/Directory.gen";
 import React from "react";
+import { Sparkline } from "@mantine/charts";
 
 interface HeaderProps {
   dir: Directory
@@ -40,13 +41,27 @@ interface HeaderProps {
 /** Header is used to render information about the proportion,
   * current user, etc. of the home page header.
   * 
-  * TODO: Optimized rendering of users and user details */
-const Header: React.FC<HeaderProps> = ({dir}) => {
+  * TODO: Optimized rendering of users and user details
+  *       SparkLine in this component is not yet complete */
+const Header: React.FC<HeaderProps> = ({ dir }) => {
   const [userDetailsState, setUserDetailsState] = useDisclosure(false);
 
   return (
     <Container>
       <Grid>
+        <GridCol span={12}>
+          <Tooltip label="Capacity Trends">
+            <Sparkline
+              w={"100%"}
+              h={"5em"}
+              data={[10, 20, 40, 20, 40, 10, 50]}
+              curveType="natural"
+              color="black"
+              fillOpacity={0.6}
+              strokeWidth={2}
+            />
+          </Tooltip>
+        </GridCol>
         <Grid.Col>
           <Group justify="space-between" mt="md" mb="xs">
             <FileTypes dir={dir} />

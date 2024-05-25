@@ -34,6 +34,7 @@ import { useLoaderData } from "react-router-dom";
 import { File } from "../model/File.gen";
 import React from "react";
 import { stringOfFileSize } from "../model/File.res.mjs";
+import { LoaderData } from "../model/LoaderData.gen";
 
 /** Operations is a series of operation components under the 
   * Header component on the homepage, such as uploading files, 
@@ -41,7 +42,8 @@ import { stringOfFileSize } from "../model/File.res.mjs";
   * 
   * TODO: This component is not yet complete */
 const Operations = () => {
-    const files: File[] = flatFile(useLoaderData())
+    const loaderData = useLoaderData() as LoaderData;
+    const files: File[] = flatFile(loaderData.dir)
     const [queryFilename, setQueryFilename] = React.useState('');
 
     const items: SpotlightActionData[] =

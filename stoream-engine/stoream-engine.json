@@ -11,6 +11,7 @@
         ]
     },
     "storage": {
+        "capacity": 100,
         "typ": {
             "FileSystem": {                
                 "root": "/home/muqiu/Documents/Note"

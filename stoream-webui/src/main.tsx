@@ -41,9 +41,10 @@ import '@mantine/spotlight/styles.css';
 import Error from "./pages/Error";
 import App from "./pages/App";
 import { fetch } from "./components/Files";
+import * as Request from "./model/Request.res.mjs"
 
 const theme = createTheme({
-  
+
 })
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -61,7 +62,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             path: "/",
             element: <App />,
             errorElement: <Error />,
-            loader: async () => { return await fetch() }
+            loader: async () => { return { dir: await fetch(), capacity: Request.Directory.capacity() } }
           },
         ])}
       />

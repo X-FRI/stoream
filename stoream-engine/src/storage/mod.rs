@@ -36,6 +36,7 @@ use tokio_util::io::ReaderStream;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
+    pub capacity: u64,
     pub typ: StorageType,
 }
 
@@ -49,6 +50,7 @@ pub trait Storage {
     /// TODO: Handle the situation when path is not a directory.
     async fn tree(self, path: String) -> Directory;
     async fn cat(self, path: String) -> ReaderStream<tokio::fs::File>;
+    async fn capacity(self, directory: Directory) -> f32;
 }
 
 pub async fn handlers() -> crate::server::request::Handlers {
