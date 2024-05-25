@@ -162,7 +162,16 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 </Stack>
             </Card>
 
-            <Modal opened={downloadFileModalState} onClose={setDownloadFileModalState.close} title="Download">
+            <Modal
+                opened={downloadFileModalState}
+                onClose={setDownloadFileModalState.close}
+                title="Download"
+                size={"auto"}
+                yOffset={"20%"}
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}>
                 <List>
                     <List.Item>File name: {downloadFile.filename}</List.Item>
                     <List.Item>File path: {downloadFile.filepath}</List.Item>
@@ -177,6 +186,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                         download.click()
                         URL.revokeObjectURL(link)
                         setDownloadFileModalState.close()
+                        download.remove()
                     }}> Click to download </Button>
                 </Center>
             </Modal>
