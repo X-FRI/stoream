@@ -1,11 +1,13 @@
-﻿module Stoream.Engine.Program
+﻿(* The entry module of stoream-engine.
+ * This module must always be at the bottom of the dependencies.
+ *
+ * NOTE: No module must depend on this module!!! *)
 
-open Config
-open System
+module Stoream.Engine.Program
+
 open Server
 
 [<EntryPoint>]
 let main argv =
-    Server.Start()
-
-    0 // return an integer exit code
+  Server.Start ()
+  0
