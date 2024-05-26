@@ -36,7 +36,8 @@ import { useLoaderData } from "react-router-dom";
 import { LoaderData } from "../model/LoaderData.gen";
 
 interface FileTypesProps {
-    dir: Directory,}
+    dir: Directory,
+}
 
 /** FileTypes itself does not render information about file types,
   * but rather renders the ratio of total file size to free space.
@@ -47,24 +48,24 @@ interface FileTypesProps {
 const FileTypes: React.FC<FileTypesProps> = ({ dir }) => {
     const loaderData = useLoaderData() as LoaderData
     const [fileDetailsState, setFileDetailsState] = useDisclosure(false);
-    const [capacity, setCapacity] = React.useState(loaderData.capacity)
+
+    /* capacity (MB) = dir.size (Bytes) / 1000 / 1000 / capacity * 100 */
+    const capacity = (loaderData.dir.size / 10000 / loaderData.capacity)
 
     return (
         <>
-            <RingProgress            
-                onLoad={async () => setCapacity(await Request.Directory.capacity())}
-                onPointerEnter={async () => setCapacity(await Request.Directory.capacity())}
+            <RingProgress
                 onClick={() => setFileDetailsState.open()}
                 size={100}
                 thickness={5}
                 roundCaps
                 label={
                     <Text c="black" fw={700} ta="center" size="xl">
-                        {(capacity * 100).toFixed(0) + " %"}
+                        {capacity.toFixed(0) + " %"}
                     </Text>
                 }
                 sections={[
-                    { value: (capacity * 100), color: 'black' },
+                    { value: capacity, color: 'black' },
                 ]}
             />
             <FileTypeDetails dir={dir} state={fileDetailsState} setState={setFileDetailsState} />
