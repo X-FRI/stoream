@@ -13,6 +13,7 @@ open Stoream.Engine.Storage.Model.File
 open Stoream.Engine.Storage.Model.Directory
 
 type Tree () =
+  static let mutable ROOT_SIZE = 0UL
 
   (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
    * SEE: Stoream.Engine.Config *)
@@ -22,29 +23,32 @@ type Tree () =
   interface API with
     static member public App = Tree.App
 
-  static member public App =
-    choose [ path "/tree" >=> GET >=> request Tree.Tree ]
+  static member public App = path "/tree" >=> GET >=> request Tree.Tree
 
-  static member private Tree (request: HttpRequest) =
-    IO.DirectoryInfo (Tree.CONFIG.Root)
-    |> Tree.BuildDirectoryStructure
-    |> Text.Json.JsonSerializer.Serialize
-    |> OK
+  static member public PublicTreeMethod () =
+    ROOT_SIZE <- 0UL
+    IO.DirectoryInfo (Tree.CONFIG.Root) |> Tree.BuildDirectoryStructure
 
   (* Traverse the directory tree under the specified directory *)
   static member private BuildDirectoryStructure (dir: IO.DirectoryInfo) =
-    let mutable dirSize = 0UL
-
     { Name = dir.Name
       Path = dir.FullName
       Files =
         dir.GetFiles ()
         |> Array.map(fun fileInfo ->
           let fileSize = fileInfo.Length |> uint64
-          dirSize <- dirSize + fileSize
+          ROOT_SIZE <- ROOT_SIZE + fileSize
 
           { Name = fileInfo.Name
             Path = fileInfo.FullName
             Size = fileSize })
       Sub = dir.GetDirectories () |> Array.map Tree.BuildDirectoryStructure
-      Size = dirSize }
+      Size = ROOT_SIZE }
+
+  (* 此方法供其他模块调用 *)
+  static member private Tree (request: HttpRequest) =
+    ROOT_SIZE <- 0UL
+    IO.DirectoryInfo (Tree.CONFIG.Root)
+    |> Tree.BuildDirectoryStructure
+    |> Text.Json.JsonSerializer.Serialize
+    |> OK
