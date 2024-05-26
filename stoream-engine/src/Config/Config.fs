@@ -6,25 +6,27 @@
 module Stoream.Engine.Config
 
 open System
+open FSharp.Data
 
-[<Text.Json.Serialization.JsonFSharpConverter>]
-type AccountConfig = { Username: String; Password: String }
-
-[<Text.Json.Serialization.JsonFSharpConverter>]
-type ServerConfig =
-  { Hostname: String
-    Port: UInt16
-    WebUI: String }
-
-[<Text.Json.Serialization.JsonFSharpConverter>]
-type StorageConfig = { Root: String; Capacity: UInt32 }
-
-[<Text.Json.Serialization.JsonFSharpConverter>]
+(* Use FSharp.Data's JsonProvider to generate the Config type,
+ * ensuring .NET Native AOT compatibility *)
 type Config =
-  { Account: AccountConfig
-    Server: ServerConfig
-    Storage: StorageConfig }
+  JsonProvider<Sample="""
+{
+    "Account": {
+        "Username": "admin",
+        "Password": "admin"
+    },
+    "Server": {
+        "Hostname": "127.0.0.1",
+        "Port": 9993,
+        "WebUI": "http://localhost:5173"
+    },
+    "Storage": {
+        "Root": "/home/muqiu/Documents/Note",
+        "Capacity": 100
+    }
+}
+""", InferenceMode=InferenceMode.ValuesAndInlineSchemasOverrides>
 
-  static member public CONFIG =
-    IO.File.ReadAllText "./stoream-engine.json"
-    |> Text.Json.JsonSerializer.Deserialize<Config>
+let CONFIG = Config.Parse (IO.File.ReadAllText "./stoream-engine.json")

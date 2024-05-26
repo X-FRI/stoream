@@ -15,12 +15,12 @@ type Server () =
 
   (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
    * SEE: Stoream.Engine.Config *)
-  static member public CONFIG = Config.CONFIG.Server
+  static member public CONFIG = CONFIG.Server
 
   (* Cross-domain related configurations.
    * SEE: [CORS response with Suave](https://www.fssnip.net/mL/title/CORS-response-with-Suave) *)
   static member private CORS =
-    addHeader "Access-Control-Allow-Origin" Server.CONFIG.WebUI
+    addHeader "Access-Control-Allow-Origin" Server.CONFIG.WebUi
     >=> setHeader "Access-Control-Allow-Headers" "token"
     >=> addHeader "Access-Control-Allow-Headers" "Content-Type"
     >=> addHeader "Access-Control-Allow-Methods" "GET"
@@ -50,7 +50,7 @@ type Server () =
             [ (HttpBinding.create
                 HTTP
                 (Server.CONFIG.Hostname |> Net.IPAddress.Parse)
-                Server.CONFIG.Port) ] }
+                (Server.CONFIG.Port |> uint16)) ] }
 
     let _, server = startWebServerAsync conf Server.Apps
 

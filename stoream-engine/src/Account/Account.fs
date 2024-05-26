@@ -13,7 +13,7 @@ open API
 type Account () =
   (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
    * SEE: Stoream.Engine.Config *)
-  static member public CONFIG = Config.CONFIG.Account
+  static member public CONFIG = CONFIG.Account
 
   (* Implementing the API interface indicates that this type is an API service *)
   interface API with
@@ -22,8 +22,8 @@ type Account () =
   static member private Login (request: HttpRequest) =
     let username = request.queryParamOpt("username").Value |> snd |> _.Value
     let password = request.queryParamOpt("password").Value |> snd |> _.Value
-
-    (username = Account.CONFIG.Username && password = Account.CONFIG.Password)
+    
+    (username = Account.CONFIG.Username && password = Account.CONFIG.Password.ToString())
     |> fun correct -> {| status = if correct then "OK" else "ERROR" |}
     |> JsonSerializer.Serialize
     |> OK
