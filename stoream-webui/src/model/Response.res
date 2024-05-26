@@ -58,16 +58,16 @@ module File = {
   let parse = (response: Js_dict.t<_>): File.t => {
     open File
     {
-      filename: response->parseString("filename"),
-      filepath: response->parseString("path"),
-      filesize: response->parseInt("size"),
+      filename: response->parseString("Name"),
+      filepath: response->parseString("Path"),
+      filesize: response->parseInt("Size"),
     }
   }
 }
 
 module Directory = {
   let files = (response: Js_dict.t<_>) => {
-    switch response->Js_dict.get("files")->Option.getExn {
+    switch response->Js_dict.get("Files")->Option.getExn {
     | Js.Json.Array(files) =>
       files
       ->Array.map(files => Js.Json.decodeObject(files)->Option.getExn)
@@ -80,12 +80,12 @@ module Directory = {
   let rec parse = (response: Js_dict.t<_>): Directory.t => {
     open Directory
     {
-      name: response->parseString("dirname"),
-      path: response->parseString("path"),
-      size: response->parseInt("size"),
+      name: response->parseString("Name"),
+      path: response->parseString("Path"),
+      size: response->parseInt("Size"),
       files: response->files,
       sub: response
-      ->Js_dict.get("sub")
+      ->Js_dict.get("Sub")
       ->Option.getExn
       ->Js.Json.decodeArray
       ->Option.getExn
