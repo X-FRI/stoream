@@ -3,7 +3,8 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace>stoream_engine</RootNamespace>
+        <RootNamespace>Stoream.Engine</RootNamespace>
+        <ServerGarbageCollection>false</ServerGarbageCollection>
         <PublishAot>true</PublishAot>
         <PublishReadyToRun>false</PublishReadyToRun>
         <PublishSingleFile>false</PublishSingleFile>
