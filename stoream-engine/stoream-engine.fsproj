@@ -23,6 +23,10 @@
         <Compile Include="src/Config/Config.fs" />
         <Compile Include="src/API/API.fs" />
         <Compile Include="src/Account/Account.fs" />
+        <Compile Include="src/Storage/Model/File.fs" />
+        <Compile Include="src/Storage/Model/Directory.fs" />
+        <Compile Include="src/Storage/API/Tree.fs" />
+        <Compile Include="src/Storage/Service.fs" />
         <Compile Include="src/Server/Server.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>

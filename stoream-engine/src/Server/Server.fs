@@ -10,12 +10,13 @@ open Suave.Filters
 open Suave.Operators
 open Config
 open Account
+open Storage.Services
 
 type Server () =
 
   (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
    * SEE: Stoream.Engine.Config *)
-  static member public CONFIG = CONFIG.Server
+  static member inline public CONFIG = CONFIG.Server
 
   (* Cross-domain related configurations.
    * SEE: [CORS response with Suave](https://www.fssnip.net/mL/title/CORS-response-with-Suave) *)
@@ -35,7 +36,8 @@ type Server () =
           >=> choose
             [
               (* Please add new services here. *)
-              Account.App ])
+              Account.App
+              Storage.App ])
 
   (* Start the asynchronous server according to the configuration.
    * NOTE: This function will read the keyboard input from the console.

@@ -7,6 +7,7 @@ module Stoream.Engine.Config
 
 open System
 open FSharp.Data
+open System.Text.Json
 
 (* Use FSharp.Data's JsonProvider to generate the Config type,
  * ensuring .NET Native AOT compatibility *)
@@ -27,6 +28,6 @@ type Config =
         "Capacity": 100
     }
 }
-""", InferenceMode=InferenceMode.ValuesAndInlineSchemasOverrides>
+""">
 
 let CONFIG = Config.Parse (IO.File.ReadAllText "./stoream-engine.json")
