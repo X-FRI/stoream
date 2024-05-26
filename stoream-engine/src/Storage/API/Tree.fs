@@ -13,7 +13,6 @@ open Stoream.Engine.Storage.Model.File
 open Stoream.Engine.Storage.Model.Directory
 
 type Tree () =
-  static let mutable ROOT_SIZE = 0UL
 
   (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
    * SEE: Stoream.Engine.Config *)
@@ -25,30 +24,30 @@ type Tree () =
 
   static member public App = path "/tree" >=> GET >=> request Tree.Tree
 
-  static member public PublicTreeMethod () =
-    ROOT_SIZE <- 0UL
-    IO.DirectoryInfo (Tree.CONFIG.Root) |> Tree.BuildDirectoryStructure
-
-  (* Traverse the directory tree under the specified directory *)
-  static member private BuildDirectoryStructure (dir: IO.DirectoryInfo) =
-    { Name = dir.Name
-      Path = dir.FullName
-      Files =
-        dir.GetFiles ()
-        |> Array.map(fun fileInfo ->
-          let fileSize = fileInfo.Length |> uint64
-          ROOT_SIZE <- ROOT_SIZE + fileSize
-
-          { Name = fileInfo.Name
-            Path = fileInfo.FullName
-            Size = fileSize })
-      Sub = dir.GetDirectories () |> Array.map Tree.BuildDirectoryStructure
-      Size = ROOT_SIZE }
-
-  (* 此方法供其他模块调用 *)
-  static member private Tree (request: HttpRequest) =
-    ROOT_SIZE <- 0UL
+  static member public Tree (request: HttpRequest) =
+    (* Tree may be a very memory-intensive operation, so GC is called here for recycling. *)
+    GC.Collect()
     IO.DirectoryInfo (Tree.CONFIG.Root)
     |> Tree.BuildDirectoryStructure
     |> Text.Json.JsonSerializer.Serialize
     |> OK
+
+  (* Traverse the directory tree under the specified directory *)
+  static member public BuildDirectoryStructure (dir: IO.DirectoryInfo) =
+    let subDirectories =
+      dir.GetDirectories () |> Array.map Tree.BuildDirectoryStructure
+
+    let files =
+      dir.GetFiles ()
+      |> Array.map(fun file ->
+        { Name = file.Name
+          Path = file.FullName
+          Size = file.Length })
+
+    let size = files |> Array.sumBy(fun f -> int64 f.Size) |> uint64
+
+    { Name = dir.Name
+      Size = size + (subDirectories |> Array.sumBy(fun d -> d.Size))
+      Sub = subDirectories
+      Path = dir.FullName
+      Files = files }

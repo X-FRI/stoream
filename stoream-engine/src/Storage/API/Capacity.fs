@@ -25,9 +25,10 @@ type Capacity () =
     path "/capacity" >=> GET >=> request Capacity.Capacity
 
   static member public Capacity (request: HttpRequest) =
-    Tree.PublicTreeMethod ()
+    IO.DirectoryInfo Capacity.CONFIG.Root
+    |> Tree.BuildDirectoryStructure
     |> fun dir ->
-      (double dir.Size) / 1000_000. / (Capacity.CONFIG.Capacity |> double)
+        (double dir.Size) / 1000_000. / (Capacity.CONFIG.Capacity |> double)
     |> fun size -> {| Capacity = size |}
     |> Text.Json.JsonSerializer.Serialize
     |> OK
