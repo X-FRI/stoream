@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Container, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Card, Container, Group, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
@@ -36,6 +36,7 @@ import { Directory } from "../model/Directory.gen"
 import DownloadFile from "./DownloadFile.tsx"
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
+import Operations from "./Operations.tsx";
 
 /** Before loading the Files component, its need to request the directory tree
   * under the path specified by the configuration file from the engine.
@@ -112,7 +113,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 setDownloadFile(file)
                 setDownloadFileModalState.open()
             }}>
-                <Table.Td><Text fz="sm" lh="xs" c="black">{file.filename}</Text></Table.Td>
+                <Table.Td><Text fz="sm" lh="xs" >{file.filename}</Text></Table.Td>
                 <Table.Td>0</Table.Td>
                 <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
             </Table.Tr>
@@ -123,18 +124,21 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
         <Container>
             <Card shadow="lg" withBorder>
                 <Stack>
-                    <Breadcrumbs>{
-                        breadcrumbs.map((item, index) => (
-                            <Anchor key={index} onClick={() => {
-                                if (item.path === dir.path) setBreadcrumbs(DEFAULT_BREADCRUMBS)
-                                else {
-                                    updateBreadcrumbs(item.path)
-                                }
-                            }}>
-                                {item.title}
-                            </Anchor>
-                        ))
-                    }</Breadcrumbs>
+                    <Group justify="space-between">
+                        <Breadcrumbs>{
+                            breadcrumbs.map((item, index) => (
+                                <Anchor key={index} onClick={() => {
+                                    if (item.path === dir.path) setBreadcrumbs(DEFAULT_BREADCRUMBS)
+                                    else {
+                                        updateBreadcrumbs(item.path)
+                                    }
+                                }}>
+                                    {item.title}
+                                </Anchor>
+                            ))
+                        }</Breadcrumbs>
+                        <Operations />
+                    </Group>
                     <ScrollArea h={500}>
                         <Table captionSide="bottom" highlightOnHover>
                             <Table.Caption>Files in {breadcrumbs[breadcrumbs.length - 1].path}</Table.Caption>

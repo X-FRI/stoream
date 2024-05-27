@@ -30,7 +30,8 @@ import { File } from "../model/File.gen"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import * as Request from "../model/Request.res.mjs"
 import React from "react"
-import { Button, List, Center, Modal } from "@mantine/core"
+import { Button, List, Center, Modal, rem } from "@mantine/core"
+import { IconDownload } from "@tabler/icons-react"
 
 interface DownloadFileProps {
     file: File,
@@ -62,7 +63,7 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, downloadFileModalStat
                     <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
                 </List>
                 <Center>
-                    <Button mt="lg" onClick={async () => {
+                    <Button mt="lg" leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />} onClick={async () => {
                         const link = URL.createObjectURL(await Request.$$File.cat(file.filepath))
                         const download = document.createElement("a")
                         download.href = link

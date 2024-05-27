@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ dir }) => {
               h={"5em"}
               data={[10, 20, 40, 20, 40, 10, 50]}
               curveType="natural"
-              color="black"
+              
               fillOpacity={0.6}
               strokeWidth={2}
             />

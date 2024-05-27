@@ -59,7 +59,7 @@ const FileTypes: React.FC<FileTypesProps> = ({ dir }) => {
                 thickness={5}
                 roundCaps
                 label={
-                    <Text c="black" fw={700} ta="center" size="xl">
+                    <Text  fw={700} ta="center" size="xl">
                         {capacity.toFixed(0) + " %"}
                     </Text>
                 }
