@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./.github/logo.png" height="150px">
+<img src="stoream-webui/src/assets/logo.png" height="150px">
 
 # Stoream
 
