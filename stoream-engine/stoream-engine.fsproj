@@ -27,6 +27,7 @@
     <Compile Include="src/Storage/API/Tree.fs" />
     <Compile Include="src/Storage/API/Capacity.fs" />
     <Compile Include="src/Storage/API/Cat.fs" />
+    <Compile Include="src/Storage/API/CreateDirectory.fs" />
     <Compile Include="src/Storage/Service.fs" />
     <Compile Include="src/Server/Server.fs" />
     <Compile Include="Program.fs" />
