@@ -69,7 +69,7 @@ module File = {
     /* The File.t passed from the front end has become filepath for some reason.
      * Everything is so weird, so I can only file->Js.String.make */
     await Fetch.fetch(
-      `${Config.value.engine}/cat?path=${file->Js.String.make}`,
+      `${Config.value.engine}/cat?path=${file.filepath}`,
       {mode: #cors},
     )->Promise.then(Fetch.Response.blob)
   }

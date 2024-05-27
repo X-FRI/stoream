@@ -64,7 +64,7 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, downloadFileModalStat
                 </List>
                 <Center>
                     <Button mt="lg" leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />} onClick={async () => {
-                        const link = URL.createObjectURL(await Request.$$File.cat(file.filepath))
+                        const link = URL.createObjectURL(await Request.$$File.cat(file))
                         const download = document.createElement("a")
                         download.href = link
                         download.download = file.filename
