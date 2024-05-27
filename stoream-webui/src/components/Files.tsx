@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Container, Group, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Card, Container, Group, Input, rem, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
@@ -37,6 +37,7 @@ import DownloadFile from "./DownloadFile.tsx"
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import Operations from "./Operations.tsx";
+import { IconFile, IconFolder } from "@tabler/icons-react";
 
 /** Before loading the Files component, its need to request the directory tree
   * under the path specified by the configuration file from the engine.
@@ -104,7 +105,12 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
             <Table.Tr key={dir.name} style={{ cursor: "pointer" }} onClick={() => {
                 updateBreadcrumbs(dir.path)
             }}>
-                <Table.Td><Text fz="sm" lh="xs" c="blue">{dir.name}</Text></Table.Td>
+                <Table.Td>
+                    <Group justify="flex-start">
+                        <IconFolder style={{ width: rem(15), height: rem(15) }} />
+                        <Text fz="sm" lh="xs">{dir.name}</Text>
+                    </Group>
+                </Table.Td>
                 <Table.Td>{dir.files.length}</Table.Td>
                 <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
@@ -113,7 +119,12 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 setDownloadFile(file)
                 setDownloadFileModalState.open()
             }}>
-                <Table.Td><Text fz="sm" lh="xs" >{file.filename}</Text></Table.Td>
+                <Table.Td>
+                    <Group justify="flex-start">
+                        <IconFile style={{ width: rem(15), height: rem(15) }} />
+                        <Text fz="sm" lh="xs" >{file.filename}</Text>
+                    </Group>
+                </Table.Td>
                 <Table.Td>0</Table.Td>
                 <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
             </Table.Tr>
@@ -137,7 +148,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                                 </Anchor>
                             ))
                         }</Breadcrumbs>
-                        <Operations />
+                        <Operations breadcrumbs={breadcrumbs} />
                     </Group>
                     <ScrollArea h={500}>
                         <Table captionSide="bottom" highlightOnHover>

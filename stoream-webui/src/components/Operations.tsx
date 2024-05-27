@@ -26,24 +26,30 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Menu, rem } from "@mantine/core"
+import { Breadcrumbs, Button, Center, Input, Menu, Modal, rem, Stack } from "@mantine/core"
 import { Spotlight, SpotlightActionData, spotlight } from '@mantine/spotlight';
 import { flatFile } from "../model/Directory.res.mjs";
 import { useLoaderData } from "react-router-dom";
 import { File } from "../model/File.gen";
 import React from "react";
+import * as Request from "../model/Request.res.mjs"
 import DownloadFile from "./DownloadFile";
 import { stringOfFileSize } from "../model/File.res.mjs";
 import { LoaderData } from "../model/LoaderData.gen";
 import { useDisclosure } from "@mantine/hooks";
-import { IconFileSearch, IconUpload, IconFolderPlus, IconSearch } from '@tabler/icons-react';
+import { IconUpload, IconFolderPlus, IconSearch } from '@tabler/icons-react';
+import { notifications } from "@mantine/notifications";
+
+interface OperationsProps {
+    breadcrumbs: { title: string; path: string; }[]
+}
 
 /** Operations is a series of operation components under the 
   * Header component on the homepage, such as uploading files, 
   * searching for files, etc.
   * 
   * TODO: This component is not yet complete */
-const Operations = () => {
+const Operations: React.FC<OperationsProps> = ({ breadcrumbs }) => {
     const loaderData = useLoaderData() as LoaderData;
     const files: File[] = flatFile(loaderData.dir)
     const [queryFilename, setQueryFilename] = React.useState('');
@@ -52,6 +58,9 @@ const Operations = () => {
      * and its state is controlled by downloadFileModalState. */
     const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
     const [downloadFile, setDownloadFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
+
+    const [createDirectoryModalStatus, setCreateDirectoryModalStatus] = useDisclosure(false);
+    const [createDirectory, setCreateDirectory] = React.useState("");
 
     const items: SpotlightActionData[] =
         files
@@ -70,11 +79,14 @@ const Operations = () => {
         <>
             <Menu shadow="md">
                 <Menu.Target>
-                    <Button  style={{ boxShadow: "1px 1px 3px black" }}> Operations </Button>
+                    <Button style={{ boxShadow: "1px 1px 3px black" }}> Operations </Button>
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                    <Menu.Item leftSection={<IconFolderPlus style={{ width: rem(14), height: rem(14) }} />}>
+                    <Menu.Item
+                        onClick={setCreateDirectoryModalStatus.open}
+                        leftSection={<IconFolderPlus style={{ width: rem(14), height: rem(14) }} />}
+                    >
                         Create Directory
                     </Menu.Item>
                     <Menu.Item leftSection={<IconUpload style={{ width: rem(14), height: rem(14) }} />}>
@@ -84,6 +96,51 @@ const Operations = () => {
                         Search File
                     </Menu.Item>
                 </Menu.Dropdown>
+                <Modal
+                    opened={createDirectoryModalStatus}
+                    onClose={setCreateDirectoryModalStatus.close} title="Create Directory"
+                    yOffset="20vh"
+                    overlayProps={{
+                        backgroundOpacity: 0.55,
+                        blur: 3,
+                    }}
+                >
+                    <Center>
+                        <Stack align="center" justify="center" gap="xs">
+                            <Input
+                                error={createDirectory === ""}
+                                placeholder="Directory name"
+                                style={{ width: "15em" }}
+                                onChange={(value) => {
+                                    setCreateDirectory(value.target.value)
+                                }} />
+
+                            <Button onClick={async () => {
+                                await
+                                    Request.Directory.createdir(`${breadcrumbs[breadcrumbs.length - 1].path}/${createDirectory}`)
+                                        .then(() => {
+                                            setCreateDirectoryModalStatus.close()                                            
+                                            notifications.show({
+                                                title: "Successful operation",
+                                                message: `Create directory ${createDirectory} successfully`,
+                                                color: "green"
+                                            })
+                                            
+                                            setTimeout(() => window.location.reload(), 1000)
+                                        })
+                                        .catch(reason => {
+                                            notifications.show({
+                                                title: "An error occurred during create directory",
+                                                message: String(reason),
+                                                color: "red"
+                                            })
+                                        })
+                            }}>
+                                Confim
+                            </Button>
+                        </Stack>
+                    </Center>
+                </Modal>
                 <Spotlight
                     actions={items}
                     shadow="lg"
@@ -98,7 +155,7 @@ const Operations = () => {
                         placeholder: 'Search files...',
                     }}
                 />
-            </Menu>
+            </Menu >
             <DownloadFile setDownloadFileModalState={setDownloadFileModalState} downloadFileModalState={downloadFileModalState} file={downloadFile} />
         </>
     )
