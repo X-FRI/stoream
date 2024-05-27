@@ -30,7 +30,6 @@ import { RingProgress, Text } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import FileTypeDetails from "./FileTypeDetails";
 import { Directory } from "../model/Directory.gen";
-import * as Request from "../model/Request.res.mjs"
 import React from "react";
 import { useLoaderData } from "react-router-dom";
 import { LoaderData } from "../model/LoaderData.gen";
