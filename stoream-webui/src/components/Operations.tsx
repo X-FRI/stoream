@@ -49,14 +49,21 @@ const Operations = () => {
     const items: SpotlightActionData[] =
         files
             .filter((file: File) => file.filename.includes(queryFilename.toLowerCase().trim()))
-            .map((file: File) => ({ id: file.filename, label: file.filepath, description: stringOfFileSize(file.filesize) }));
+            .map((file: File) => ({
+                id: file.filename,
+                label: file.filepath,
+                description: stringOfFileSize(file.filesize),
+                
+            }
+        )
+    );
 
     return (
         <Container>
             <Group justify="flex-start">
-                <Button bg="black" style={{boxShadow: "1px 1px 3px black"}}> Upload </Button>
-                <Button bg="black" style={{boxShadow: "1px 1px 3px black"}}> Create </Button>
-                <Button bg="black" style={{boxShadow: "1px 1px 3px black"}} onClick={spotlight.open}>Search</Button>
+                <Button bg="black" style={{ boxShadow: "1px 1px 3px black" }}> Upload </Button>
+                <Button bg="black" style={{ boxShadow: "1px 1px 3px black" }}> Create </Button>
+                <Button bg="black" style={{ boxShadow: "1px 1px 3px black" }} onClick={spotlight.open}>Search</Button>
                 <Spotlight
                     actions={items}
                     shadow="lg"

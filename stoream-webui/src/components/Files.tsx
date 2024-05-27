@@ -26,14 +26,15 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Card, Center, Container, List, Modal, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Card, Container, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
 import { slice, stringOfDirectorySize } from "../model/Directory.res.mjs"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import { Directory } from "../model/Directory.gen"
-import { File as File_t } from "../model/File.gen";
+import { File } from "../model/File.gen"
+import DownloadFile from "./DownloadFile.tsx"
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -67,32 +68,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
     /* When a file in the list is clicked, a Modal will pop up to confirm the download, 
      * and its state is controlled by downloadFileModalState. */
     const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
-    const [downloadFileModalChildren, setDownloadFileModalChildren] = React.useState(<></>)
-
-    const download = (file: File_t) => {
-        setDownloadFileModalState.open()
-        setDownloadFileModalChildren(
-            <>
-                <List>
-                    <List.Item>File name: {file.filename}</List.Item>
-                    <List.Item>File path: {file.filepath}</List.Item>
-                    <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
-                </List>
-                <Center>
-                    <Button mt="lg" onClick={async () => {
-                        const link = URL.createObjectURL(await Request.$$File.cat(file.filepath))
-                        const download = document.createElement("a")
-                        download.href = link
-                        download.download = file.filename
-                        download.click()
-                        URL.revokeObjectURL(link)
-                        setDownloadFileModalState.close()
-                        download.remove()
-                    }}> Click to download </Button>
-                </Center>
-            </>
-        )
-    }
+    const [downloadFile, setDownloadFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
 
     /* Used to update breadcrumbs.
      * Clicking the path in breadcrumbs should call this function to update.
@@ -109,9 +85,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
             DEFAULT_BREADCRUMBS
                 .concat(titles.map((title, index) => {
                     return { title: title, path: dir.path + titles.slice(0, index + 1).join("/") }
-                }
-                )
-                )
+                }))
 
         newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
         setBreadcrumbs(newBreadcrumbs)
@@ -135,7 +109,10 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
-            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={() => download(file)}>
+            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={() => {
+                setDownloadFile(file)
+                setDownloadFileModalState.open()
+            }}>
                 <Table.Td><Text fz="sm" lh="xs" c="black">{file.filename}</Text></Table.Td>
                 <Table.Td>0</Table.Td>
                 <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
@@ -183,19 +160,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                     </ScrollArea>
                 </Stack>
             </Card>
-
-            <Modal
-                opened={downloadFileModalState}
-                onClose={setDownloadFileModalState.close}
-                title="Download"
-                size={"auto"}
-                yOffset={"20%"}
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}>
-                {downloadFileModalChildren}
-            </Modal>
+            <DownloadFile setDownloadFileModalState={setDownloadFileModalState} downloadFileModalState={downloadFileModalState} file={downloadFile} />
         </Container>
     )
 }
