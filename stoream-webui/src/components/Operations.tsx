@@ -39,9 +39,16 @@ import { LoaderData } from "../model/LoaderData.gen";
 import { useDisclosure } from "@mantine/hooks";
 import { IconUpload, IconFolderPlus, IconSearch } from '@tabler/icons-react';
 import { notifications } from "@mantine/notifications";
+import { fetch } from "./Files";
+import { Directory } from "../model/Directory.gen";
 
 interface OperationsProps {
-    breadcrumbs: { title: string; path: string; }[]
+    breadcrumbs: { title: string; path: string; }[],
+    setBreadcrumbs: React.Dispatch<React.SetStateAction<{
+        title: string;
+        path: string;
+    }[]>>,
+    setRenderDir: React.Dispatch<React.SetStateAction<Directory>>
 }
 
 /** Operations is a series of operation components under the 
@@ -49,7 +56,7 @@ interface OperationsProps {
   * searching for files, etc.
   * 
   * TODO: This component is not yet complete */
-const Operations: React.FC<OperationsProps> = ({ breadcrumbs }) => {
+const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir }) => {
     const loaderData = useLoaderData() as LoaderData;
     const files: File[] = flatFile(loaderData.dir)
     const [queryFilename, setQueryFilename] = React.useState('');
@@ -61,6 +68,7 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs }) => {
 
     const [createDirectoryModalStatus, setCreateDirectoryModalStatus] = useDisclosure(false);
     const [createDirectory, setCreateDirectory] = React.useState("");
+    const breadcrumbsSnapshot = [...breadcrumbs]
 
     const items: SpotlightActionData[] =
         files
@@ -118,15 +126,15 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs }) => {
                             <Button onClick={async () => {
                                 await
                                     Request.Directory.createdir(`${breadcrumbs[breadcrumbs.length - 1].path}/${createDirectory}`)
-                                        .then(() => {
-                                            setCreateDirectoryModalStatus.close()                                            
+                                        .then(async () => {
+                                            setCreateDirectoryModalStatus.close()
                                             notifications.show({
                                                 title: "Successful operation",
                                                 message: `Create directory ${createDirectory} successfully`,
                                                 color: "green"
                                             })
-                                            
-                                            setTimeout(() => window.location.reload(), 1000)
+                                            setRenderDir(await fetch() as Directory)
+                                            setBreadcrumbs(breadcrumbsSnapshot)
                                         })
                                         .catch(reason => {
                                             notifications.show({

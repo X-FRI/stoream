@@ -60,10 +60,12 @@ interface FilesProps {
 /** Files is a file list view component used to display the contents of dir
   * dir is passed in from the outside. This value is usually the return value of fetch. */
 const Files: React.FC<FilesProps> = ({ dir }) => {
+    const [renderDir, setRenderDir] = React.useState(dir)
+
     /* Breadcrumbs is used to display the path of the current file list
      * and is bound to the rendering function of the file list.
      * If breadcrumbs is updated, it will cause the file list to re-render the content in the new path. */
-    const DEFAULT_BREADCRUMBS = [{ title: dir.name, path: dir.path }]
+    const DEFAULT_BREADCRUMBS = [{ title: renderDir.name, path: renderDir.path }]
     const [breadcrumbs, setBreadcrumbs] = React.useState(DEFAULT_BREADCRUMBS)
 
     /* When a file in the list is clicked, a Modal will pop up to confirm the download, 
@@ -78,14 +80,14 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
      * Note: Please do not call setBreadcrumbs directly */
     const updateBreadcrumbs = (path: string) => {
         const titles = path
-            .split(dir.path)[1]
+            .split(renderDir.path)[1]
             .split("/")
             .slice(1);
 
         const newBreadcrumbs =
             DEFAULT_BREADCRUMBS
                 .concat(titles.map((title, index) => {
-                    return { title: title, path: dir.path + titles.slice(0, index + 1).join("/") }
+                    return { title: title, path: renderDir.path + titles.slice(0, index + 1).join("/") }
                 }))
 
         newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
@@ -97,8 +99,8 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
     const render = () => {
         const realtimeDir: Directory = (() => {
             if (breadcrumbs.length == 1)
-                return dir
-            else return slice(dir, breadcrumbs[breadcrumbs.length - 1].path.split(dir.path)[1])
+                return renderDir
+            else return slice(renderDir, breadcrumbs[breadcrumbs.length - 1].path.split(renderDir.path)[1])
         })()
 
         return realtimeDir.sub.map(dir =>
@@ -139,7 +141,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                         <Breadcrumbs>{
                             breadcrumbs.map((item, index) => (
                                 <Anchor key={index} onClick={() => {
-                                    if (item.path === dir.path) setBreadcrumbs(DEFAULT_BREADCRUMBS)
+                                    if (item.path === renderDir.path) setBreadcrumbs(DEFAULT_BREADCRUMBS)
                                     else {
                                         updateBreadcrumbs(item.path)
                                     }
@@ -148,7 +150,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                                 </Anchor>
                             ))
                         }</Breadcrumbs>
-                        <Operations breadcrumbs={breadcrumbs} />
+                        <Operations breadcrumbs={breadcrumbs} setBreadcrumbs={setBreadcrumbs} setRenderDir={setRenderDir} />
                     </Group>
                     <ScrollArea h={500}>
                         <Table captionSide="bottom" highlightOnHover>
