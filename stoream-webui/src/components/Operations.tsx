@@ -33,8 +33,10 @@ import { flatFile } from "../model/Directory.res.mjs";
 import { useLoaderData } from "react-router-dom";
 import { File } from "../model/File.gen";
 import React from "react";
+import DownloadFile from "./DownloadFile";
 import { stringOfFileSize } from "../model/File.res.mjs";
 import { LoaderData } from "../model/LoaderData.gen";
+import { useDisclosure } from "@mantine/hooks";
 
 /** Operations is a series of operation components under the 
   * Header component on the homepage, such as uploading files, 
@@ -46,6 +48,11 @@ const Operations = () => {
     const files: File[] = flatFile(loaderData.dir)
     const [queryFilename, setQueryFilename] = React.useState('');
 
+    /* When a file in the search result is clicked, a Modal will pop up to confirm the download, 
+     * and its state is controlled by downloadFileModalState. */
+    const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
+    const [downloadFile, setDownloadFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
+
     const items: SpotlightActionData[] =
         files
             .filter((file: File) => file.filename.includes(queryFilename.toLowerCase().trim()))
@@ -53,10 +60,11 @@ const Operations = () => {
                 id: file.filename,
                 label: file.filepath,
                 description: stringOfFileSize(file.filesize),
-                
-            }
-        )
-    );
+                onClick: () => {
+                    setDownloadFile(file)
+                    setDownloadFileModalState.open()
+                }
+            }));
 
     return (
         <Container>
@@ -79,6 +87,7 @@ const Operations = () => {
                     }}
                 />
             </Group>
+            <DownloadFile setDownloadFileModalState={setDownloadFileModalState} downloadFileModalState={downloadFileModalState} file={downloadFile} />
         </Container>
     )
 }

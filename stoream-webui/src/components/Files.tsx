@@ -33,7 +33,6 @@ import * as Request from "../model/Request.res.mjs"
 import { slice, stringOfDirectorySize } from "../model/Directory.res.mjs"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import { Directory } from "../model/Directory.gen"
-import { File } from "../model/File.gen"
 import DownloadFile from "./DownloadFile.tsx"
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
