@@ -25,8 +25,6 @@ type Tree () =
   static member public App = path "/tree" >=> GET >=> request Tree.Tree
 
   static member public Tree (request: HttpRequest) =
-    (* Tree may be a very memory-intensive operation, so GC is called here for recycling. *)
-    GC.Collect()
     IO.DirectoryInfo (Tree.CONFIG.Root)
     |> Tree.BuildDirectoryStructure
     |> Text.Json.JsonSerializer.Serialize

@@ -5,6 +5,7 @@ open Stoream.Engine.API
 open Stoream.Engine.Config
 open Stoream.Engine.Storage.API.Tree
 open Stoream.Engine.Storage.API.Capacity
+open Stoream.Engine.Storage.API.Cat
 
 type Storage () =
 
@@ -16,4 +17,8 @@ type Storage () =
   interface API with
     static member public App = Storage.App
 
-  static member public App = choose [ Tree.App; Capacity.App ]
+  static member public App =
+    choose
+      [ Tree.App
+        Capacity.App
+        Cat.App ]
