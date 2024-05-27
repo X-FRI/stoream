@@ -45,6 +45,23 @@ module Directory = {
       }
     )
   }
+
+  let createdir = async (path: string): unit => {
+    await Fetch.fetch(`${Config.value.engine}/createdir?path=${path}`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError(`Cannot create directory at ${path}`)
+          }
+        }
+      )
+    })
+  }
 }
 
 module File = {
@@ -73,7 +90,7 @@ module User = {
         ->Promise.then(Fetch.Response.json)
         ->Promise.thenResolve(response => {
           response
-          ->Response.User.status
+          ->Response.parseStatus
           ->(
             status => {
               switch status {

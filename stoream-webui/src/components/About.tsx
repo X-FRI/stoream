@@ -55,7 +55,7 @@ const About = () => {
 
                 <Group justify="space-between" mt="md" mb="xs">
                     <Text fw={500}>Stoream</Text>
-                    <Badge color="black" />
+                    <Badge  />
                 </Group>
 
                 <Text size="sm" c="dimmed">

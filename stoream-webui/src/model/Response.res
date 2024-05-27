@@ -40,17 +40,15 @@ let parseString = (response: Js_dict.t<_>, key: string): string => {
   }
 }
 
-module User = {
-  /// Get the status value from the response returned by engine
-  let status = (response: Js.Json.t): string => {
-    switch response
-    ->Js.Json.decodeObject
-    ->Option.getExn
-    ->Js_dict.get("status")
-    ->Option.getExn {
-    | Js.Json.String(status) => status
-    | _ => failwith("The status is not string")
-    }
+/// Get the status value from the response returned by engine
+let parseStatus = (response: Js.Json.t): string => {
+  switch response
+  ->Js.Json.decodeObject
+  ->Option.getExn
+  ->Js_dict.get("status")
+  ->Option.getExn {
+  | Js.Json.String(status) => status
+  | _ => failwith("The status is not string")
   }
 }
 

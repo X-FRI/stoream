@@ -26,16 +26,18 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Card, Center, Container, List, Modal, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Card, Container, Group, rem, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
 import { slice, stringOfDirectorySize } from "../model/Directory.res.mjs"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import { Directory } from "../model/Directory.gen"
-import { File as File_t } from "../model/File.gen";
+import DownloadFile from "./DownloadFile.tsx"
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
+import Operations from "./Operations.tsx";
+import { IconFile, IconFolder } from "@tabler/icons-react";
 
 /** Before loading the Files component, its need to request the directory tree
   * under the path specified by the configuration file from the engine.
@@ -58,41 +60,18 @@ interface FilesProps {
 /** Files is a file list view component used to display the contents of dir
   * dir is passed in from the outside. This value is usually the return value of fetch. */
 const Files: React.FC<FilesProps> = ({ dir }) => {
+    const [renderDir, setRenderDir] = React.useState(dir)
+
     /* Breadcrumbs is used to display the path of the current file list
      * and is bound to the rendering function of the file list.
      * If breadcrumbs is updated, it will cause the file list to re-render the content in the new path. */
-    const DEFAULT_BREADCRUMBS = [{ title: dir.name, path: dir.path }]
+    const DEFAULT_BREADCRUMBS = [{ title: renderDir.name, path: renderDir.path }]
     const [breadcrumbs, setBreadcrumbs] = React.useState(DEFAULT_BREADCRUMBS)
 
     /* When a file in the list is clicked, a Modal will pop up to confirm the download, 
      * and its state is controlled by downloadFileModalState. */
     const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
-    const [downloadFileModalChildren, setDownloadFileModalChildren] = React.useState(<></>)
-
-    const download = (file: File_t) => {
-        setDownloadFileModalState.open()
-        setDownloadFileModalChildren(
-            <>
-                <List>
-                    <List.Item>File name: {file.filename}</List.Item>
-                    <List.Item>File path: {file.filepath}</List.Item>
-                    <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
-                </List>
-                <Center>
-                    <Button mt="lg" onClick={async () => {
-                        const link = URL.createObjectURL(await Request.$$File.cat(file.filepath))
-                        const download = document.createElement("a")
-                        download.href = link
-                        download.download = file.filename
-                        download.click()
-                        URL.revokeObjectURL(link)
-                        setDownloadFileModalState.close()
-                        download.remove()
-                    }}> Click to download </Button>
-                </Center>
-            </>
-        )
-    }
+    const [downloadFile, setDownloadFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
 
     /* Used to update breadcrumbs.
      * Clicking the path in breadcrumbs should call this function to update.
@@ -101,17 +80,15 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
      * Note: Please do not call setBreadcrumbs directly */
     const updateBreadcrumbs = (path: string) => {
         const titles = path
-            .split(dir.path)[1]
+            .split(renderDir.path)[1]
             .split("/")
             .slice(1);
 
         const newBreadcrumbs =
             DEFAULT_BREADCRUMBS
                 .concat(titles.map((title, index) => {
-                    return { title: title, path: dir.path + titles.slice(0, index + 1).join("/") }
-                }
-                )
-                )
+                    return { title: title, path: renderDir.path + titles.slice(0, index + 1).join("/") }
+                }))
 
         newBreadcrumbs[newBreadcrumbs.length - 1] = { title: titles[titles.length - 1], path: path }
         setBreadcrumbs(newBreadcrumbs)
@@ -122,21 +99,34 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
     const render = () => {
         const realtimeDir: Directory = (() => {
             if (breadcrumbs.length == 1)
-                return dir
-            else return slice(dir, breadcrumbs[breadcrumbs.length - 1].path.split(dir.path)[1])
+                return renderDir
+            else return slice(renderDir, breadcrumbs[breadcrumbs.length - 1].path.split(renderDir.path)[1])
         })()
 
         return realtimeDir.sub.map(dir =>
             <Table.Tr key={dir.name} style={{ cursor: "pointer" }} onClick={() => {
                 updateBreadcrumbs(dir.path)
             }}>
-                <Table.Td><Text fz="sm" lh="xs" c="blue">{dir.name}</Text></Table.Td>
+                <Table.Td>
+                    <Group justify="flex-start">
+                        <IconFolder style={{ width: rem(15), height: rem(15) }} />
+                        <Text fz="sm" lh="xs">{dir.name}</Text>
+                    </Group>
+                </Table.Td>
                 <Table.Td>{dir.files.length}</Table.Td>
                 <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
-            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={() => download(file)}>
-                <Table.Td><Text fz="sm" lh="xs" c="black">{file.filename}</Text></Table.Td>
+            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={() => {
+                setDownloadFile(file)
+                setDownloadFileModalState.open()
+            }}>
+                <Table.Td>
+                    <Group justify="flex-start">
+                        <IconFile style={{ width: rem(15), height: rem(15) }} />
+                        <Text fz="sm" lh="xs" >{file.filename}</Text>
+                    </Group>
+                </Table.Td>
                 <Table.Td>0</Table.Td>
                 <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
             </Table.Tr>
@@ -147,18 +137,21 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
         <Container>
             <Card shadow="lg" withBorder>
                 <Stack>
-                    <Breadcrumbs>{
-                        breadcrumbs.map((item, index) => (
-                            <Anchor key={index} onClick={() => {
-                                if (item.path === dir.path) setBreadcrumbs(DEFAULT_BREADCRUMBS)
-                                else {
-                                    updateBreadcrumbs(item.path)
-                                }
-                            }}>
-                                {item.title}
-                            </Anchor>
-                        ))
-                    }</Breadcrumbs>
+                    <Group justify="space-between">
+                        <Breadcrumbs>{
+                            breadcrumbs.map((item, index) => (
+                                <Anchor key={index} onClick={() => {
+                                    if (item.path === renderDir.path) setBreadcrumbs(DEFAULT_BREADCRUMBS)
+                                    else {
+                                        updateBreadcrumbs(item.path)
+                                    }
+                                }}>
+                                    {item.title}
+                                </Anchor>
+                            ))
+                        }</Breadcrumbs>
+                        <Operations breadcrumbs={breadcrumbs} setBreadcrumbs={setBreadcrumbs} setRenderDir={setRenderDir} />
+                    </Group>
                     <ScrollArea h={500}>
                         <Table captionSide="bottom" highlightOnHover>
                             <Table.Caption>Files in {breadcrumbs[breadcrumbs.length - 1].path}</Table.Caption>
@@ -183,19 +176,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                     </ScrollArea>
                 </Stack>
             </Card>
-
-            <Modal
-                opened={downloadFileModalState}
-                onClose={setDownloadFileModalState.close}
-                title="Download"
-                size={"auto"}
-                yOffset={"20%"}
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}>
-                {downloadFileModalChildren}
-            </Modal>
+            <DownloadFile setDownloadFileModalState={setDownloadFileModalState} downloadFileModalState={downloadFileModalState} file={downloadFile} />
         </Container>
     )
 }
