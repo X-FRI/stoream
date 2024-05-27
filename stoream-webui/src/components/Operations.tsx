@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Breadcrumbs, Button, Center, Input, Menu, Modal, rem, Stack } from "@mantine/core"
+import { Button, Center, Input, Menu, Modal, rem, Stack } from "@mantine/core"
 import { Spotlight, SpotlightActionData, spotlight } from '@mantine/spotlight';
 import { flatFile } from "../model/Directory.res.mjs";
 import { useLoaderData } from "react-router-dom";
