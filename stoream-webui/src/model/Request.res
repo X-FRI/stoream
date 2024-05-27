@@ -39,7 +39,7 @@ module Directory = {
     await Fetch.fetch(`${Config.value.engine}/capacity`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
-      switch response->Js.Json.decodeObject->Option.getExn->Js_dict.get("capacity") {
+      switch response->Js.Json.decodeObject->Option.getExn->Js_dict.get("Capacity") {
       | Some(Js.Json.Number(capacity)) => capacity
       | _ => Js.Exn.raiseError("Cannot get the capacity")
       }

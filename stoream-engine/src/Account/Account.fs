@@ -1,0 +1,33 @@
+(* This module provides stoream-engine user system API services,
+ * such as user login verification, etc.*)
+module Stoream.Engine.Account
+
+open System
+open Suave
+open Suave.Filters
+open Suave.Operators
+open Suave.Successful
+open Config
+open API
+
+type Account () =
+  (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
+   * SEE: Stoream.Engine.Config *)
+  static member inline public CONFIG = CONFIG.Account
+
+  (* Implementing the API interface indicates that this type is an API service *)
+  interface API with
+    static member public App = Account.App
+
+  static member private Login (request: HttpRequest) =
+    let username = request.queryParamOpt("username").Value |> snd |> _.Value
+    let password = request.queryParamOpt("password").Value |> snd |> _.Value
+
+    (username = Account.CONFIG.Username
+     && password = Account.CONFIG.Password.ToString ())
+    |> fun correct -> {| status = if correct then "OK" else "ERROR" |}
+    |> Text.Json.JsonSerializer.Serialize
+    |> OK
+
+  static member public App: WebPart =
+    path "/login" >=> GET >=> request Account.Login
