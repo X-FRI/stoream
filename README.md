@@ -25,14 +25,15 @@
 This project is mainly constructed using the following technologies:
 
 ### WebUI
-- <a href="https://rescript-lang.org/"> <img src="./stoream-webui/src/assets/rescript-logo.svg" height="20px"> Fast, Simple, Fully Typed JavaScript from the Future </a>
-- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/src/assets/typescript-logo.svg" height="20px"> JavaScript with syntax for types. </a>
+- <a href="https://rescript-lang.org/"> <img src="./stoream-webui/src/assets/rescript-logo.svg" height="20px"> Rescript: Fast, Simple, Fully Typed JavaScript from the Future </a>
+- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/src/assets/typescript-logo.svg" height="20px"> Typescript: JavaScript with syntax for types. </a>
 - <a href="https://react.dev/"> <img src="./stoream-webui/src/assets/react-logo.svg" height="20px"> React: The library for web and native user interfaces </a>
-- <a href="https://mantine.dev/"> <img src="./stoream-webui/src/assets/mantine-logo.svg" height="20px"> A fully featured React components library </a>
+- <a href="https://mantine.dev/"> <img src="./stoream-webui/src/assets/mantine-logo.svg" height="20px"> Mantine: A fully featured React components library </a>
 
 ### Engine
-- <a href="https://www.rust-lang.org/"> <img src="./stoream-webui/src/assets/rust-logo.svg" height="20px"> A language empowering everyone to build reliable and efficient software. </a>
-- [Axum: Ergonomic and modular web framework built with Tokio, Tower, and Hyper](https://github.com/tokio-rs/axum)
+- <a href="https://dotnet.microsoft.com/en-us/languages/fsharp"> <img src="./stoream-webui/src/assets/fsharp-logo.svg" height="20px"> F#: An open-source language that makes it easy to write succinct, robust, and performant code. </a>
+- <a href="https://suave.io"> <img src="./stoream-webui/src/assets/suave-logo.png" height="20px"> Suave: A simple web development F# library providing a lightweight web server and a set of combinators to manipulate route flow and task composition. </a>
+
 
 ## Docs
 
@@ -68,19 +69,24 @@ pnpm dev
 
 #### Engine
 
-For Rust, we recommend using [rustup](https://rustup.rs/) to manage its toolchain.
+For .NET Core 8.0, you can use the script:
 
-Then use the following command to install the latest stable rust:
+```bash
+wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+chmod +x ./dotnet-install.sh
+./dotnet-install.sh --version latest
+```
 
-```
-rustup install stable
-```
+or download it from the [official website](https://dotnet.microsoft.com/en-us/download).
 
-If you have installed Rust before and want to update to the latest stable version, you can use the following command:
+> [!IMPORTANT]
+> This project uses radical .NET Native AOT parameters and must use .NET Core 8 or above.
 
-```
-rustup update
-```
+Now you can develop in stoream-engine directory:
+- Build: `dotnet build`
+- Run: `dotnet run`
+- Dev: `dotnet watch`
+- Publish: `dotnet publish`
 
 > [!NOTE]
 > *OPTIONAL*: In addition, we also use [UPX](https://upx.github.io/) to > optimize the size of the executable file. Most Linux distributions can > be installed through the package manager, such as on openSUSE:
@@ -89,7 +95,7 @@ rustup update
 > ```
 > then
 > ```
-> upx --best --lzma target/release/stoream-engine
+> upx --best --lzma ./bin/Release/net8.0/{your runtime}/publish/stoream-engine(.exe)
 > ```
 
 ## [LICENSE](./LICENSE)
