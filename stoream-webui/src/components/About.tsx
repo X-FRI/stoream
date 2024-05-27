@@ -26,15 +26,17 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Badge, Card, Container, Group, Image, SimpleGrid, Text } from "@mantine/core";
+import { Badge, Card, Container, Group, Image, SimpleGrid, Text, Tooltip } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 /// Image files used in About component
 const images = [
-    "/src/assets/rescript-logo.svg",
-    "/src/assets/typescript-logo.svg",
-    "/src/assets/rust-logo.svg",
-    "/src/assets/react-logo.svg",
-    "/src/assets/mantine-logo.svg",
+    { path: "/src/assets/rescript-logo.svg", tooltip: "Fast, Simple, Fully Typed JavaScript from the Future", href: "https://rescript-lang.org/" },
+    { path: "/src/assets/fsharp-logo.svg", tooltip: "An open-source language that makes it easy to write succinct, robust, and performant code.", href: "https://dotnet.microsoft.com/en-us/languages/fsharp" },
+    { path: "/src/assets/typescript-logo.svg", tooltip: "JavaScript with syntax for types.", href: "https://www.typescriptlang.org/" },
+    { path: "/src/assets/react-logo.svg", tooltip: "The library for web and native user interfaces", href: "https://react.dev/" },
+    { path: "/src/assets/mantine-logo.svg", tooltip: "A fully featured React components library", href: "https://mantine.dev/" },
+    { path: "/src/assets/suave-logo.png", tooltip: "A simple web development F# library providing a lightweight web server and a set of combinators to manipulate route flow and task composition.", href: "https://suave.io/" }
 ];
 
 /** About component is used to display information related to the project,
@@ -66,8 +68,12 @@ const About = () => {
 
                 <Card.Section inheritPadding mt="sm" pb="md">
                     <SimpleGrid cols={3}>
-                        {images.map((image) => (
-                            <Image src={image} key={image} radius="sm" />
+                        {images.map(({ path, tooltip, href }) => (
+                            <Tooltip label={tooltip}>
+                                <Link to={href}>
+                                    <Image src={path} key={path} radius="sm" />
+                                </Link>
+                            </Tooltip>
                         ))}
                     </SimpleGrid>
                 </Card.Section>

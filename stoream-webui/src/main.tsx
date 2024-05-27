@@ -62,7 +62,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             path: "/",
             element: <App />,
             errorElement: <Error />,
-            loader: async () => { return { dir: await fetch(), capacity: Request.Directory.capacity() } }
+            loader: async () => { return { dir: await fetch(), capacity: await Request.Directory.capacity() } }
           },
         ])}
       />
