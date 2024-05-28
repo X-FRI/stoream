@@ -36,7 +36,7 @@ open Suave.Filters
 open Suave.Operators
 open Config
 open Account
-open Storage.Services
+open Stoream.Engine.Storage
 
 (* API server for stoream-engine, currently implemented using Suave 
  * SEE: https://suave.io *)
@@ -52,20 +52,32 @@ type Server () =
     addHeader "Access-Control-Allow-Origin" Server.CONFIG.WebUi
     >=> setHeader "Access-Control-Allow-Headers" "token"
     >=> addHeader "Access-Control-Allow-Headers" "Content-Type"
-    >=> addHeader "Access-Control-Allow-Methods" "GET"
+    >=> addHeader "Access-Control-Allow-Methods" "GET,POST"
 
   (* All API services are defined here,
    * and this member will be passed as a parameter to Suave.startWebServerAsync. *)
   static member private Apps: WebPart =
-    GET
-    >=> fun context ->
-      context
-      |> (Server.CORS
-          >=> choose
-            [
-              (* Please add new services here. *)
-              Account.App
-              Storage.App ])
+    choose
+      [ GET
+        >=> fun context ->
+          context
+          |> (Server.CORS
+              >=> choose
+                [
+                  (* Please add new services here. *)
+                  Account.App
+                  Tree.Tree.App
+                  Cat.Cat.App
+                  Capacity.Capacity.App
+                  CreateDirectory.CreateDirectory.App ])
+        POST
+        >=> fun context ->
+          context
+          |> (Server.CORS
+              >=> choose
+                [
+                  (* Please add new services here. *)
+                  Upload.Upload.App ]) ]
 
   (* Start the asynchronous server according to the configuration.
    * NOTE: This function will read the keyboard input from the console.

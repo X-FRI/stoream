@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.API.Capacity
+module Stoream.Engine.Storage.Capacity
 
 open System
 open Suave

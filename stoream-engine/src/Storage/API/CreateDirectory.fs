@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.API.CreateDirectory
+module Stoream.Engine.Storage.CreateDirectory
 
 open System
 open Suave

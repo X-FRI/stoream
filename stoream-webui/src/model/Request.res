@@ -66,12 +66,34 @@ module Directory = {
 
 module File = {
   let cat = async (file: File.t): Fetch.Blob.t => {
-    /* The File.t passed from the front end has become filepath for some reason.
-     * Everything is so weird, so I can only file->Js.String.make */
     await Fetch.fetch(
       `${Config.value.engine}/cat?path=${file.filepath}`,
       {mode: #cors},
     )->Promise.then(Fetch.Response.blob)
+  }
+
+  let upload = async (filename: string, directory: string, filevalue: Fetch.Blob.t) => {
+    await Fetch.fetch(
+      `${Config.value.engine}/upload`,
+      {
+        method: #POST,
+        mode: #cors,
+        body: filevalue->Fetch.Body.blob,
+      },
+    )
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError(`Cannot upload file ${filename} to ${directory}`)
+          }
+        }
+      )
+    })
   }
 }
 

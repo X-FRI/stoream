@@ -27,19 +27,21 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.Services
+module Stoream.Engine.Storage.Upload
 
+open System
 open Suave
+open Suave.Filters
+open Suave.Operators
+open Suave.Successful
 open Stoream.Engine.API
 open Stoream.Engine.Config
-open Stoream.Engine.Storage.API.Tree
-open Stoream.Engine.Storage.API.Capacity
-open Stoream.Engine.Storage.API.Cat
-open Stoream.Engine.Storage.API.CreateDirectory
+open Stoream.Engine.Storage.Model.File
+open Stoream.Engine.Storage.Model.Directory
 
-(* This module is a collection of Stoream's storage APIs.
- * All storage-related APIs should be placed in Storage.App. *)
-type Storage () =
+(* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
+ * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
+type Upload () =
 
   (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
    * SEE: Stoream.Engine.Config *)
@@ -47,11 +49,14 @@ type Storage () =
 
   (* Implementing the API interface indicates that this type is an API service *)
   interface API with
-    static member public App = Storage.App
+    static member public App = Upload.App
 
-  static member public App =
-    choose
-      [ Tree.App
-        Capacity.App
-        Cat.App
-        CreateDirectory.App ]
+  static member public App = path "/upload" >=> POST >=> request Upload.Upload
+
+  static member private Upload (request: HttpRequest) =
+    printfn $"{request}"
+
+    try
+      {| status = "OK" |} |> Text.Json.JsonSerializer.Serialize |> OK
+    with _ ->
+      {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK
