@@ -26,21 +26,20 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Center, Fieldset, Tooltip, FileInput, Input, Menu, Modal, rem, Stack, TextInput } from "@mantine/core"
+import { Button, Menu, rem } from "@mantine/core"
 import { Spotlight, SpotlightActionData, spotlight } from '@mantine/spotlight';
 import { flatFile } from "../model/Directory.res.mjs";
 import { useLoaderData } from "react-router-dom";
 import { File as $$File } from "../model/File.gen";
 import React from "react";
-import * as Request from "../model/Request.res.mjs"
 import DownloadFile from "./DownloadFile";
 import { stringOfFileSize } from "../model/File.res.mjs";
 import { LoaderData } from "../model/LoaderData.gen";
 import { useDisclosure } from "@mantine/hooks";
 import { IconUpload, IconFolderPlus, IconSearch } from '@tabler/icons-react';
-import { notifications } from "@mantine/notifications";
-import { fetch } from "./Files";
 import { Directory } from "../model/Directory.gen";
+import UploadFile from "./UploadFile";
+import CreateDirectory from "./CreateDirectory";
 
 interface OperationsProps {
     breadcrumbs: { title: string; path: string; }[],
@@ -49,36 +48,6 @@ interface OperationsProps {
         path: string;
     }[]>>,
     setRenderDir: React.Dispatch<React.SetStateAction<Directory>>
-}
-
-interface CreateDirectoryProps {
-    breadcrumbs: { title: string; path: string; }[],
-    setBreadcrumbs: React.Dispatch<React.SetStateAction<{
-        title: string;
-        path: string;
-    }[]>>,
-    setRenderDir: React.Dispatch<React.SetStateAction<Directory>>,
-    createDirectoryModalStatus: boolean,
-    setCreateDirectoryModalStatus: {
-        readonly open: () => void;
-        readonly close: () => void;
-        readonly toggle: () => void;
-    }
-}
-
-interface UploadFileProps {
-    breadcrumbs: { title: string; path: string; }[],
-    setBreadcrumbs: React.Dispatch<React.SetStateAction<{
-        title: string;
-        path: string;
-    }[]>>,
-    setRenderDir: React.Dispatch<React.SetStateAction<Directory>>,
-    uploadFileModalStatus: boolean,
-    setUploadFileModalStatus: {
-        readonly open: () => void;
-        readonly close: () => void;
-        readonly toggle: () => void;
-    }
 }
 
 
@@ -166,132 +135,6 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, se
                 }}
             />
             <DownloadFile setDownloadFileModalState={setDownloadFileModalState} downloadFileModalState={downloadFileModalState} file={downloadFile} />
-        </>
-    )
-}
-
-const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir, uploadFileModalStatus, setUploadFileModalStatus }) => {
-    const [uploadFile, setUploadFile] = React.useState<File | null>(null);
-    const uploadDirectory = breadcrumbs[breadcrumbs.length - 1].path
-    const breadcrumbsSnapshot = [...breadcrumbs]
-
-    const upload = async () => {
-        const data = new FormData()
-        data.append(uploadFile?.name as string, uploadFile as File)
-        console.log(data)
-
-        await
-            Request.$$File
-                .upload(uploadFile?.name, breadcrumbs[breadcrumbs.length - 1].path, data)
-                .then(async () => {
-                    setUploadFileModalStatus.close()
-                    notifications.show({
-                        title: "Successful operation",
-                        message: `Upload file ${uploadFile?.name} successfully`,
-                        color: "green"
-                    })
-                    setRenderDir(await fetch() as Directory)
-                    setBreadcrumbs(breadcrumbsSnapshot)
-                })
-                .catch(reason => {
-                    notifications.show({
-                        title: `An error occurred during uploading file ${uploadFile?.name}`,
-                        message: String(reason),
-                        color: "red"
-                    })
-                })
-    }
-
-    return (
-        <>
-            <Modal
-                opened={uploadFileModalStatus}
-                onClose={setUploadFileModalStatus.close} title="Create Directory"
-                yOffset="20vh"
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}
-                w={"auto"}
-            >
-                <Fieldset legend="Upload File">
-                    <FileInput
-                        value={uploadFile}
-                        onChange={setUploadFile}
-                        error={uploadFile === null}
-                        formEncType="multipart/form-data"
-                        placeholder="Click to select file" />
-                    {
-                        uploadFile === null ?
-                            <></> :
-                            <Tooltip label={uploadDirectory}>
-                                <TextInput
-                                    mt={"xs"}
-                                    label={"Target Directory"}
-                                    placeholder={uploadDirectory}
-                                    disabled />
-                            </Tooltip>
-                    }
-                    <Center mt={"md"}>
-                        <Button onClick={async () => await upload()}> Confim </Button>
-                    </Center>
-                </Fieldset>
-            </Modal >
-        </>
-    )
-}
-
-const CreateDirectory: React.FC<CreateDirectoryProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir, createDirectoryModalStatus, setCreateDirectoryModalStatus }) => {
-    const breadcrumbsSnapshot = [...breadcrumbs]
-    const [createDirectory, setCreateDirectory] = React.useState("");
-
-    return (
-        <>
-            <Modal
-                opened={createDirectoryModalStatus}
-                onClose={setCreateDirectoryModalStatus.close} title="Create Directory"
-                yOffset="20vh"
-                overlayProps={{
-                    backgroundOpacity: 0.55,
-                    blur: 3,
-                }}
-            >
-                <Center>
-                    <Stack align="center" justify="center" gap="xs">
-                        <Input
-                            error={createDirectory === ""}
-                            placeholder="Directory name"
-                            style={{ width: "15em" }}
-                            onChange={(value) => {
-                                setCreateDirectory(value.target.value)
-                            }} />
-
-                        <Button onClick={async () => {
-                            await
-                                Request.Directory.createdir(`${breadcrumbs[breadcrumbs.length - 1].path}/${createDirectory}`)
-                                    .then(async () => {
-                                        setCreateDirectoryModalStatus.close()
-                                        notifications.show({
-                                            title: "Successful operation",
-                                            message: `Create directory ${createDirectory} successfully`,
-                                            color: "green"
-                                        })
-                                        setRenderDir(await fetch() as Directory)
-                                        setBreadcrumbs(breadcrumbsSnapshot)
-                                    })
-                                    .catch(reason => {
-                                        notifications.show({
-                                            title: `An error occurred during creating directory ${createDirectory}`,
-                                            message: String(reason),
-                                            color: "red"
-                                        })
-                                    })
-                        }}>
-                            Confim
-                        </Button>
-                    </Stack>
-                </Center>
-            </Modal>
         </>
     )
 }
