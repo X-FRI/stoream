@@ -38,6 +38,7 @@ import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import Operations from "./Operations.tsx";
 import { IconAdjustments, IconFile, IconFileDownload, IconFileMinus, IconFolder, IconMenu2, IconMinus } from "@tabler/icons-react";
+import DeleteFile from "./DeleteFile.tsx";
 
 /** Before loading the Files component, its need to request the directory tree
   * under the path specified by the configuration file from the engine.
@@ -74,6 +75,9 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
      * and its state is controlled by downloadFileModalState. */
     const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
     const [downloadFile, setDownloadFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
+
+    const [deleteFileModalState, setDeleteFileModalState] = useDisclosure(false);
+    const [deleteFile, setDeleteFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
 
     const realtimeDir: Directory = (() => {
         if (breadcrumbs.length == 1)
@@ -130,7 +134,10 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                         </Table.Td>
                     </Menu.Target>
                     <Menu.Dropdown>
-                        <Menu.Item leftSection={<IconFileMinus style={{ width: rem(14), height: rem(14) }} />}>
+                        <Menu.Item leftSection={<IconFileMinus style={{ width: rem(14), height: rem(14) }} />} onClick={() => {
+                            setDeleteFile(file)
+                            setDeleteFileModalState.open()
+                        }}>
                             <Text fz="sm" lh="xs">Delete</Text>
                         </Menu.Item>
 
@@ -187,6 +194,14 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 </Stack>
             </Card>
             <DownloadFile setModalState={setDownloadFileModalState} modalState={downloadFileModalState} file={downloadFile} />
+            <DeleteFile
+                setModalState={setDeleteFileModalState}
+                modalState={deleteFileModalState}
+                file={deleteFile}
+                breadcrumbs={breadcrumbs}
+                setBreadcrumbs={setBreadcrumbs}
+                setRenderDir={setRenderDir}
+            />
         </Container>
     )
 }
