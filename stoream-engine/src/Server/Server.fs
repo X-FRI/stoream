@@ -36,7 +36,8 @@ open Suave.Filters
 open Suave.Operators
 open Config
 open Account
-open Stoream.Engine.Storage
+open Stoream.Engine.Storage.Storage
+open API
 
 (* API server for stoream-engine, currently implemented using Suave 
  * SEE: https://suave.io *)
@@ -66,12 +67,7 @@ type Server () =
                 [
                   (* Please add new services here. *)
                   Account.App
-                  Tree.Tree.App
-                  Cat.Cat.App
-                  Capacity.Capacity.App
-                  CreateDirectory.CreateDirectory.App
-                  DeleteFile.DeleteFile.App
-                  DeleteDirectory.DeleteDirectory.App ])
+                  Storage.GetApp ])
         POST
         >=> fun context ->
           context
@@ -79,7 +75,7 @@ type Server () =
               >=> choose
                 [
                   (* Please add new services here. *)
-                  Upload.Upload.App ]) ]
+                  Storage.PostApp ]) ]
 
   (* Start the asynchronous server according to the configuration.
    * NOTE: This function will read the keyboard input from the console.

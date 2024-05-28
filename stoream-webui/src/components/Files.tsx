@@ -37,7 +37,7 @@ import DownloadFile from "./DownloadFile.tsx"
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import Operations from "./Operations.tsx";
-import { IconAdjustments, IconFile, IconFileDownload, IconFileMinus, IconFolder, IconMenu2, IconMinus } from "@tabler/icons-react";
+import { IconFile, IconFileDownload, IconFileMinus, IconFolder, IconMinus } from "@tabler/icons-react";
 import DeleteFile from "./DeleteFile.tsx";
 
 /** Before loading the Files component, its need to request the directory tree

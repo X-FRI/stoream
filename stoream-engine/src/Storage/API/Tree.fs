@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.Tree
+module Stoream.Engine.Storage.API.Tree
 
 open System
 open Suave
@@ -48,7 +48,7 @@ type Tree () =
   static member inline public CONFIG = CONFIG.Storage
 
   (* Implementing the API interface indicates that this type is an API service *)
-  interface API with
+  interface IGetAPI with
     static member public App = Tree.App
 
   static member public App = path "/tree" >=> GET >=> request Tree.Tree

@@ -37,5 +37,9 @@ open Suave
 
 (* When adding a new service implementation, please implement this interface *)
 [<Interface>]
-type API =
+type IGetAPI =
   static abstract App: WebPart
+
+[<Interface>]
+type IPostAPI =
+  static abstract App: WebPart  

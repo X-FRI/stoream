@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.Cat
+module Stoream.Engine.Storage.API.Cat
 
 open System
 open Suave
@@ -46,7 +46,7 @@ type Cat () =
   static member inline public CONFIG = CONFIG.Storage
 
   (* Implementing the API interface indicates that this type is an API service *)
-  interface API with
+  interface IGetAPI with
     static member public App = Cat.App
 
   static member public App = path "/cat" >=> GET >=> request Cat.Cat

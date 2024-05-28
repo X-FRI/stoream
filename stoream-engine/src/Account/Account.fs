@@ -45,7 +45,7 @@ type Account () =
   static member inline public CONFIG = CONFIG.Account
 
   (* Implementing the API interface indicates that this type is an API service *)
-  interface API with
+  interface IGetAPI with
     static member public App = Account.App
 
   static member private Login (request: HttpRequest) =

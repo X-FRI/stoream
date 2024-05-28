@@ -26,9 +26,9 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Button, Menu, rem } from "@mantine/core"
+import { Menu, rem } from "@mantine/core"
 import { Spotlight, SpotlightActionData, spotlight } from '@mantine/spotlight';
-import { flatFile, slice } from "../model/Directory.res.mjs";
+import { flatFile } from "../model/Directory.res.mjs";
 import { useLoaderData } from "react-router-dom";
 import { File as $$File } from "../model/File.gen";
 import React from "react";
@@ -36,7 +36,7 @@ import DownloadFile from "./DownloadFile";
 import { stringOfFileSize } from "../model/File.res.mjs";
 import { LoaderData } from "../model/LoaderData.gen";
 import { useDisclosure } from "@mantine/hooks";
-import { IconUpload, IconFolderPlus, IconSearch, IconFolderMinus, IconMenu, IconMenu2 } from '@tabler/icons-react';
+import { IconUpload, IconFolderPlus, IconSearch, IconFolderMinus, IconMenu2 } from '@tabler/icons-react';
 import { Directory } from "../model/Directory.gen";
 import UploadFile from "./UploadFile";
 import CreateDirectory from "./CreateDirectory";

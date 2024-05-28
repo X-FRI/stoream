@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.DeleteDirectory
+module Stoream.Engine.Storage.API.DeleteDirectory
 
 open System
 open Suave
@@ -46,7 +46,7 @@ type DeleteDirectory () =
   static member inline public CONFIG = CONFIG.Storage
 
   (* Implementing the API interface indicates that this type is an API service *)
-  interface API with
+  interface IGetAPI with
     static member public App = DeleteDirectory.App
 
   static member public App =
