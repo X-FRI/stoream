@@ -27,36 +27,32 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.API.CreateDirectory
+module Stoream.Engine.Storage.Storage
 
-open System
 open Suave
-open Suave.Filters
-open Suave.Operators
-open Suave.Successful
 open Stoream.Engine.API
-open Stoream.Engine.Config
+open Stoream.Engine.Storage.API.Tree
+open Stoream.Engine.Storage.API.Capacity
+open Stoream.Engine.Storage.API.Cat
+open Stoream.Engine.Storage.API.CreateDirectory
+open Stoream.Engine.Storage.API.DeleteDirectory
+open Stoream.Engine.Storage.API.DeleteFile
+open Stoream.Engine.Storage.API.Upload
 
-type CreateDirectory () =
-
-  (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
-   * SEE: Stoream.Engine.Config *)
-  static member inline public CONFIG = CONFIG.Storage
-
-  (* Implementing the API interface indicates that this type is an API service *)
+type Storage () =
   interface IGetAPI with
-    static member public App = CreateDirectory.App
+    static member public App = Storage.GetApp
 
-  static member public App =
-    path "/createdir" >=> GET >=> request CreateDirectory.CreateDirectory
+  interface IPostAPI with
+    static member public App = Storage.PostApp
 
-  static member private CreateDirectory (request: HttpRequest) =
-    let path = request.queryParamOpt("path").Value |> snd |> _.Value
+  static member public GetApp =
+    choose
+      [ Tree.App
+        Capacity.App
+        Cat.App
+        CreateDirectory.App
+        DeleteFile.App
+        DeleteDirectory.App ]
 
-    try
-      IO.Directory.CreateDirectory path
-      |> fun _ -> {| status = "OK" |}
-      |> Text.Json.JsonSerializer.Serialize
-      |> OK
-    with _ ->
-      {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK
+  static member public PostApp = choose [ Upload.App ]

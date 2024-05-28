@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.Upload
+module Stoream.Engine.Storage.API.Upload
 
 open System
 open Suave
@@ -36,8 +36,6 @@ open Suave.Operators
 open Suave.Successful
 open Stoream.Engine.API
 open Stoream.Engine.Config
-open Stoream.Engine.Storage.Model.File
-open Stoream.Engine.Storage.Model.Directory
 
 (* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
  * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
@@ -48,7 +46,7 @@ type Upload () =
   static member inline public CONFIG = CONFIG.Storage
 
   (* Implementing the API interface indicates that this type is an API service *)
-  interface API with
+  interface IPostAPI with
     static member public App = Upload.App
 
   static member public App = path "/upload" >=> POST >=> request Upload.Upload

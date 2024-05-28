@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.Capacity
+module Stoream.Engine.Storage.API.Capacity
 
 open System
 open Suave
@@ -46,7 +46,7 @@ type Capacity () =
   static member inline public CONFIG = CONFIG.Storage
 
   (* Implementing the API interface indicates that this type is an API service *)
-  interface API with
+  interface IGetAPI with
     static member public App = Capacity.App
 
   static member public App =
