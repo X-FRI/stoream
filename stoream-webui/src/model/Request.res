@@ -62,6 +62,23 @@ module Directory = {
       )
     })
   }
+
+  let deletedir = async (path: string): unit => {
+    await Fetch.fetch(`${Config.value.engine}/deletedir?path=${path}`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError(`Cannot create directory at ${path}`)
+          }
+        }
+      )
+    })
+  }
 }
 
 module File = {
@@ -90,6 +107,23 @@ module File = {
           switch status {
           | "OK" => ()
           | _ => Js.Exn.raiseError(`Cannot upload file ${filename} to ${directory}`)
+          }
+        }
+      )
+    })
+  }
+
+  let deletefile = async (path: string): unit => {
+    await Fetch.fetch(`${Config.value.engine}/deletefile?path=${path}`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError(`Cannot create directory at ${path}`)
           }
         }
       )

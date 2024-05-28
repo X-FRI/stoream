@@ -49,13 +49,14 @@ type DeleteFile () =
   interface API with
     static member public App = DeleteFile.App
 
-  static member public App = path "/deletefile" >=> POST >=> request DeleteFile.DeleteFile
+  static member public App =
+    path "/deletefile" >=> GET >=> request DeleteFile.DeleteFile
 
   static member private DeleteFile (request: HttpRequest) =
     let path = request.queryParamOpt("path").Value |> snd |> _.Value
 
     try
-      IO.File.Delete(path)
+      IO.File.Delete (path)
       {| status = "OK" |} |> Text.Json.JsonSerializer.Serialize |> OK
     with e ->
       printfn $"{e}"

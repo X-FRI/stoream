@@ -82,7 +82,7 @@ let slice = (dir: t, path: string): t => {
           __slice(
             switch dir.sub->Array.find(sub => sub.name == path) {
             | Some(dir) => dir
-            | None => Js.Exn.raiseError(`Cannot get the directory content: ${dir.path}`)
+            | None => dir
             },
             progres + 1,
           )

@@ -40,23 +40,23 @@ interface CreateDirectoryProps {
         path: string;
     }[]>>,
     setRenderDir: React.Dispatch<React.SetStateAction<Directory>>,
-    createDirectoryModalStatus: boolean,
-    setCreateDirectoryModalStatus: {
+    modalState: boolean,
+    setmodalState: {
         readonly open: () => void;
         readonly close: () => void;
         readonly toggle: () => void;
     }
 }
 
-const CreateDirectory: React.FC<CreateDirectoryProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir, createDirectoryModalStatus, setCreateDirectoryModalStatus }) => {
+const CreateDirectory: React.FC<CreateDirectoryProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir, modalState, setmodalState }) => {
     const breadcrumbsSnapshot = [...breadcrumbs]
     const [createDirectory, setCreateDirectory] = React.useState("");
 
     return (
         <>
             <Modal
-                opened={createDirectoryModalStatus}
-                onClose={setCreateDirectoryModalStatus.close} title="Create Directory"
+                opened={modalState}
+                onClose={setmodalState.close} title="Create Directory"
                 yOffset="20vh"
                 overlayProps={{
                     backgroundOpacity: 0.55,
@@ -77,7 +77,7 @@ const CreateDirectory: React.FC<CreateDirectoryProps> = ({ breadcrumbs, setBread
                             await
                                 Request.Directory.createdir(`${breadcrumbs[breadcrumbs.length - 1].path}/${createDirectory}`)
                                     .then(async () => {
-                                        setCreateDirectoryModalStatus.close()
+                                        setmodalState.close()
                                         notifications.show({
                                             title: "Successful operation",
                                             message: `Create directory ${createDirectory} successfully`,

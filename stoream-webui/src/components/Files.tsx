@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Container, Group, rem, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Card, Container, Group, Menu, rem, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"
@@ -37,7 +37,7 @@ import DownloadFile from "./DownloadFile.tsx"
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import Operations from "./Operations.tsx";
-import { IconFile, IconFolder } from "@tabler/icons-react";
+import { IconAdjustments, IconFile, IconFileDownload, IconFileMinus, IconFolder, IconMenu2, IconMinus } from "@tabler/icons-react";
 
 /** Before loading the Files component, its need to request the directory tree
   * under the path specified by the configuration file from the engine.
@@ -58,7 +58,9 @@ interface FilesProps {
 }
 
 /** Files is a file list view component used to display the contents of dir
-  * dir is passed in from the outside. This value is usually the return value of fetch. */
+  * dir is passed in from the outside. This value is usually the return value of fetch.
+  * 
+  * TODO: ContextMenu is not implemented yet */
 const Files: React.FC<FilesProps> = ({ dir }) => {
     const [renderDir, setRenderDir] = React.useState(dir)
 
@@ -72,6 +74,12 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
      * and its state is controlled by downloadFileModalState. */
     const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
     const [downloadFile, setDownloadFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
+
+    const realtimeDir: Directory = (() => {
+        if (breadcrumbs.length == 1)
+            return renderDir
+        else return slice(renderDir, breadcrumbs[breadcrumbs.length - 1].path.split(renderDir.path)[1])
+    })()
 
     /* Used to update breadcrumbs.
      * Clicking the path in breadcrumbs should call this function to update.
@@ -97,16 +105,10 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
     /* Used to render the content in the path 
      * pointed to by the last (i.e. latest) value of breadcrumbs. */
     const render = () => {
-        const realtimeDir: Directory = (() => {
-            if (breadcrumbs.length == 1)
-                return renderDir
-            else return slice(renderDir, breadcrumbs[breadcrumbs.length - 1].path.split(renderDir.path)[1])
-        })()
-
         return realtimeDir.sub.map(dir =>
-            <Table.Tr key={dir.name} style={{ cursor: "pointer" }} onClick={() => {
-                updateBreadcrumbs(dir.path)
-            }}>
+            <Table.Tr key={dir.name}
+                style={{ cursor: "pointer" }}
+                onClick={() => updateBreadcrumbs(dir.path)}>
                 <Table.Td>
                     <Group justify="flex-start">
                         <IconFolder style={{ width: rem(15), height: rem(15) }} />
@@ -117,17 +119,32 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
-            <Table.Tr style={{ cursor: "pointer" }} key={file.filename} onClick={() => {
-                setDownloadFile(file)
-                setDownloadFileModalState.open()
-            }}>
+            <Table.Tr style={{ cursor: "pointer" }} key={file.filename}>
+                <Menu shadow="md">
+                    <Menu.Target>
+                        <Table.Td>
+                            <Group justify="flex-start">
+                                <IconFile style={{ width: rem(15), height: rem(15) }} />
+                                <Text fz="sm" lh="xs" >{file.filename}</Text>
+                            </Group>
+                        </Table.Td>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        <Menu.Item leftSection={<IconFileMinus style={{ width: rem(14), height: rem(14) }} />}>
+                            <Text fz="sm" lh="xs">Delete</Text>
+                        </Menu.Item>
+
+                        <Menu.Item leftSection={<IconFileDownload style={{ width: rem(14), height: rem(14) }} />} onClick={() => {
+                            setDownloadFile(file)
+                            setDownloadFileModalState.open()
+                        }}>
+                            <Text fz="sm" lh="xs">Download</Text>
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
                 <Table.Td>
-                    <Group justify="flex-start">
-                        <IconFile style={{ width: rem(15), height: rem(15) }} />
-                        <Text fz="sm" lh="xs" >{file.filename}</Text>
-                    </Group>
+                    <IconMinus />
                 </Table.Td>
-                <Table.Td>0</Table.Td>
                 <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
             </Table.Tr>
         ))
@@ -150,7 +167,7 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                                 </Anchor>
                             ))
                         }</Breadcrumbs>
-                        <Operations breadcrumbs={breadcrumbs} setBreadcrumbs={setBreadcrumbs} setRenderDir={setRenderDir} />
+                        <Operations breadcrumbs={breadcrumbs} setBreadcrumbs={setBreadcrumbs} setRenderDir={setRenderDir} realtimeDir={realtimeDir} />
                     </Group>
                     <ScrollArea h={500}>
                         <Table captionSide="bottom" highlightOnHover>
@@ -165,18 +182,11 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                             <Table.Tbody>
                                 {render()}
                             </Table.Tbody>
-                            <Table.Tfoot>
-                                <Table.Tr>
-                                    <Table.Th>Name</Table.Th>
-                                    <Table.Th>Files</Table.Th>
-                                    <Table.Th>Size</Table.Th>
-                                </Table.Tr>
-                            </Table.Tfoot>
                         </Table>
                     </ScrollArea>
                 </Stack>
             </Card>
-            <DownloadFile setDownloadFileModalState={setDownloadFileModalState} downloadFileModalState={downloadFileModalState} file={downloadFile} />
+            <DownloadFile setModalState={setDownloadFileModalState} modalState={downloadFileModalState} file={downloadFile} />
         </Container>
     )
 }

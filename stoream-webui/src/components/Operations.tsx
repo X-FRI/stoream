@@ -28,7 +28,7 @@
 
 import { Button, Menu, rem } from "@mantine/core"
 import { Spotlight, SpotlightActionData, spotlight } from '@mantine/spotlight';
-import { flatFile } from "../model/Directory.res.mjs";
+import { flatFile, slice } from "../model/Directory.res.mjs";
 import { useLoaderData } from "react-router-dom";
 import { File as $$File } from "../model/File.gen";
 import React from "react";
@@ -36,10 +36,11 @@ import DownloadFile from "./DownloadFile";
 import { stringOfFileSize } from "../model/File.res.mjs";
 import { LoaderData } from "../model/LoaderData.gen";
 import { useDisclosure } from "@mantine/hooks";
-import { IconUpload, IconFolderPlus, IconSearch } from '@tabler/icons-react';
+import { IconUpload, IconFolderPlus, IconSearch, IconFolderMinus, IconMenu, IconMenu2 } from '@tabler/icons-react';
 import { Directory } from "../model/Directory.gen";
 import UploadFile from "./UploadFile";
 import CreateDirectory from "./CreateDirectory";
+import DeleteDirectory from "./DeleteDirectory";
 
 interface OperationsProps {
     breadcrumbs: { title: string; path: string; }[],
@@ -47,7 +48,8 @@ interface OperationsProps {
         title: string;
         path: string;
     }[]>>,
-    setRenderDir: React.Dispatch<React.SetStateAction<Directory>>
+    setRenderDir: React.Dispatch<React.SetStateAction<Directory>>,
+    realtimeDir: Directory
 }
 
 
@@ -56,14 +58,15 @@ interface OperationsProps {
   * searching for files, etc.
   * 
   * TODO: This component is not yet complete */
-const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir }) => {
+const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir, realtimeDir }) => {
     const loaderData = useLoaderData() as LoaderData;
     const files: $$File[] = flatFile(loaderData.dir)
     const [queryFilename, setQueryFilename] = React.useState('');
 
-    const [createDirectoryModalStatus, setCreateDirectoryModalStatus] = useDisclosure(false);
-    const [downloadFileModalState, setDownloadFileModalState] = useDisclosure(false);
-    const [uploadFileModalState, setUploadFileModalState] = useDisclosure(false);
+    const [createModalStatus, setCreateModalStatus] = useDisclosure(false);
+    const [downloadModalState, setDownloadModalState] = useDisclosure(false);
+    const [uploadModalState, setUploadModalState] = useDisclosure(false);
+    const [deleteModalState, setDeleteModalState] = useDisclosure(false);
 
     const [downloadFile, setDownloadFile] = React.useState({ filename: "", filepath: "", filesize: 0 })
 
@@ -76,7 +79,7 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, se
                 description: stringOfFileSize(file.filesize),
                 onClick: () => {
                     setDownloadFile(file)
-                    setDownloadFileModalState.open()
+                    setDownloadModalState.open()
                 }
             }));
 
@@ -84,24 +87,30 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, se
         <>
             <Menu shadow="md">
                 <Menu.Target>
-                    <Button> Operations </Button>
+                    <IconMenu2 style={{ cursor: "pointer" }} />
                 </Menu.Target>
 
                 <Menu.Dropdown>
                     <Menu.Item
-                        onClick={setCreateDirectoryModalStatus.open}
+                        onClick={setCreateModalStatus.open}
                         leftSection={<IconFolderPlus style={{ width: rem(14), height: rem(14) }} />}
                     >
-                        Create Directory
+                        Create
                     </Menu.Item>
                     <Menu.Item
-                        onClick={setUploadFileModalState.open}
+                        onClick={setDeleteModalState.open}
+                        leftSection={<IconFolderMinus style={{ width: rem(14), height: rem(14) }} />}
+                    >
+                        Delete
+                    </Menu.Item>
+                    <Menu.Item
+                        onClick={setUploadModalState.open}
                         leftSection={<IconUpload style={{ width: rem(14), height: rem(14) }} />}
                     >
-                        Upload File
+                        Upload
                     </Menu.Item>
                     <Menu.Item leftSection={<IconSearch style={{ width: rem(14), height: rem(14) }} />} onClick={spotlight.open}>
-                        Search File
+                        Search
                     </Menu.Item>
                 </Menu.Dropdown>
             </Menu>
@@ -109,15 +118,23 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, se
             <CreateDirectory
                 breadcrumbs={breadcrumbs}
                 setBreadcrumbs={setBreadcrumbs}
-                createDirectoryModalStatus={createDirectoryModalStatus}
-                setCreateDirectoryModalStatus={setCreateDirectoryModalStatus}
+                modalState={createModalStatus}
+                setmodalState={setCreateModalStatus}
                 setRenderDir={setRenderDir} />
 
             <UploadFile
                 breadcrumbs={breadcrumbs}
                 setBreadcrumbs={setBreadcrumbs}
-                setUploadFileModalStatus={setUploadFileModalState}
-                uploadFileModalStatus={uploadFileModalState}
+                modalState={uploadModalState}
+                setModalState={setUploadModalState}
+                setRenderDir={setRenderDir} />
+
+            <DeleteDirectory
+                dir={realtimeDir}
+                breadcrumbs={breadcrumbs}
+                setBreadcrumbs={setBreadcrumbs}
+                modalState={deleteModalState}
+                setModalState={setDeleteModalState}
                 setRenderDir={setRenderDir} />
 
             <Spotlight
@@ -134,7 +151,7 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, se
                     placeholder: 'Search files...',
                 }}
             />
-            <DownloadFile setDownloadFileModalState={setDownloadFileModalState} downloadFileModalState={downloadFileModalState} file={downloadFile} />
+            <DownloadFile setModalState={setDownloadModalState} modalState={downloadModalState} file={downloadFile} />
         </>
     )
 }

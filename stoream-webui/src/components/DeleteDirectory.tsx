@@ -26,31 +26,39 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { File } from "../model/File.gen"
-import { stringOfFileSize } from "../model/File.res.mjs"
 import * as Request from "../model/Request.res.mjs"
 import React from "react"
 import { Button, List, Center, Modal, rem } from "@mantine/core"
 import { IconDownload } from "@tabler/icons-react"
+import { notifications } from "@mantine/notifications"
+import { Directory } from "../model/Directory.gen"
+import { fetch } from "./Files"
+import { stringOfDirectorySize } from "../model/Directory.res.mjs"
 
-interface DownloadFileProps {
-    file: File,
+interface DeleteDirectoryProps {
+    dir: Directory,
     modalState: boolean,
     setModalState: {
         readonly open: () => void;
         readonly close: () => void;
         readonly toggle: () => void;
-    }
+    },
+    breadcrumbs: { title: string; path: string; }[],
+    setBreadcrumbs: React.Dispatch<React.SetStateAction<{
+        title: string;
+        path: string;
+    }[]>>,
+    setRenderDir: React.Dispatch<React.SetStateAction<Directory>>,
 }
 
-const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalState }) => {
-
+const DeleteDirectory: React.FC<DeleteDirectoryProps> = ({ dir, modalState, setModalState, breadcrumbs, setBreadcrumbs, setRenderDir }) => {
+    const breadcrumbsSnapshot = breadcrumbs.slice(0, -1)
     return (
         <>
             <Modal
                 opened={modalState}
                 onClose={setModalState.close}
-                title="Download"
+                title="Delete Directory"
                 size={"auto"}
                 yOffset={"20%"}
                 overlayProps={{
@@ -58,25 +66,36 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalS
                     blur: 3,
                 }}>
                 <List>
-                    <List.Item>File name: {file.filename}</List.Item>
-                    <List.Item>File path: {file.filepath}</List.Item>
-                    <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
+                    <List.Item>Directory name: {dir.name}</List.Item>
+                    <List.Item>Directory path: {dir.path}</List.Item>
+                    <List.Item>Directory size: {stringOfDirectorySize(dir.size)}</List.Item>
                 </List>
                 <Center>
                     <Button mt="lg" leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />} onClick={async () => {
-                        const link = URL.createObjectURL(await Request.$$File.cat(file))
-                        const download = document.createElement("a")
-                        download.href = link
-                        download.download = file.filename
-                        download.click()
-                        URL.revokeObjectURL(link)
-                        setModalState.close()
-                        download.remove()
-                    }}> Click to download </Button>
+                        await
+                            Request.Directory.deletedir(dir.path)
+                                .then(async () => {
+                                    setModalState.close()
+                                    notifications.show({
+                                        title: "Successful operation",
+                                        message: `Delete directory ${dir.name} successfully`,
+                                        color: "green"
+                                    })
+                                    setRenderDir(await fetch() as Directory)
+                                    setBreadcrumbs(breadcrumbsSnapshot)
+                                })
+                                .catch(reason => {
+                                    notifications.show({
+                                        title: `An error occurred during deleting directory ${dir.name}`,
+                                        message: String(reason),
+                                        color: "red"
+                                    })
+                                })
+                    }}> Confim </Button>
                 </Center>
             </Modal>
         </>
     )
 }
 
-export default DownloadFile;
+export default DeleteDirectory;

@@ -50,7 +50,7 @@ type DeleteDirectory () =
     static member public App = DeleteDirectory.App
 
   static member public App =
-    path "/deletedir" >=> POST >=> request DeleteDirectory.DeleteDirectory
+    path "/deletedir" >=> GET >=> request DeleteDirectory.DeleteDirectory
 
   static member private DeleteDirectory (request: HttpRequest) =
     let path = request.queryParamOpt("path").Value |> snd |> _.Value

@@ -32,16 +32,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import { createTheme, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { ContextMenuProvider } from 'mantine-contextmenu';
+import Error from "./pages/Error";
+import App from "./pages/App";
+import { fetch } from "./components/Files";
+import * as Request from "./model/Request.res.mjs"
 
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/charts/styles.css';
 import '@mantine/spotlight/styles.css';
-
-import Error from "./pages/Error";
-import App from "./pages/App";
-import { fetch } from "./components/Files";
-import * as Request from "./model/Request.res.mjs"
+import '@mantine/core/styles.layer.css';
+import 'mantine-contextmenu/styles.layer.css';
 
 const theme = createTheme({
 
@@ -50,22 +52,24 @@ const theme = createTheme({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MantineProvider theme={theme}>
-      <Notifications position="top-right" zIndex={1000} />
-      <RouterProvider
-        router={createBrowserRouter([
-          {
-            path: "/login",
-            element: <Login />,
-            errorElement: <Error />
-          },
-          {
-            path: "/",
-            element: <App />,
-            errorElement: <Error />,
-            loader: async () => { return { dir: await fetch(), capacity: await Request.Directory.capacity() } }
-          },
-        ])}
-      />
+      <ContextMenuProvider>
+        <Notifications position="top-right" zIndex={1000} />
+        <RouterProvider
+          router={createBrowserRouter([
+            {
+              path: "/login",
+              element: <Login />,
+              errorElement: <Error />
+            },
+            {
+              path: "/",
+              element: <App />,
+              errorElement: <Error />,
+              loader: async () => { return { dir: await fetch(), capacity: await Request.Directory.capacity() } }
+            },
+          ])}
+        />
+      </ContextMenuProvider>
     </MantineProvider>
   </React.StrictMode>,
 );

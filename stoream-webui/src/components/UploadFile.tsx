@@ -40,15 +40,15 @@ interface UploadFileProps {
         path: string;
     }[]>>,
     setRenderDir: React.Dispatch<React.SetStateAction<Directory>>,
-    uploadFileModalStatus: boolean,
-    setUploadFileModalStatus: {
+    modalState: boolean,
+    setModalState: {
         readonly open: () => void;
         readonly close: () => void;
         readonly toggle: () => void;
     }
 }
 
-const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir, uploadFileModalStatus, setUploadFileModalStatus }) => {
+const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, setRenderDir, modalState, setModalState }) => {
     const [uploadFile, setUploadFile] = React.useState<File | null>(null);
     const uploadDirectory = breadcrumbs[breadcrumbs.length - 1].path
     const breadcrumbsSnapshot = [...breadcrumbs]
@@ -62,7 +62,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
             Request.$$File
                 .upload(uploadFile?.name, breadcrumbs[breadcrumbs.length - 1].path, data)
                 .then(async () => {
-                    setUploadFileModalStatus.close()
+                    setModalState.close()
                     notifications.show({
                         title: "Successful operation",
                         message: `Upload file ${uploadFile?.name} successfully`,
@@ -83,8 +83,8 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
     return (
         <>
             <Modal
-                opened={uploadFileModalStatus}
-                onClose={setUploadFileModalStatus.close} title="Create Directory"
+                opened={modalState}
+                onClose={setModalState.close} title="Create Directory"
                 yOffset="20vh"
                 overlayProps={{
                     backgroundOpacity: 0.55,
