@@ -32,25 +32,34 @@ import * as Request from "../model/Request.res.mjs"
 import React from "react"
 import { Button, List, Center, Modal, rem } from "@mantine/core"
 import { IconDownload } from "@tabler/icons-react"
+import { notifications } from "@mantine/notifications"
+import { Directory } from "../model/Directory.gen"
+import { fetch } from "./Files"
 
-interface DownloadFileProps {
+interface DeleteFileProps {
     file: File,
     modalState: boolean,
     setModalState: {
         readonly open: () => void;
         readonly close: () => void;
         readonly toggle: () => void;
-    }
+    },
+    breadcrumbs: { title: string; path: string; }[],
+    setBreadcrumbs: React.Dispatch<React.SetStateAction<{
+        title: string;
+        path: string;
+    }[]>>,
+    setRenderDir: React.Dispatch<React.SetStateAction<Directory>>,
 }
 
-const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalState }) => {
-
+const DeleteFile: React.FC<DeleteFileProps> = ({ file, modalState, setModalState, breadcrumbs, setBreadcrumbs, setRenderDir }) => {
+    const breadcrumbsSnapshot = [...breadcrumbs]
     return (
         <>
             <Modal
                 opened={modalState}
                 onClose={setModalState.close}
-                title="Download"
+                title="Delete File"
                 size={"auto"}
                 yOffset={"20%"}
                 overlayProps={{
@@ -64,19 +73,31 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalS
                 </List>
                 <Center>
                     <Button mt="lg" leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />} onClick={async () => {
-                        const link = URL.createObjectURL(await Request.$$File.cat(file))
-                        const download = document.createElement("a")
-                        download.href = link
-                        download.download = file.filename
-                        download.click()
-                        URL.revokeObjectURL(link)
-                        setModalState.close()
-                        download.remove()
-                    }}> Click to download </Button>
+                        await
+                            Request.$$File
+                                .deletefile(file.filepath)
+                                .then(async () => {
+                                    setModalState.close()
+                                    notifications.show({
+                                        title: "Successful operation",
+                                        message: `Delete file ${file.filename} successfully`,
+                                        color: "green"
+                                    })
+                                    setRenderDir(await fetch() as Directory)
+                                    setBreadcrumbs(breadcrumbsSnapshot)
+                                })
+                                .catch(reason => {
+                                    notifications.show({
+                                        title: `An error occurred during deleting file ${file.filename}`,
+                                        message: String(reason),
+                                        color: "red"
+                                    })
+                                })
+                    }}> Confim </Button>
                 </Center>
             </Modal>
         </>
     )
 }
 
-export default DownloadFile;
+export default DeleteFile;

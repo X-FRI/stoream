@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Storage.CreateDirectory
+module Stoream.Engine.Storage.Upload
 
 open System
 open Suave
@@ -36,8 +36,12 @@ open Suave.Operators
 open Suave.Successful
 open Stoream.Engine.API
 open Stoream.Engine.Config
+open Stoream.Engine.Storage.Model.File
+open Stoream.Engine.Storage.Model.Directory
 
-type CreateDirectory () =
+(* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
+ * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
+type Upload () =
 
   (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
    * SEE: Stoream.Engine.Config *)
@@ -45,18 +49,16 @@ type CreateDirectory () =
 
   (* Implementing the API interface indicates that this type is an API service *)
   interface API with
-    static member public App = CreateDirectory.App
+    static member public App = Upload.App
 
-  static member public App =
-    path "/createdir" >=> GET >=> request CreateDirectory.CreateDirectory
+  static member public App = path "/upload" >=> POST >=> request Upload.Upload
 
-  static member private CreateDirectory (request: HttpRequest) =
+  static member private Upload (request: HttpRequest) =
     let path = request.queryParamOpt("path").Value |> snd |> _.Value
 
     try
-      IO.Directory.CreateDirectory path
-      |> fun _ -> {| status = "OK" |}
-      |> Text.Json.JsonSerializer.Serialize
-      |> OK
-    with _ ->
+      IO.File.Copy (request.files.Head.tempFilePath, path, true)
+      {| status = "OK" |} |> Text.Json.JsonSerializer.Serialize |> OK
+    with e ->
+      printfn $"{e}"
       {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK

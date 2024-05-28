@@ -62,16 +62,72 @@ module Directory = {
       )
     })
   }
+
+  let deletedir = async (path: string): unit => {
+    await Fetch.fetch(`${Config.value.engine}/deletedir?path=${path}`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError(`Cannot create directory at ${path}`)
+          }
+        }
+      )
+    })
+  }
 }
 
 module File = {
   let cat = async (file: File.t): Fetch.Blob.t => {
-    /* The File.t passed from the front end has become filepath for some reason.
-     * Everything is so weird, so I can only file->Js.String.make */
     await Fetch.fetch(
-      `${Config.value.engine}/cat?path=${file->Js.String.make}`,
+      `${Config.value.engine}/cat?path=${file.filepath}`,
       {mode: #cors},
     )->Promise.then(Fetch.Response.blob)
+  }
+
+  let upload = async (filename: string, directory: string, filevalue: Fetch.FormData.t) => {
+    await Fetch.fetch(
+      `http://localhost:5173/upload?path=${directory}/${filename}`,
+      {
+        method: #POST,
+        mode: #cors,
+        body: filevalue->Fetch.Body.formData,
+      },
+    )
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError(`Cannot upload file ${filename} to ${directory}`)
+          }
+        }
+      )
+    })
+  }
+
+  let deletefile = async (path: string): unit => {
+    await Fetch.fetch(`${Config.value.engine}/deletefile?path=${path}`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError(`Cannot create directory at ${path}`)
+          }
+        }
+      )
+    })
   }
 }
 
