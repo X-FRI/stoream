@@ -182,7 +182,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
 
         await
             Request.$$File
-                .upload(uploadFile?.name, breadcrumbs[breadcrumbs.length - 1].path, await (uploadFile?.text()))
+                .upload(uploadFile?.name, breadcrumbs[breadcrumbs.length - 1].path, data)
                 .then(async () => {
                     setUploadFileModalStatus.close()
                     notifications.show({

@@ -57,7 +57,8 @@ type Upload () =
     let path = request.queryParamOpt("path").Value |> snd |> _.Value
 
     try
-      IO.File.WriteAllBytes (path, request.rawForm)
+      IO.File.Copy (request.files.Head.tempFilePath, path, true)
       {| status = "OK" |} |> Text.Json.JsonSerializer.Serialize |> OK
-    with _ ->
+    with e ->
+      printfn $"{e}"
       {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK

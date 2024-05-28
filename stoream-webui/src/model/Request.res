@@ -77,9 +77,6 @@ module File = {
       `http://localhost:5173/upload?path=${directory}/${filename}`,
       {
         method: #POST,
-        headers: Fetch.Headers.fromObject({
-          "Content-type": "text/plain",
-        }),
         mode: #cors,
         body: filevalue->Fetch.Body.formData,
       },
