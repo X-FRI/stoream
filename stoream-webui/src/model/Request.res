@@ -72,13 +72,16 @@ module File = {
     )->Promise.then(Fetch.Response.blob)
   }
 
-  let upload = async (filename: string, directory: string, filevalue: Fetch.Blob.t) => {
+  let upload = async (filename: string, directory: string, filevalue: Fetch.FormData.t) => {
     await Fetch.fetch(
-      `${Config.value.engine}/upload`,
+      `http://localhost:5173/upload?path=${directory}/${filename}`,
       {
         method: #POST,
+        headers: Fetch.Headers.fromObject({
+          "Content-type": "text/plain",
+        }),
         mode: #cors,
-        body: filevalue->Fetch.Body.blob,
+        body: filevalue->Fetch.Body.formData,
       },
     )
     ->Promise.then(Fetch.Response.json)

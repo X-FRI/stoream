@@ -52,7 +52,7 @@ type Server () =
     addHeader "Access-Control-Allow-Origin" Server.CONFIG.WebUi
     >=> setHeader "Access-Control-Allow-Headers" "token"
     >=> addHeader "Access-Control-Allow-Headers" "Content-Type"
-    >=> addHeader "Access-Control-Allow-Methods" "GET,POST"
+    >=> addHeader "Access-Control-Allow-Methods" "GET,POST,OPTIONS"
 
   (* All API services are defined here,
    * and this member will be passed as a parameter to Suave.startWebServerAsync. *)

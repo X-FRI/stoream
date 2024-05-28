@@ -175,6 +175,33 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
     const uploadDirectory = breadcrumbs[breadcrumbs.length - 1].path
     const breadcrumbsSnapshot = [...breadcrumbs]
 
+    const upload = async () => {
+        const data = new FormData()
+        data.append(uploadFile?.name as string, uploadFile as File)
+        console.log(data)
+
+        await
+            Request.$$File
+                .upload(uploadFile?.name, breadcrumbs[breadcrumbs.length - 1].path, await (uploadFile?.text()))
+                .then(async () => {
+                    setUploadFileModalStatus.close()
+                    notifications.show({
+                        title: "Successful operation",
+                        message: `Upload file ${uploadFile?.name} successfully`,
+                        color: "green"
+                    })
+                    setRenderDir(await fetch() as Directory)
+                    setBreadcrumbs(breadcrumbsSnapshot)
+                })
+                .catch(reason => {
+                    notifications.show({
+                        title: `An error occurred during uploading file ${uploadFile?.name}`,
+                        message: String(reason),
+                        color: "red"
+                    })
+                })
+    }
+
     return (
         <>
             <Modal
@@ -206,28 +233,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
                             </Tooltip>
                     }
                     <Center mt={"md"}>
-                        <Button onClick={async () => {
-                            await
-                                Request.$$File
-                                    .upload(uploadFile?.name, breadcrumbs[breadcrumbs.length - 1].path, uploadFile)
-                                    .then(async () => {
-                                        setUploadFileModalStatus.close()
-                                        notifications.show({
-                                            title: "Successful operation",
-                                            message: `Upload file ${uploadFile?.name} successfully`,
-                                            color: "green"
-                                        })
-                                        setRenderDir(await fetch() as Directory)
-                                        setBreadcrumbs(breadcrumbsSnapshot)
-                                    })
-                                    .catch(reason => {
-                                        notifications.show({
-                                            title: `An error occurred during uploading file ${uploadFile?.name}`,
-                                            message: String(reason),
-                                            color: "red"
-                                        })
-                                    })
-                        }}> Confim </Button>
+                        <Button onClick={async () => await upload()}> Confim </Button>
                     </Center>
                 </Fieldset>
             </Modal >

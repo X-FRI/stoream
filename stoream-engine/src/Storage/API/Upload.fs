@@ -54,9 +54,10 @@ type Upload () =
   static member public App = path "/upload" >=> POST >=> request Upload.Upload
 
   static member private Upload (request: HttpRequest) =
-    printfn $"{request}"
+    let path = request.queryParamOpt("path").Value |> snd |> _.Value
 
     try
+      IO.File.WriteAllBytes (path, request.rawForm)
       {| status = "OK" |} |> Text.Json.JsonSerializer.Serialize |> OK
     with _ ->
       {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK
