@@ -30,7 +30,6 @@
 module Stoream.Engine.Storage.Storage
 
 open Suave
-open Stoream.Engine.API
 open Stoream.Engine.Storage.API.Tree
 open Stoream.Engine.Storage.API.Capacity
 open Stoream.Engine.Storage.API.Cat
@@ -38,6 +37,7 @@ open Stoream.Engine.Storage.API.CreateDirectory
 open Stoream.Engine.Storage.API.DeleteDirectory
 open Stoream.Engine.Storage.API.DeleteFile
 open Stoream.Engine.Storage.API.Upload
+open Stoream.Engine.API.Constraint
 
 type Storage () =
   interface IGetAPI with

@@ -43,11 +43,14 @@ const Login = () => {
     if (username.length == 0) return setUsernameInputError(true)
     if (password.length == 0) return setPasswordInputError(true)
     else return await Request.User.request({ username, password }).then(() => {
+      localStorage.setItem("isLogin", "true")
+
       notifications.show({
         title: "login successful",
         message: "Successfully logged in to user " + username,
         color: "green"
       })
+
       navigate("/")
     }).catch(reason => {
       notifications.show({

@@ -34,7 +34,7 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.Successful
-open Stoream.Engine.API
+open Stoream.Engine.API.Constraint
 open Stoream.Engine.Config
 
 (* Capacity returns the ratio of the size of Stoream.Engine.Config.CONFIG.Storage.Root

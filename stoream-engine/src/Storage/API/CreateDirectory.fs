@@ -34,8 +34,10 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.Successful
-open Stoream.Engine.API
+open Stoream.Engine.API.Constraint
+open Stoream.Engine.API.Response
 open Stoream.Engine.Config
+open Stoream.Engine.Storage.Secure
 
 type CreateDirectory () =
 
@@ -51,12 +53,11 @@ type CreateDirectory () =
     path "/createdir" >=> GET >=> request CreateDirectory.CreateDirectory
 
   static member private CreateDirectory (request: HttpRequest) =
-    let path = request.queryParamOpt("path").Value |> snd |> _.Value
-
-    try
-      IO.Directory.CreateDirectory path
-      |> fun _ -> {| status = "OK" |}
-      |> Text.Json.JsonSerializer.Serialize
-      |> OK
-    with _ ->
-      {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK
+    request.queryParamOpt("path").Value
+    |> snd
+    |> _.Value
+    |> Secure.PathOperation (fun path ->
+      try
+        IO.Directory.CreateDirectory path |> Response.OK
+      with _ ->
+        {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK)

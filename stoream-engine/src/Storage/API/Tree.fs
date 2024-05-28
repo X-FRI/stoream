@@ -34,10 +34,10 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.Successful
-open Stoream.Engine.API
 open Stoream.Engine.Config
 open Stoream.Engine.Storage.Model.File
 open Stoream.Engine.Storage.Model.Directory
+open Stoream.Engine.API.Constraint
 
 (* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
  * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)

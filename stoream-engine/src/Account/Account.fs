@@ -35,7 +35,7 @@ open Suave.Filters
 open Suave.Operators
 open Suave.Successful
 open Config
-open API
+open API.Constraint
 
 (* This module provides stoream-engine user system API services,
  * such as user login verification, etc.*)

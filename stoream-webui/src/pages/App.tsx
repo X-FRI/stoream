@@ -29,16 +29,18 @@
 import { Container, Grid, GridCol } from "@mantine/core";
 import Header from "../components/Header";
 import Files from "../components/Files";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { LoaderData } from "../model/LoaderData.gen";
 
-function App() {
+
+const App = () => {
   const loaderData = useLoaderData() as LoaderData
+  const navigate = useNavigate()
 
   return (
-    <Container>
-      <Grid display={"flex"} style={{height: "100vh", justifyContent: "center", alignItems: "center"}}>
-        <GridCol span={12}> <Header dir={loaderData.dir}  /> </GridCol>
+    <Container onLoad={() => localStorage.getItem("isLogin") !== "true" ? navigate("/login") : null}>
+      <Grid display={"flex"} style={{ height: "100vh", justifyContent: "center", alignItems: "center" }}>
+        <GridCol span={12}> <Header dir={loaderData.dir} /> </GridCol>
         <GridCol span={12}> <Files dir={loaderData.dir} /> </GridCol>
       </Grid>
     </Container>

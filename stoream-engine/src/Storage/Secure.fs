@@ -27,36 +27,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Config
+module Stoream.Engine.Storage.Secure
 
 open System
-open FSharp.Data
+open Suave
+open Stoream.Engine.API.Response
+open Stoream.Engine.Config
 
-(* Use FSharp.Data's JsonProvider to generate the Config type,
- * ensuring .NET Native AOT compatibility 
- * 
- * The configuration file of stoream-engine will be deserialized into the record
- * type defined under this module. 
- * 
- * NOTE: stoream-engine does not allow users to customize the path of the 
- * configuration file. Please check stoream-engine.json in the project root directory. *)
-type Config =
-  JsonProvider<Sample="""
-{
-    "Account": {
-        "Username": "admin",
-        "Password": "admin"
-    },
-    "Server": {
-        "Hostname": "127.0.0.1",
-        "Port": 9993,
-        "WebUI": "http://localhost:5173"
-    },
-    "Storage": {
-        "Root": "/home/muqiu/Documents/Note",
-        "Capacity": 100
-    }
-}
-""">
+type Secure () =
 
-let CONFIG = Config.Parse (IO.File.ReadAllText "./stoream-engine.json")
+  (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
+   * SEE: Stoream.Engine.Config *)
+  static member inline public CONFIG = CONFIG.Storage
+
+  static member public PathOperation
+    (operation: String -> WebPart)
+    (path: String)
+    =
+    if Secure.CONFIG.Root |> String.contains path then
+      operation path
+    else
+      Response.ERROR (
+        ArgumentException
+          $"Cannot access files outside of root {CONFIG.Storage.Root}"
+      )
