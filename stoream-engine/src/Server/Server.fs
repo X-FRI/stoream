@@ -69,7 +69,9 @@ type Server () =
                   Tree.Tree.App
                   Cat.Cat.App
                   Capacity.Capacity.App
-                  CreateDirectory.CreateDirectory.App ])
+                  CreateDirectory.CreateDirectory.App
+                  DeleteFile.DeleteFile.App
+                  DeleteDirectory.DeleteDirectory.App ])
         POST
         >=> fun context ->
           context

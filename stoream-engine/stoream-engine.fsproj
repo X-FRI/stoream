@@ -29,6 +29,8 @@
     <Compile Include="src/Storage/API/Cat.fs" />
     <Compile Include="src/Storage/API/CreateDirectory.fs" />
     <Compile Include="src/Storage/API/Upload.fs" />
+    <Compile Include="src/Storage/API/DeleteDirectory.fs" />
+    <Compile Include="src/Storage/API/DeleteFile.fs" />
     <Compile Include="src/Server/Server.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
