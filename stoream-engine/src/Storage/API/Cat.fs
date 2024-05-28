@@ -34,8 +34,9 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.Writers
-open Stoream.Engine.API
+open Stoream.Engine.API.Constraint
 open Stoream.Engine.Config
+open Stoream.Engine.Storage.Secure
 
 (* Cat is similar to the cat command under Unix and is used to return all the contents of the file.
  * This API is especially suitable for small files. *)
@@ -52,9 +53,12 @@ type Cat () =
   static member public App = path "/cat" >=> GET >=> request Cat.Cat
 
   static member private Cat (request: HttpRequest) =
-    let path = request.queryParamOpt("path").Value |> snd |> _.Value
 
-    setHeader
-      "Content-Disposition"
-      $"inline; filename={IO.FileInfo(path).FullName}"
-    >=> Files.sendFile path true
+    request.queryParamOpt("path").Value
+    |> snd
+    |> _.Value
+    |> Secure.PathOperation (fun path ->
+      setHeader
+        "Content-Disposition"
+        $"inline; filename={IO.FileInfo(path).FullName}"
+      >=> Files.sendFile path true)

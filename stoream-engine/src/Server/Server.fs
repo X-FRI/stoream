@@ -37,7 +37,6 @@ open Suave.Operators
 open Config
 open Account
 open Stoream.Engine.Storage.Storage
-open API
 
 (* API server for stoream-engine, currently implemented using Suave 
  * SEE: https://suave.io *)

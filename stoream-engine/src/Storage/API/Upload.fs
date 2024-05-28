@@ -33,9 +33,10 @@ open System
 open Suave
 open Suave.Filters
 open Suave.Operators
-open Suave.Successful
-open Stoream.Engine.API
 open Stoream.Engine.Config
+open Stoream.Engine.API.Response
+open Stoream.Engine.API.Constraint
+open Stoream.Engine.Storage.Secure
 
 (* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
  * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
@@ -52,11 +53,12 @@ type Upload () =
   static member public App = path "/upload" >=> POST >=> request Upload.Upload
 
   static member private Upload (request: HttpRequest) =
-    let path = request.queryParamOpt("path").Value |> snd |> _.Value
-
-    try
-      IO.File.Copy (request.files.Head.tempFilePath, path, true)
-      {| status = "OK" |} |> Text.Json.JsonSerializer.Serialize |> OK
-    with e ->
-      printfn $"{e}"
-      {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK
+    request.queryParamOpt("path").Value
+    |> snd
+    |> _.Value
+    |> Secure.PathOperation (fun path ->
+      try
+        IO.File.Copy (request.files.Head.tempFilePath, path, true)
+        |> Response.OK
+      with e ->
+        e |> Response.ERROR)

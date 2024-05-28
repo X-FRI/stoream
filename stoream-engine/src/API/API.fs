@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.API
+module Stoream.Engine.API.Constraint
 
 open Suave
 
@@ -42,4 +42,4 @@ type IGetAPI =
 
 [<Interface>]
 type IPostAPI =
-  static abstract App: WebPart  
+  static abstract App: WebPart
