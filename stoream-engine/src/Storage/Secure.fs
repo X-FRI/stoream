@@ -44,8 +44,11 @@ type Secure () =
     (operation: String -> WebPart)
     (path: String)
     =
-    if Secure.CONFIG.Root |> String.contains path then
-      operation path
+    if path.Contains Secure.CONFIG.Root then
+      try
+        operation path
+      with e ->
+        Response.ERROR e
     else
       Response.ERROR (
         ArgumentException

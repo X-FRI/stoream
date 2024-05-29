@@ -57,8 +57,4 @@ type DeleteFile () =
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value
-    |> Secure.PathOperation (fun path ->
-      try
-        IO.File.Delete (path) |> Response.OK
-      with e ->
-        e |> Response.ERROR)
+    |> Secure.PathOperation (fun path -> IO.File.Delete (path) |> Response.OK)

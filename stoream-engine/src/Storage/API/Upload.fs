@@ -57,8 +57,4 @@ type Upload () =
     |> snd
     |> _.Value
     |> Secure.PathOperation (fun path ->
-      try
-        IO.File.Copy (request.files.Head.tempFilePath, path, true)
-        |> Response.OK
-      with e ->
-        e |> Response.ERROR)
+      IO.File.Copy (request.files.Head.tempFilePath, path, true) |> Response.OK)

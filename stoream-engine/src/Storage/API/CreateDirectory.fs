@@ -33,7 +33,6 @@ open System
 open Suave
 open Suave.Filters
 open Suave.Operators
-open Suave.Successful
 open Stoream.Engine.API.Constraint
 open Stoream.Engine.API.Response
 open Stoream.Engine.Config
@@ -57,7 +56,4 @@ type CreateDirectory () =
     |> snd
     |> _.Value
     |> Secure.PathOperation (fun path ->
-      try
-        IO.Directory.CreateDirectory path |> Response.OK
-      with _ ->
-        {| status = "ERROR" |} |> Text.Json.JsonSerializer.Serialize |> OK)
+      IO.Directory.CreateDirectory path |> Response.OK)
