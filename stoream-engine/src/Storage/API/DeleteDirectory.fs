@@ -58,7 +58,4 @@ type DeleteDirectory () =
     |> snd
     |> _.Value
     |> Secure.PathOperation (fun path ->
-      try
-        IO.Directory.Delete (path) |> Response.OK
-      with e ->
-        e |> Response.ERROR)
+      IO.Directory.Delete (path) |> Response.OK)

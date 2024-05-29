@@ -41,7 +41,7 @@ const Error = () => {
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
           <Image
-            src="/src/assets/logo.png"
+            src="/logo.png"
             height={160}
             alt="Stoream"
           />

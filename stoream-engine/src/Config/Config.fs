@@ -41,7 +41,7 @@ open FSharp.Data
  * NOTE: stoream-engine does not allow users to customize the path of the 
  * configuration file. Please check stoream-engine.json in the project root directory. *)
 type Config =
-  JsonProvider<Sample="""
+  JsonProvider<"""
 {
     "Account": {
         "Username": "admin",
@@ -59,4 +59,7 @@ type Config =
 }
 """>
 
-let CONFIG = Config.Parse (IO.File.ReadAllText "./stoream-engine.json")
+let CONFIG =
+  [ "./stoream-engine/stoream-engine.json"; "./stoream-engine.json" ]
+  |> List.find IO.File.Exists
+  |> Config.Parse

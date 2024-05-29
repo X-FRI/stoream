@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ dir }) => {
         <Grid.Col>
           <Group justify="space-between" mt="md" mb="xs">
             <FileTypes dir={dir} />
-            <Avatar color="red" size={"xl"} alt="" src={"/src/assets/logo.png"} onClick={() => setUserDetailsState.open()} />
+            <Avatar color="red" size={"xl"} alt="" src={"/logo.png"} onClick={() => setUserDetailsState.open()} />
             <Drawer
               opened={userDetailsState}
               onClose={setUserDetailsState.close}

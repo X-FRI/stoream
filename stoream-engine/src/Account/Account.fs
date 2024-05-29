@@ -52,9 +52,11 @@ type Account () =
     let username = request.queryParamOpt("username").Value |> snd |> _.Value
     let password = request.queryParamOpt("password").Value |> snd |> _.Value
 
-    (username = Account.CONFIG.Username
-     && password = Account.CONFIG.Password.ToString ())
-    |> fun correct -> {| status = if correct then "OK" else "ERROR" |}
+    let correct =
+      (username = Account.CONFIG.Username
+       && password = Account.CONFIG.Password.ToString ())
+
+    {| status = if correct then "OK" else "ERROR" |}
     |> Text.Json.JsonSerializer.Serialize
     |> OK
 

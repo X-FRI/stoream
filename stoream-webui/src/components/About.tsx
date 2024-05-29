@@ -31,12 +31,12 @@ import { Link } from "react-router-dom";
 
 /// Image files used in About component
 const images = [
-    { path: "/src/assets/rescript-logo.svg", tooltip: "Fast, Simple, Fully Typed JavaScript from the Future", href: "https://rescript-lang.org/" },
-    { path: "/src/assets/fsharp-logo.svg", tooltip: "An open-source language that makes it easy to write succinct, robust, and performant code.", href: "https://dotnet.microsoft.com/en-us/languages/fsharp" },
-    { path: "/src/assets/typescript-logo.svg", tooltip: "JavaScript with syntax for types.", href: "https://www.typescriptlang.org/" },
-    { path: "/src/assets/react-logo.svg", tooltip: "The library for web and native user interfaces", href: "https://react.dev/" },
-    { path: "/src/assets/mantine-logo.svg", tooltip: "A fully featured React components library", href: "https://mantine.dev/" },
-    { path: "/src/assets/suave-logo.png", tooltip: "A simple web development F# library providing a lightweight web server and a set of combinators to manipulate route flow and task composition.", href: "https://suave.io/" }
+    { path: "/rescript-logo.svg", tooltip: "Fast, Simple, Fully Typed JavaScript from the Future", href: "https://rescript-lang.org/" },
+    { path: "/fsharp-logo.svg", tooltip: "An open-source language that makes it easy to write succinct, robust, and performant code.", href: "https://dotnet.microsoft.com/en-us/languages/fsharp" },
+    { path: "/typescript-logo.svg", tooltip: "JavaScript with syntax for types.", href: "https://www.typescriptlang.org/" },
+    { path: "/react-logo.svg", tooltip: "The library for web and native user interfaces", href: "https://react.dev/" },
+    { path: "/mantine-logo.svg", tooltip: "A fully featured React components library", href: "https://mantine.dev/" },
+    { path: "/suave-logo.png", tooltip: "A simple web development F# library providing a lightweight web server and a set of combinators to manipulate route flow and task composition.", href: "https://suave.io/" }
 ];
 
 /** About component is used to display information related to the project,
@@ -47,7 +47,7 @@ const About = () => {
             <Card shadow="sm" padding="lg" radius="md" withBorder>
                 <Card.Section>
                     <Image
-                        src="/src/assets/logo.png"
+                        src="/logo.png"
                         height={160}
                         alt="Norway"
                     />

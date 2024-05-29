@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="stoream-webui/src/assets/logo.png" height="150px">
+<img src="stoream-webui/public/logo.png" height="150px">
 
 # Stoream
 
@@ -25,14 +25,14 @@
 This project is mainly constructed using the following technologies:
 
 ### WebUI
-- <a href="https://rescript-lang.org/"> <img src="./stoream-webui/src/assets/rescript-logo.svg" height="20px"> Rescript: Fast, Simple, Fully Typed JavaScript from the Future </a>
-- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/src/assets/typescript-logo.svg" height="20px"> Typescript: JavaScript with syntax for types. </a>
-- <a href="https://react.dev/"> <img src="./stoream-webui/src/assets/react-logo.svg" height="20px"> React: The library for web and native user interfaces </a>
-- <a href="https://mantine.dev/"> <img src="./stoream-webui/src/assets/mantine-logo.svg" height="20px"> Mantine: A fully featured React components library </a>
+- <a href="https://rescript-lang.org/"> <img src="./stoream-webui/public/rescript-logo.svg" height="20px"> Rescript: Fast, Simple, Fully Typed JavaScript from the Future </a>
+- <a href="https://www.typescriptlang.org/"> <img src="/./stoream-webuipublic/typescript-logo.svg" height="20px"> Typescript: JavaScript with syntax for types. </a>
+- <a href="https://react.dev/"> <img src="./stoream-webui/public/react-logo.svg" height="20px"> React: The library for web and native user interfaces </a>
+- <a href="https://mantine.dev/"> <img src="./stoream-webui/public/mantine-logo.svg" height="20px"> Mantine: A fully featured React components library </a>
 
 ### Engine
-- <a href="https://dotnet.microsoft.com/en-us/languages/fsharp"> <img src="./stoream-webui/src/assets/fsharp-logo.svg" height="20px"> F#: An open-source language that makes it easy to write succinct, robust, and performant code. </a>
-- <a href="https://suave.io"> <img src="./stoream-webui/src/assets/suave-logo.png" height="20px"> Suave: A simple web development F# library providing a lightweight web server and a set of combinators to manipulate route flow and task composition. </a>
+- <a href="https://dotnet.microsoft.com/en-us/languages/fsharp"> <img src="./stoream-webui/public/fsharp-logo.svg" height="20px"> F#: An open-source language that makes it easy to write succinct, robust, and performant code. </a>
+- <a href="https://suave.io"> <img src="./stoream-webui/public/suave-logo.png" height="20px"> Suave: A simple web development F# library providing a lightweight web server and a set of combinators to manipulate route flow and task composition. </a>
 
 
 ## Docs
