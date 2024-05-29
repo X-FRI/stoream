@@ -85,7 +85,7 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, se
 
     return (
         <>
-            <Menu shadow="md">
+            <Menu shadow="lg">
                 <Menu.Target>
                     <IconMenu2 style={{ cursor: "pointer" }} />
                 </Menu.Target>
@@ -93,23 +93,23 @@ const Operations: React.FC<OperationsProps> = ({ breadcrumbs, setBreadcrumbs, se
                 <Menu.Dropdown>
                     <Menu.Item
                         onClick={setCreateModalStatus.open}
-                        leftSection={<IconFolderPlus style={{ width: rem(14), height: rem(14) }} />}
+                        leftSection={<IconFolderPlus size="1em" color="cyan" />}
                     >
                         Create
                     </Menu.Item>
                     <Menu.Item
                         onClick={setDeleteModalState.open}
-                        leftSection={<IconFolderMinus style={{ width: rem(14), height: rem(14) }} />}
+                        leftSection={<IconFolderMinus size="1em" color="cyan" />}
                     >
                         Delete
                     </Menu.Item>
                     <Menu.Item
                         onClick={setUploadModalState.open}
-                        leftSection={<IconUpload style={{ width: rem(14), height: rem(14) }} />}
+                        leftSection={<IconUpload size="1em" color="cyan" />}
                     >
                         Upload
                     </Menu.Item>
-                    <Menu.Item leftSection={<IconSearch style={{ width: rem(14), height: rem(14) }} />} onClick={spotlight.open}>
+                    <Menu.Item leftSection={<IconSearch size="1em" color="cyan" />} onClick={spotlight.open}>
                         Search
                     </Menu.Item>
                 </Menu.Dropdown>

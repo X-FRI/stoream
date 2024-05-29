@@ -48,6 +48,7 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalS
     return (
         <>
             <Modal
+                style={{ border: "1px solid orange" }}
                 opened={modalState}
                 onClose={setModalState.close}
                 title="Download"
@@ -63,7 +64,7 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalS
                     <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
                 </List>
                 <Center>
-                    <Button mt="lg" leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />} onClick={async () => {
+                    <Button c="dark" bg="orange" mt="lg" leftSection={<IconDownload size={"1em"} />} onClick={async () => {
                         const link = URL.createObjectURL(await Request.$$File.cat(file))
                         const download = document.createElement("a")
                         download.href = link

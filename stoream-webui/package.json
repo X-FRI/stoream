@@ -23,6 +23,7 @@
     "@rescript/react": "^0.12.1",
     "@tabler/icons-react": "^3.5.0",
     "clsx": "^2.1.1",
+    "dracula-mantine": "^1.1.0",
     "js-md5": "^0.8.3",
     "mantine-contextmenu": "^7.9.1",
     "react": "^18.3.1",

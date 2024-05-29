@@ -30,7 +30,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
-import { createTheme, MantineProvider } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
+import { DraculaTheme } from 'dracula-mantine'
 import { Notifications } from '@mantine/notifications';
 import { ContextMenuProvider } from 'mantine-contextmenu';
 import Error from "./pages/Error";
@@ -45,13 +46,9 @@ import '@mantine/spotlight/styles.css';
 import '@mantine/core/styles.layer.css';
 import 'mantine-contextmenu/styles.layer.css';
 
-const theme = createTheme({
-
-})
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={DraculaTheme} defaultColorScheme="dark">
       <ContextMenuProvider>
         <Notifications position="top-right" zIndex={1000} />
         <RouterProvider

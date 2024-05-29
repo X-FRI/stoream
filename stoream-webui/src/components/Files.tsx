@@ -115,33 +115,33 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 onClick={() => updateBreadcrumbs(dir.path)}>
                 <Table.Td>
                     <Group justify="flex-start">
-                        <IconFolder style={{ width: rem(15), height: rem(15) }} />
+                        <IconFolder size={"1em"} color="green" />
                         <Text fz="sm" lh="xs">{dir.name}</Text>
                     </Group>
                 </Table.Td>
-                <Table.Td>{dir.files.length}</Table.Td>
-                <Table.Td>{stringOfDirectorySize(dir.size)}</Table.Td>
+                <Table.Td c={"indigo"}>{dir.files.length}</Table.Td>
+                <Table.Td c={"blue"}>{stringOfDirectorySize(dir.size)}</Table.Td>
             </Table.Tr>
         ).concat(realtimeDir.files.map(file =>
             <Table.Tr style={{ cursor: "pointer" }} key={file.filename}>
-                <Menu shadow="md">
+                <Menu shadow="lg">
                     <Menu.Target>
                         <Table.Td>
                             <Group justify="flex-start">
-                                <IconFile style={{ width: rem(15), height: rem(15) }} />
+                                <IconFile size={"1em"} color="grey" />
                                 <Text fz="sm" lh="xs" >{file.filename}</Text>
                             </Group>
                         </Table.Td>
                     </Menu.Target>
                     <Menu.Dropdown>
-                        <Menu.Item leftSection={<IconFileMinus style={{ width: rem(14), height: rem(14) }} />} onClick={() => {
+                        <Menu.Item leftSection={<IconFileMinus size="1em" color="cyan" />} onClick={() => {
                             setDeleteFile(file)
                             setDeleteFileModalState.open()
                         }}>
                             <Text fz="sm" lh="xs">Delete</Text>
                         </Menu.Item>
 
-                        <Menu.Item leftSection={<IconFileDownload style={{ width: rem(14), height: rem(14) }} />} onClick={() => {
+                        <Menu.Item leftSection={<IconFileDownload size="1em" color="cyan"  />} onClick={() => {
                             setDownloadFile(file)
                             setDownloadFileModalState.open()
                         }}>
@@ -152,14 +152,14 @@ const Files: React.FC<FilesProps> = ({ dir }) => {
                 <Table.Td>
                     <IconMinus />
                 </Table.Td>
-                <Table.Td>{stringOfFileSize(file.filesize)}</Table.Td>
+                <Table.Td c={"blue"}>{stringOfFileSize(file.filesize)}</Table.Td>
             </Table.Tr>
         ))
     }
 
     return (
         <Container>
-            <Card shadow="lg" withBorder>
+            <Card shadow="lg" style={{border: "1px solid orange"}}>
                 <Stack>
                     <Group justify="space-between">
                         <Breadcrumbs>{

@@ -67,7 +67,8 @@ const Login = () => {
       <Space h="xl" />
       <Space h="xl" />
       <Space h="xl" />
-      <Card shadow="sm" padding="1g" radius="md" withBorder style={{ width: "20em" }}>
+      
+      <Card shadow="lg" padding="lg" radius="md" style={{ width: "20em", border: "1px solid orange" }} c="blue">
         <Stack style={{ margin: "10% 10% 10% 10%" }} align="center" justify="center" gap="xl">
           <Title order={2}>Login to Stoream</Title>
 
@@ -93,7 +94,7 @@ const Login = () => {
             onChange={(value) => setEngine(value.target.value)}
           />
 
-          <Button onClick={async () => await login()}> Login </Button>
+          <Button onClick={async () => await login()} bg="orange" c="dark"> Login </Button>
         </Stack>
       </Card>
 

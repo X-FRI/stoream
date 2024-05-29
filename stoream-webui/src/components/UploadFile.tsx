@@ -82,6 +82,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
     return (
         <>
             <Modal
+                style={{ border: "1px solid orange" }}
                 opened={modalState}
                 onClose={setModalState.close} title="Create Directory"
                 yOffset="20vh"
@@ -110,7 +111,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
                             </Tooltip>
                     }
                     <Center mt={"md"}>
-                        <Button onClick={async () => await upload()}> Confim </Button>
+                        <Button c="dark" bg="orange" onClick={async () => await upload()}> Confim </Button>
                     </Center>
                 </Fieldset>
             </Modal >

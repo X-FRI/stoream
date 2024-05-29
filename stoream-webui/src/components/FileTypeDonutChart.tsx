@@ -39,11 +39,11 @@ interface FileTypeDonutChartProps {
   * The proportion parameter is the file proportion data calculated externally. */
 const FileTypeDonutChart: React.FC<FileTypeDonutChartProps> = ({ proportion }) => {
     const fileTypeDetails = [
-        { name: 'Document', value: proportion.document, color: 'indigo.6' },
-        { name: 'Image', value: proportion.image, color: 'yellow.6' },
-        { name: 'Video', value: proportion.video, color: 'teal.6' },
-        { name: 'Audio', value: proportion.audio, color: 'black.6' },
-        { name: 'Other', value: proportion.other, color: 'gray.6' },
+        { name: 'Document', value: proportion.document, color: 'blue' },
+        { name: 'Image', value: proportion.image, color: 'orange' },
+        { name: 'Video', value: proportion.video, color: 'purple' },
+        { name: 'Audio', value: proportion.audio, color: 'green' },
+        { name: 'Other', value: proportion.other, color: 'grey' },
     ];
 
     return (
