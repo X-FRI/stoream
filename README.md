@@ -22,11 +22,15 @@
 
 ## Intro.
 
-This project is mainly constructed using the following technologies:
+![screenshot.png](./.github/screenshot.png)
+
+The purpose of this project is to provide a simple, fast, small, and easy-to-deploy self-hosted network disk application.
+
+This project is built using the following technologies:
 
 ### WebUI
 - <a href="https://rescript-lang.org/"> <img src="./stoream-webui/public/rescript-logo.svg" height="20px"> Rescript: Fast, Simple, Fully Typed JavaScript from the Future </a>
-- <a href="https://www.typescriptlang.org/"> <img src="/./stoream-webuipublic/typescript-logo.svg" height="20px"> Typescript: JavaScript with syntax for types. </a>
+- <a href="https://www.typescriptlang.org/"> <img src="./stoream-webui/public/typescript-logo.svg" height="20px"> Typescript: JavaScript with syntax for types. </a>
 - <a href="https://react.dev/"> <img src="./stoream-webui/public/react-logo.svg" height="20px"> React: The library for web and native user interfaces </a>
 - <a href="https://mantine.dev/"> <img src="./stoream-webui/public/mantine-logo.svg" height="20px"> Mantine: A fully featured React components library </a>
 
@@ -37,15 +41,25 @@ This project is mainly constructed using the following technologies:
 
 ## Docs
 
+If you already have
+
+- .NET Core SDK 8.0+
+- NodeJS 20+ with pnpm
+- [UPX 4.0+](https://upx.github.io/)
+
+You can directly run: `dotnet fsi publish.fsx`
+> [!IMPORTANT]
+> `publish.fsx` currently only supports linux
+
 ### Developer
 
-1. Fork this repo, then clone your forked repo
-2. Develop on the __dev branch__: `git checkout -b dev`
-3. Create new upstream remote: `git remote add upstream https://github.com/X-FRI`
-4. Synchronize the dev branch of upstream: `git pull upstream dev`
-5. Do your development
+1. Fork this repo, then clone your fork
+2. Change to the __dev branch__: `git checkout -b dev`
+3. Add new upstream remote: `git remote add upstream https://github.com/X-FRI`
+4. Sync the dev branch of upstream: `git pull upstream dev`
+5. Add your changes
 6. Push to your own repo: `git push origin dev`
-7. Submit your PR to the __dev branch__
+7. PR to the __dev branch__
 
 #### WebUI
 
@@ -61,15 +75,15 @@ This project is built using [pnpm](https://pnpm.io/), so:
 npm install -g pnpm
 ```
 
-Now you can run stoream:
+Now you can build stoream:
 
 ```shell
-pnpm dev
+pnpm build
 ```
 
 #### Engine
 
-For .NET Core 8.0, you can use the script:
+For .NET Core 8.0, you can use the script (If you already have a .NET Core SDK, you can skip this step):
 
 ```bash
 wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
@@ -89,7 +103,7 @@ Now you can develop in stoream-engine directory:
 - Publish: `dotnet publish`
 
 > [!NOTE]
-> *OPTIONAL*: In addition, we also use [UPX](https://upx.github.io/) to > optimize the size of the executable file. Most Linux distributions can > be installed through the package manager, such as on openSUSE:
+> *OPTIONAL*: If you need to publish, you need to install [UPX](https://upx.github.io/), it will be used to optimize the size of the executable file. Most Linux distributions can be installed through the package manager, such as on openSUSE:
 > ```
 > zypper in upx
 > ```
