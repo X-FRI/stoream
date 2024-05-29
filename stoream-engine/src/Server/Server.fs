@@ -66,7 +66,12 @@ type Server () =
                 [
                   (* Please add new services here. *)
                   Account.App
-                  Storage.GetApp ])
+                  Storage.GetApp
+
+                  GET
+                  >=> path "/"
+                  >=> Files.file "../stoream-webui/dist/index.html"
+                  GET >=> Files.browseHome ])
         POST
         >=> fun context ->
           context
@@ -85,6 +90,7 @@ type Server () =
     let conf =
       { defaultConfig with
           cancellationToken = cts.Token
+          homeFolder = Some (IO.Path.GetFullPath "../stoream-webui/dist")
           bindings =
             [ (HttpBinding.create
                 HTTP
