@@ -44,7 +44,7 @@ const images = [
 const About = () => {
     return (
         <Container>
-            <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Card shadow="lg" padding="lg" radius="md" style={{border: "1px solid orange"}}>
                 <Card.Section>
                     <Image
                         src="/logo.png"

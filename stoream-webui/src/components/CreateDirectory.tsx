@@ -55,6 +55,7 @@ const CreateDirectory: React.FC<CreateDirectoryProps> = ({ breadcrumbs, setBread
     return (
         <>
             <Modal
+                style={{ border: "1px solid orange" }}
                 opened={modalState}
                 onClose={setmodalState.close} title="Create Directory"
                 yOffset="20vh"
@@ -73,7 +74,7 @@ const CreateDirectory: React.FC<CreateDirectoryProps> = ({ breadcrumbs, setBread
                                 setCreateDirectory(value.target.value)
                             }} />
 
-                        <Button onClick={async () => {
+                        <Button c="dark" bg="orange" onClick={async () => {
                             await
                                 Request.Directory.createdir(`${breadcrumbs[breadcrumbs.length - 1].path}/${createDirectory}`)
                                     .then(async () => {

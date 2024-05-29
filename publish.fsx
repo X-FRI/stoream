@@ -351,6 +351,7 @@ let _ =
 
     match Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier with
     | runtimeIdentifier when runtimeIdentifier.Contains("linux") -> PublishToLinux(runtimeIdentifier)
+    | runtimeIdentifier when  runtimeIdentifier.Contains("rocky") -> PublishToLinux($"""linux-{runtimeIdentifier.Split("-")[1]}""")
     | runtimeIdentifier -> failwith $"stoream-engine does not support publishing to this platform: {runtimeIdentifier}"
 
     0

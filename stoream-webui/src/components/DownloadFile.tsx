@@ -30,8 +30,9 @@ import { File } from "../model/File.gen"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import * as Request from "../model/Request.res.mjs"
 import React from "react"
-import { Button, List, Center, Modal, rem } from "@mantine/core"
+import { Button, List, Center, Modal, rem, Box, LoadingOverlay } from "@mantine/core"
 import { IconDownload } from "@tabler/icons-react"
+import { useDisclosure } from "@mantine/hooks"
 
 interface DownloadFileProps {
     file: File,
@@ -44,7 +45,7 @@ interface DownloadFileProps {
 }
 
 const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalState }) => {
-
+    const [downloadingWaitState, setDownloadingWaitState] = useDisclosure(false);
     return (
         <>
             <Modal
@@ -57,6 +58,9 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalS
                     backgroundOpacity: 0.55,
                     blur: 3,
                 }}>
+                <Box pos="relative">
+                    <LoadingOverlay visible={downloadingWaitState} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                </Box>
                 <List>
                     <List.Item>File name: {file.filename}</List.Item>
                     <List.Item>File path: {file.filepath}</List.Item>
@@ -68,8 +72,10 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalS
                         const download = document.createElement("a")
                         download.href = link
                         download.download = file.filename
+                        setDownloadingWaitState.open()
                         download.click()
                         URL.revokeObjectURL(link)
+                        setDownloadingWaitState.close()
                         setModalState.close()
                         download.remove()
                     }}> Click to download </Button>

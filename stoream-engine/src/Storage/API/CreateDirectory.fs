@@ -37,6 +37,7 @@ open Stoream.Engine.API.Constraint
 open Stoream.Engine.API.Response
 open Stoream.Engine.Config
 open Stoream.Engine.Storage.Secure
+open Stoream.Engine.Logger.StoreamLogger
 
 type CreateDirectory () =
 
@@ -52,6 +53,7 @@ type CreateDirectory () =
     path "/createdir" >=> GET >=> request CreateDirectory.CreateDirectory
 
   static member private CreateDirectory (request: HttpRequest) =
+    StoreamLogger.Info $"request {CreateDirectory}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value

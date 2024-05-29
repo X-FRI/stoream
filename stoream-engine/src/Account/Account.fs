@@ -36,6 +36,7 @@ open Suave.Operators
 open Suave.Successful
 open Config
 open API.Constraint
+open Stoream.Engine.Logger.StoreamLogger
 
 (* This module provides stoream-engine user system API services,
  * such as user login verification, etc.*)
@@ -48,7 +49,11 @@ type Account () =
   interface IGetAPI with
     static member public App = Account.App
 
+  static member public App: WebPart =
+    path "/login" >=> GET >=> request Account.Login
+
   static member private Login (request: HttpRequest) =
+    StoreamLogger.Info $"request {Account}"
     let username = request.queryParamOpt("username").Value |> snd |> _.Value
     let password = request.queryParamOpt("password").Value |> snd |> _.Value
 
@@ -59,6 +64,3 @@ type Account () =
     {| status = if correct then "OK" else "ERROR" |}
     |> Text.Json.JsonSerializer.Serialize
     |> OK
-
-  static member public App: WebPart =
-    path "/login" >=> GET >=> request Account.Login

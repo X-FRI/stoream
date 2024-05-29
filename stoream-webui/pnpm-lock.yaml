@@ -38,6 +38,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      dracula-mantine:
+        specifier: ^1.1.0
+        version: 1.1.0(@mantine/core@7.9.2(@mantine/hooks@7.9.2(react@18.3.1))(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       js-md5:
         specifier: ^0.8.3
         version: 0.8.3
@@ -893,6 +896,12 @@ packages:
 
   dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
+
+  dracula-mantine@1.1.0:
+    resolution: {integrity: sha512-RxTaECNAkVhyWg5+I7eZ3BaWaHZ24imsMgBGgdDvQwtOH4uSlWbhAuvimhVzKSBFG8OM73umHOD1rpBKuhKs8A==}
+    engines: {node: '>=14.17.0'}
+    peerDependencies:
+      '@mantine/core': '>=6.0.15'
 
   electron-to-chromium@1.4.774:
     resolution: {integrity: sha512-132O1XCd7zcTkzS3FgkAzKmnBuNJjK8WjcTtNuoylj7MYbqw5eXehjQ5OK91g0zm7OTKIPeaAG4CPoRfD9M1Mg==}
@@ -2404,6 +2413,10 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.24.5
       csstype: 3.1.3
+
+  dracula-mantine@1.1.0(@mantine/core@7.9.2(@mantine/hooks@7.9.2(react@18.3.1))(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+    dependencies:
+      '@mantine/core': 7.9.2(@mantine/hooks@7.9.2(react@18.3.1))(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   electron-to-chromium@1.4.774: {}
 

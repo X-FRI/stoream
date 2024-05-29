@@ -30,7 +30,7 @@ import { File } from "../model/File.gen"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import * as Request from "../model/Request.res.mjs"
 import React from "react"
-import { Button, List, Center, Modal, rem } from "@mantine/core"
+import { Button, List, Center, Modal } from "@mantine/core"
 import { IconDownload } from "@tabler/icons-react"
 import { notifications } from "@mantine/notifications"
 import { Directory } from "../model/Directory.gen"
@@ -57,6 +57,7 @@ const DeleteFile: React.FC<DeleteFileProps> = ({ file, modalState, setModalState
     return (
         <>
             <Modal
+                style={{ border: "1px solid orange" }}
                 opened={modalState}
                 onClose={setModalState.close}
                 title="Delete File"
@@ -72,7 +73,7 @@ const DeleteFile: React.FC<DeleteFileProps> = ({ file, modalState, setModalState
                     <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
                 </List>
                 <Center>
-                    <Button mt="lg" leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />} onClick={async () => {
+                    <Button c="dark" bg="orange" mt="lg" leftSection={<IconDownload size={"1em"} />} onClick={async () => {
                         await
                             Request.$$File
                                 .deletefile(file.filepath)

@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Center, Container, Divider, Drawer, Grid, GridCol } from "@mantine/core"
+import { Card, Center, Container, Divider, Drawer, Grid, GridCol } from "@mantine/core"
 import React from "react";
 import FileTypeDountChart from "./FileTypeDonutChart";
 import { Directory } from "../model/Directory.gen";
@@ -63,13 +63,15 @@ const FileTypeDetails: React.FC<FileTypeDetailsProps> = ({ state, setState, dir 
             >
                 <Grid justify="center">
                     <GridCol span={12}>
-                        <Center>
-                            <FileTypeDountChart proportion={proportion} />
-                        </Center>
+                        <Card shadow="lg" style={{ border: "1px solid orange" }}>
+                            <Center>
+                                <FileTypeDountChart proportion={proportion} />
+                            </Center>
+                        </Card>
                     </GridCol>
                     <GridCol span={12}>
                         <Center>
-                            
+
                         </Center>
                         <Divider my="md" />
                     </GridCol>

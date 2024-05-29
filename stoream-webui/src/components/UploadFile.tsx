@@ -31,7 +31,8 @@ import { Directory } from "../model/Directory.gen";
 import * as Request from "../model/Request.res.mjs";
 import { notifications } from "@mantine/notifications";
 import { fetch } from "./Files";
-import { Button, Center, Fieldset, FileInput, Modal, TextInput, Tooltip } from "@mantine/core";
+import { Box, Button, Center, Fieldset, FileInput, LoadingOverlay, Modal, TextInput, Tooltip } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 
 interface UploadFileProps {
     breadcrumbs: { title: string; path: string; }[],
@@ -52,11 +53,11 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
     const [uploadFile, setUploadFile] = React.useState<File | null>(null);
     const uploadDirectory = breadcrumbs[breadcrumbs.length - 1].path
     const breadcrumbsSnapshot = [...breadcrumbs]
+    const [uploadingWaitState, setUploadingWaitState] = useDisclosure(false);
 
     const upload = async () => {
         const data = new FormData()
         data.append(uploadFile?.name as string, uploadFile as File)
-        console.log(data)
 
         await
             Request.$$File
@@ -71,6 +72,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
                     setRenderDir(await fetch() as Directory)
                     setBreadcrumbs(breadcrumbsSnapshot)
                 })
+                .then(() => setUploadingWaitState.close())
                 .catch(reason => {
                     notifications.show({
                         title: `An error occurred during uploading file ${uploadFile?.name}`,
@@ -83,6 +85,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
     return (
         <>
             <Modal
+                style={{ border: "1px solid orange" }}
                 opened={modalState}
                 onClose={setModalState.close} title="Create Directory"
                 yOffset="20vh"
@@ -92,6 +95,9 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
                 }}
                 w={"auto"}
             >
+                <Box pos="relative">
+                    <LoadingOverlay visible={uploadingWaitState} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                </Box>
                 <Fieldset legend="Upload File">
                     <FileInput
                         value={uploadFile}
@@ -111,7 +117,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
                             </Tooltip>
                     }
                     <Center mt={"md"}>
-                        <Button onClick={async () => await upload()}> Confim </Button>
+                        <Button c="dark" bg="orange" onClick={async () => await upload()}> Confim </Button>
                     </Center>
                 </Fieldset>
             </Modal >

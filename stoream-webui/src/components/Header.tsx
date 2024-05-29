@@ -50,22 +50,22 @@ const Header: React.FC<HeaderProps> = ({ dir }) => {
     <Container>
       <Grid>
         <GridCol span={12}>
-          <Tooltip label="Capacity Trends">
+          <Tooltip label="Capacity Trends" bg={"orange"}>
             <Sparkline
               w={"100%"}
               h={"5em"}
               data={[10, 20, 40, 20, 40, 10, 50]}
               curveType="natural"
-              
               fillOpacity={0.6}
               strokeWidth={2}
+              color="orange"
             />
           </Tooltip>
         </GridCol>
         <Grid.Col>
           <Group justify="space-between" mt="md" mb="xs">
             <FileTypes dir={dir} />
-            <Avatar color="red" size={"xl"} alt="" src={"/logo.png"} onClick={() => setUserDetailsState.open()} />
+            <Avatar color="red" size={"xl"} alt="" onClick={() => setUserDetailsState.open()} />
             <Drawer
               opened={userDetailsState}
               onClose={setUserDetailsState.close}
@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ dir }) => {
             >
               <Stack>
                 <Space h={"md"} />
-                <Card shadow="sm">
+                <Card shadow="lg">
                   <Skeleton height={50} circle mb="xl" />
                   <Skeleton height={8} radius="xl" />
                   <Skeleton height={8} mt={6} radius="xl" />

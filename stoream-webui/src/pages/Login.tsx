@@ -33,16 +33,13 @@ import { notifications } from '@mantine/notifications';
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [usernameInputError, setUsernameInputError] = React.useState(false);
-  const [passwordInputError, setPasswordInputError] = React.useState(false);
   const navigate = useNavigate()
 
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   const login = async (): Promise<void> => {
-    if (username.length == 0) return setUsernameInputError(true)
-    if (password.length == 0) return setPasswordInputError(true)
-    else return await Request.User.request({ username, password }).then(() => {
+    return await Request.User.request({ username, password }).then(() => {
       localStorage.setItem("isLogin", "true")
 
       notifications.show({
@@ -51,8 +48,9 @@ const Login = () => {
         color: "green"
       })
 
-      navigate("/")
+      navigate("/files")
     }).catch(reason => {
+      console.log(reason.stack)
       notifications.show({
         title: "An error occurred during login",
         message: String(reason),
@@ -62,26 +60,30 @@ const Login = () => {
   };
 
   return (
-    <Stack align="center" justify="center" gap="xl">
+    <Stack align="center" justify="center" gap="xl" onLoad={() => (localStorage.getItem("isLogin") === "true") ? navigate("/files") : null}>
       <Space h="xl" />
       <Space h="xl" />
       <Space h="xl" />
-      <Card shadow="sm" padding="1g" radius="md" withBorder style={{ width: "20em" }}>
+
+      <Card shadow="lg" padding="lg" radius="md" style={{ width: "20em", border: "1px solid orange" }} c="blue">
         <Stack style={{ margin: "10% 10% 10% 10%" }} align="center" justify="center" gap="xl">
           <Title order={2}>Login to Stoream</Title>
+
           <Input
-            error={usernameInputError}
+            error={username === ""}
             placeholder="Username"
             style={{ width: "15em" }}
-            onChange={(value) => {
-              setUsername(value.target.value)
-              setUsernameInputError(false)
-            }} />
-          <Input error={passwordInputError} placeholder="Password" type="password" style={{ width: "15em" }} onChange={(value) => {
-            setPassword(value.target.value)
-            setPasswordInputError(false)
-          }} />
-          <Button onClick={async () => await login()}> Login </Button>
+            onChange={(value) => setUsername(value.target.value)}
+          />
+
+          <Input
+            error={password === ""}
+            placeholder="Password" type="password"
+            style={{ width: "15em" }}
+            onChange={(value) => setPassword(value.target.value)}
+          />
+
+          <Button onClick={async () => await login()} bg="orange" c="dark"> Login </Button>
         </Stack>
       </Card>
 

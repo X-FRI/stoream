@@ -38,7 +38,7 @@ const Error = () => {
       <Space h="lg" />
       <Space h="lg" />
       <Space h="lg" />
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card shadow="lg" padding="lg" radius="md" style={{border: "1px solid orange"}} >
         <Card.Section>
           <Image
             src="/logo.png"

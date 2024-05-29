@@ -27,22 +27,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.API.Response
+module Stoream.Engine.WebUI
 
-open System
-open Suave.Successful
-open Stoream.Engine.Logger.StoreamLogger
+open Suave
+open Suave.Filters
+open Suave.Operators
+open Config
+open API.Constraint
 
-type Response () =
+(* This module provides stoream-engine user system API services,
+ * such as user login verification, etc.*)
+type WebUI () =
+  (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
+   * SEE: Stoream.Engine.Config *)
+  static member inline public CONFIG = CONFIG.Server
 
-  static member OK value =
-    {| status = "OK"; value = value |}
-    |> Text.Json.JsonSerializer.Serialize
-    |> OK
+  (* Implementing the API interface indicates that this type is an API service *)
+  interface IGetAPI with
+    static member public App = WebUI.App
 
-  static member ERROR exn =
-    StoreamLogger.Error (exn.ToString ())
-
-    {| status = "ERROR"; exn = exn.ToString () |}
-    |> Text.Json.JsonSerializer.Serialize
-    |> OK
+  static member public App =
+    choose
+      [ GET >=> path "/" >=> Files.file $"{WebUI.CONFIG.WebUi}/dist/index.html"
+        GET >=> path "/files" >=> Files.file $"{WebUI.CONFIG.WebUi}/dist/index.html"
+        GET >=> Files.browseHome ]

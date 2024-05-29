@@ -38,6 +38,7 @@ open Stoream.Engine.Config
 open Stoream.Engine.Storage.Model.File
 open Stoream.Engine.Storage.Model.Directory
 open Stoream.Engine.API.Constraint
+open Stoream.Engine.Logger.StoreamLogger
 
 (* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
  * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
@@ -51,9 +52,11 @@ type Tree () =
   interface IGetAPI with
     static member public App = Tree.App
 
-  static member public App = path "/tree" >=> GET >=> request Tree.Tree
+  static member public App =
+    path "/tree" >=> GET >=> request Tree.Tree
 
   static member public Tree (request: HttpRequest) =
+    StoreamLogger.Info $"request {Tree}"
     IO.DirectoryInfo (Tree.CONFIG.Root)
     |> Tree.BuildDirectoryStructure
     |> Text.Json.JsonSerializer.Serialize

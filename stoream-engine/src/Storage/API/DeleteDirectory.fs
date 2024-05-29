@@ -37,6 +37,7 @@ open Stoream.Engine.API.Constraint
 open Stoream.Engine.API.Response
 open Stoream.Engine.Config
 open Stoream.Engine.Storage.Secure
+open Stoream.Engine.Logger.StoreamLogger
 
 (* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
  * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
@@ -54,6 +55,7 @@ type DeleteDirectory () =
     path "/deletedir" >=> GET >=> request DeleteDirectory.DeleteDirectory
 
   static member private DeleteDirectory (request: HttpRequest) =
+    StoreamLogger.Info $"request {DeleteDirectory}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value

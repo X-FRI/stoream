@@ -64,7 +64,7 @@ const FileTypes: React.FC<FileTypesProps> = ({ dir }) => {
                     </Text>
                 }
                 sections={[
-                    { value: capacity, color: 'black' },
+                    { value: capacity, color: 'purple' },
                 ]}
             />
             <FileTypeDetails dir={dir} state={fileDetailsState} setState={setFileDetailsState} />

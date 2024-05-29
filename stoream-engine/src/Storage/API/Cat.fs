@@ -37,6 +37,7 @@ open Suave.Writers
 open Stoream.Engine.API.Constraint
 open Stoream.Engine.Config
 open Stoream.Engine.Storage.Secure
+open Stoream.Engine.Logger.StoreamLogger
 
 (* Cat is similar to the cat command under Unix and is used to return all the contents of the file.
  * This API is especially suitable for small files. *)
@@ -50,10 +51,11 @@ type Cat () =
   interface IGetAPI with
     static member public App = Cat.App
 
-  static member public App = path "/cat" >=> GET >=> request Cat.Cat
+  static member public App =
+    path "/cat" >=> GET >=> request Cat.Cat
 
   static member private Cat (request: HttpRequest) =
-
+    StoreamLogger.Info $"request {Cat}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value
