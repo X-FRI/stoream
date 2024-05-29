@@ -338,6 +338,7 @@ let PublishToLinux runtimeIdentifier =
 
     (Exec
         $"mkdir {releaseDir} && mkdir {releaseDir}/stoream-engine {releaseDir}/stoream-webui && 
+          upx --lzma --best {storeamEngineBinary} &&
           cp -r {storeamEngineBinary} {storeamEngineConfig} {releaseDir}/stoream-engine &&
           cp -r ./stoream-webui/dist {releaseDir}/stoream-webui &&
           tar czvf {releaseDir}.tar.gz {releaseDir} && rm -rf {releaseDir}")
