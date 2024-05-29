@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Card, Container, Group, Menu, rem, ScrollArea, Stack, Table, Text } from "@mantine/core";
+import { Card, Container, Group, Menu, ScrollArea, Stack, Table, Text } from "@mantine/core";
 import { Breadcrumbs, Anchor } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import * as Request from "../model/Request.res.mjs"

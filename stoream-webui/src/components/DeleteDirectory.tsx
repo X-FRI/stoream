@@ -28,7 +28,7 @@
 
 import * as Request from "../model/Request.res.mjs"
 import React from "react"
-import { Button, List, Center, Modal, rem } from "@mantine/core"
+import { Button, List, Center, Modal } from "@mantine/core"
 import { IconDownload } from "@tabler/icons-react"
 import { notifications } from "@mantine/notifications"
 import { Directory } from "../model/Directory.gen"

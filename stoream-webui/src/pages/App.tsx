@@ -38,7 +38,7 @@ const App = () => {
   const navigate = useNavigate()
 
   return (
-    <Container onLoad={() => localStorage.getItem("isLogin") !== "true" ? navigate("/") : null}>
+    <Container mb={"lg"} onLoad={() => localStorage.getItem("isLogin") !== "true" ? navigate("/") : null}>
       <Grid display={"flex"} style={{ height: "100vh", justifyContent: "center", alignItems: "center" }}>
         <GridCol span={12}> <Header dir={loaderData.dir} /> </GridCol>
         <GridCol span={12}> <Files dir={loaderData.dir} /> </GridCol>

@@ -27,7 +27,6 @@
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import * as Request from "../model/Request.res.mjs"
-import { config, setConfig } from "../model/Config.res.mjs";
 import React from "react";
 import { Stack, Input, Button, Title, Card, Space } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -38,10 +37,8 @@ const Login = () => {
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [engine, setEngine] = React.useState(config.contents.engine);
 
   const login = async (): Promise<void> => {
-    setConfig(engine)
     return await Request.User.request({ username, password }).then(() => {
       localStorage.setItem("isLogin", "true")
 
@@ -67,7 +64,7 @@ const Login = () => {
       <Space h="xl" />
       <Space h="xl" />
       <Space h="xl" />
-      
+
       <Card shadow="lg" padding="lg" radius="md" style={{ width: "20em", border: "1px solid orange" }} c="blue">
         <Stack style={{ margin: "10% 10% 10% 10%" }} align="center" justify="center" gap="xl">
           <Title order={2}>Login to Stoream</Title>
@@ -84,14 +81,6 @@ const Login = () => {
             placeholder="Password" type="password"
             style={{ width: "15em" }}
             onChange={(value) => setPassword(value.target.value)}
-          />
-
-          <Input
-            error={engine.contents === ""}
-            placeholder="Engine url"
-            defaultValue={engine}
-            style={{ width: "15em" }}
-            onChange={(value) => setEngine(value.target.value)}
           />
 
           <Button onClick={async () => await login()} bg="orange" c="dark"> Login </Button>
