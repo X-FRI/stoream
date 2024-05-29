@@ -55,7 +55,7 @@ type Account () =
     let correct =
       (username = Account.CONFIG.Username
        && password = Account.CONFIG.Password.ToString ())
-      
+
     {| status = if correct then "OK" else "ERROR" |}
     |> Text.Json.JsonSerializer.Serialize
     |> OK
