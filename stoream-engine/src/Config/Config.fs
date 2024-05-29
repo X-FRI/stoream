@@ -62,4 +62,5 @@ type Config =
 let CONFIG =
   [ "./stoream-engine/stoream-engine.json"; "./stoream-engine.json" ]
   |> List.find IO.File.Exists
+  |> IO.File.ReadAllText
   |> Config.Parse
