@@ -4,7 +4,7 @@
         "Password": "21232f297a57a5a743894a0e4a801fc3"
     },
     "Server": {
-        "Hostname": "127.0.0.1",
+        "Hostname": "0.0.0.0",
         "Port": 9993,
         "WebUI": "../stoream-webui"
     },

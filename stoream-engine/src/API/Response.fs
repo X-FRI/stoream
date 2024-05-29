@@ -31,6 +31,7 @@ module Stoream.Engine.API.Response
 
 open System
 open Suave.Successful
+open Stoream.Engine.Logger.StoreamLogger
 
 type Response () =
 
@@ -40,6 +41,8 @@ type Response () =
     |> OK
 
   static member ERROR exn =
+    StoreamLogger.Error (exn.ToString ())
+
     {| status = "ERROR"; exn = exn.ToString () |}
     |> Text.Json.JsonSerializer.Serialize
     |> OK

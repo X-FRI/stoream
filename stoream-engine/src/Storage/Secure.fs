@@ -33,6 +33,7 @@ open System
 open Suave
 open Stoream.Engine.API.Response
 open Stoream.Engine.Config
+open Stoream.Engine.Logger.StoreamLogger
 
 type Secure () =
 
@@ -46,7 +47,7 @@ type Secure () =
     =
     if path.Contains Secure.CONFIG.Root then
       try
-        operation path
+        path |> IO.Path.GetFullPath |> operation
       with e ->
         Response.ERROR e
     else

@@ -37,6 +37,7 @@ open Stoream.Engine.Config
 open Stoream.Engine.API.Response
 open Stoream.Engine.API.Constraint
 open Stoream.Engine.Storage.Secure
+open Stoream.Engine.Logger.StoreamLogger
 
 (* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
  * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
@@ -50,7 +51,9 @@ type Upload () =
   interface IPostAPI with
     static member public App = Upload.App
 
-  static member public App = path "/upload" >=> POST >=> request Upload.Upload
+  static member public App =
+    StoreamLogger.Info $"request {Upload}"
+    path "/upload" >=> POST >=> request Upload.Upload
 
   static member private Upload (request: HttpRequest) =
     request.queryParamOpt("path").Value

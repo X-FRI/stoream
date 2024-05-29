@@ -37,6 +37,7 @@ open Stoream.Engine.Config
 open Stoream.Engine.API.Constraint
 open Stoream.Engine.API.Response
 open Stoream.Engine.Storage.Secure
+open Stoream.Engine.Logger.StoreamLogger
 
 (* Tree API is used to return a Stoream.Engine.Storage.Model.Directory 
  * mapping of Stoream.Engine.Config.CONFIG.Storage.Root *)
@@ -51,6 +52,7 @@ type DeleteFile () =
     static member public App = DeleteFile.App
 
   static member public App =
+    StoreamLogger.Info $"request {DeleteFile}"
     path "/deletefile" >=> GET >=> request DeleteFile.DeleteFile
 
   static member private DeleteFile (request: HttpRequest) =

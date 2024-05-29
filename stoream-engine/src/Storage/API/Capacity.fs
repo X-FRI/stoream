@@ -36,6 +36,7 @@ open Suave.Operators
 open Suave.Successful
 open Stoream.Engine.API.Constraint
 open Stoream.Engine.Config
+open Stoream.Engine.Logger.StoreamLogger
 
 (* Capacity returns the ratio of the size of Stoream.Engine.Config.CONFIG.Storage.Root
  * to Stoream.Engine.Config.CONFIG.Storage.Capacity. *)
@@ -50,6 +51,7 @@ type Capacity () =
     static member public App = Capacity.App
 
   static member public App =
+    StoreamLogger.Info $"request {Capacity}"
     path "/capacity" >=> GET >=> request Capacity.Capacity
 
   static member public Capacity (request: HttpRequest) =

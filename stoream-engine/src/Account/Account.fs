@@ -36,6 +36,7 @@ open Suave.Operators
 open Suave.Successful
 open Config
 open API.Constraint
+open Stoream.Engine.Logger.StoreamLogger
 
 (* This module provides stoream-engine user system API services,
  * such as user login verification, etc.*)
@@ -61,4 +62,5 @@ type Account () =
     |> OK
 
   static member public App: WebPart =
+    StoreamLogger.Info $"request {Account}"
     path "/login" >=> GET >=> request Account.Login
