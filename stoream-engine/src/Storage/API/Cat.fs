@@ -52,10 +52,10 @@ type Cat () =
     static member public App = Cat.App
 
   static member public App =
-    StoreamLogger.Info $"request {Cat}"
     path "/cat" >=> GET >=> request Cat.Cat
 
   static member private Cat (request: HttpRequest) =
+    StoreamLogger.Info $"request {Cat}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value

@@ -49,4 +49,5 @@ type WebUI () =
   static member public App =
     choose
       [ GET >=> path "/" >=> Files.file $"{WebUI.CONFIG.WebUi}/dist/index.html"
+        GET >=> path "/files" >=> Files.file $"{WebUI.CONFIG.WebUi}/dist/index.html"
         GET >=> Files.browseHome ]

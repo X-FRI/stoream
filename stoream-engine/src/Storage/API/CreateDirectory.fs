@@ -50,10 +50,10 @@ type CreateDirectory () =
     static member public App = CreateDirectory.App
 
   static member public App =
-    StoreamLogger.Info $"request {CreateDirectory}"
     path "/createdir" >=> GET >=> request CreateDirectory.CreateDirectory
 
   static member private CreateDirectory (request: HttpRequest) =
+    StoreamLogger.Info $"request {CreateDirectory}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value

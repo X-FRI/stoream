@@ -51,10 +51,10 @@ type Capacity () =
     static member public App = Capacity.App
 
   static member public App =
-    StoreamLogger.Info $"request {Capacity}"
     path "/capacity" >=> GET >=> request Capacity.Capacity
 
   static member public Capacity (request: HttpRequest) =
+    StoreamLogger.Info $"request {Capacity}"
     {| Capacity = Capacity.CONFIG.Capacity |}
     |> Text.Json.JsonSerializer.Serialize
     |> OK

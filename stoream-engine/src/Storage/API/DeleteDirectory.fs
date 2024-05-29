@@ -52,10 +52,10 @@ type DeleteDirectory () =
     static member public App = DeleteDirectory.App
 
   static member public App =
-    StoreamLogger.Info $"request {DeleteDirectory}"
     path "/deletedir" >=> GET >=> request DeleteDirectory.DeleteDirectory
 
   static member private DeleteDirectory (request: HttpRequest) =
+    StoreamLogger.Info $"request {DeleteDirectory}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value

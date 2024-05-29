@@ -53,10 +53,10 @@ type Tree () =
     static member public App = Tree.App
 
   static member public App =
-    StoreamLogger.Info $"request {Tree}"
     path "/tree" >=> GET >=> request Tree.Tree
 
   static member public Tree (request: HttpRequest) =
+    StoreamLogger.Info $"request {Tree}"
     IO.DirectoryInfo (Tree.CONFIG.Root)
     |> Tree.BuildDirectoryStructure
     |> Text.Json.JsonSerializer.Serialize

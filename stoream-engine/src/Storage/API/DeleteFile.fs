@@ -52,10 +52,10 @@ type DeleteFile () =
     static member public App = DeleteFile.App
 
   static member public App =
-    StoreamLogger.Info $"request {DeleteFile}"
     path "/deletefile" >=> GET >=> request DeleteFile.DeleteFile
 
   static member private DeleteFile (request: HttpRequest) =
+    StoreamLogger.Info $"request {DeleteFile}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value

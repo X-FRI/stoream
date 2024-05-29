@@ -52,10 +52,10 @@ type Upload () =
     static member public App = Upload.App
 
   static member public App =
-    StoreamLogger.Info $"request {Upload}"
     path "/upload" >=> POST >=> request Upload.Upload
 
   static member private Upload (request: HttpRequest) =
+    StoreamLogger.Info $"request {Upload}"
     request.queryParamOpt("path").Value
     |> snd
     |> _.Value

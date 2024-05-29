@@ -60,7 +60,7 @@ const Login = () => {
   };
 
   return (
-    <Stack align="center" justify="center" gap="xl">
+    <Stack align="center" justify="center" gap="xl" onLoad={() => (localStorage.getItem("isLogin") === "true") ? navigate("/files") : null}>
       <Space h="xl" />
       <Space h="xl" />
       <Space h="xl" />

@@ -34,17 +34,22 @@ import { LoaderData } from "../model/LoaderData.gen";
 
 
 const App = () => {
-  const loaderData = useLoaderData() as LoaderData
+  console.log("into app")
   const navigate = useNavigate()
-
-  return (
-    <Container mb={"lg"} onLoad={() => localStorage.getItem("isLogin") !== "true" ? navigate("/") : null}>
-      <Grid display={"flex"} style={{ height: "100vh", justifyContent: "center", alignItems: "center" }}>
-        <GridCol span={12}> <Header dir={loaderData.dir} /> </GridCol>
-        <GridCol span={12}> <Files dir={loaderData.dir} /> </GridCol>
-      </Grid>
-    </Container>
-  );
+  
+  if (localStorage.getItem("isLogin") !== "true") {
+    navigate("/")
+  } else {
+    const loaderData = useLoaderData() as LoaderData
+    return (
+      <Container mb={"lg"}>
+        <Grid display={"flex"} style={{ height: "100vh", justifyContent: "center", alignItems: "center" }}>
+          <GridCol span={12}> <Header dir={loaderData.dir} /> </GridCol>
+          <GridCol span={12}> <Files dir={loaderData.dir} /> </GridCol>
+        </Grid>
+      </Container>
+    )
+  }
 }
 
 export default App;
