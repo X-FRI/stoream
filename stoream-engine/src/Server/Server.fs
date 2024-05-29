@@ -36,6 +36,7 @@ open Suave.Filters
 open Suave.Operators
 open Config
 open Account
+open WebUI
 open Stoream.Engine.Storage.Storage
 
 (* API server for stoream-engine, currently implemented using Suave 
@@ -49,7 +50,7 @@ type Server () =
   (* Cross-domain related configurations.
    * SEE: [CORS response with Suave](https://www.fssnip.net/mL/title/CORS-response-with-Suave) *)
   static member private CORS =
-    addHeader "Access-Control-Allow-Origin" Server.CONFIG.WebUi
+    addHeader "Access-Control-Allow-Origin" "*"
     >=> setHeader "Access-Control-Allow-Headers" "token"
     >=> addHeader "Access-Control-Allow-Headers" "Content-Type"
     >=> addHeader "Access-Control-Allow-Methods" "GET,POST,OPTIONS"
@@ -65,13 +66,9 @@ type Server () =
               >=> choose
                 [
                   (* Please add new services here. *)
+                  WebUI.App
                   Account.App
-                  Storage.GetApp
-
-                  GET
-                  >=> path "/"
-                  >=> Files.file "../stoream-webui/dist/index.html"
-                  GET >=> Files.browseHome ])
+                  Storage.GetApp ])
         POST
         >=> fun context ->
           context

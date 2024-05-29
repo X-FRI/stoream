@@ -53,6 +53,7 @@ const Login = () => {
 
       navigate("/files")
     }).catch(reason => {
+      console.log(reason.stack)
       notifications.show({
         title: "An error occurred during login",
         message: String(reason),
@@ -89,7 +90,7 @@ const Login = () => {
             placeholder="Engine url"
             defaultValue={engine}
             style={{ width: "15em" }}
-            onChange={(value) => setEngine({ contents: value.target.value })}
+            onChange={(value) => setEngine(value.target.value)}
           />
 
           <Button onClick={async () => await login()}> Login </Button>

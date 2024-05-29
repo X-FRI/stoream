@@ -6,7 +6,7 @@
     "Server": {
         "Hostname": "127.0.0.1",
         "Port": 9993,
-        "WebUI": "*"
+        "WebUI": "../stoream-webui"
     },
     "Storage": {
         "Root": "/home/muqiu/Documents/Note",
