@@ -56,7 +56,6 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
     const upload = async () => {
         const data = new FormData()
         data.append(uploadFile?.name as string, uploadFile as File)
-        console.log(data)
 
         await
             Request.$$File

@@ -27,22 +27,22 @@
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import * as Request from "../model/Request.res.mjs"
+import { config, setConfig } from "../model/Config.res.mjs";
 import React from "react";
 import { Stack, Input, Button, Title, Card, Space } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [usernameInputError, setUsernameInputError] = React.useState(false);
-  const [passwordInputError, setPasswordInputError] = React.useState(false);
   const navigate = useNavigate()
 
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [engine, setEngine] = React.useState(config.contents.engine);
+
   const login = async (): Promise<void> => {
-    if (username.length == 0) return setUsernameInputError(true)
-    if (password.length == 0) return setPasswordInputError(true)
-    else return await Request.User.request({ username, password }).then(() => {
+    setConfig(engine)
+    return await Request.User.request({ username, password }).then(() => {
       localStorage.setItem("isLogin", "true")
 
       notifications.show({
@@ -51,7 +51,7 @@ const Login = () => {
         color: "green"
       })
 
-      navigate("/")
+      navigate("/files")
     }).catch(reason => {
       notifications.show({
         title: "An error occurred during login",
@@ -69,18 +69,29 @@ const Login = () => {
       <Card shadow="sm" padding="1g" radius="md" withBorder style={{ width: "20em" }}>
         <Stack style={{ margin: "10% 10% 10% 10%" }} align="center" justify="center" gap="xl">
           <Title order={2}>Login to Stoream</Title>
+
           <Input
-            error={usernameInputError}
+            error={username === ""}
             placeholder="Username"
             style={{ width: "15em" }}
-            onChange={(value) => {
-              setUsername(value.target.value)
-              setUsernameInputError(false)
-            }} />
-          <Input error={passwordInputError} placeholder="Password" type="password" style={{ width: "15em" }} onChange={(value) => {
-            setPassword(value.target.value)
-            setPasswordInputError(false)
-          }} />
+            onChange={(value) => setUsername(value.target.value)}
+          />
+
+          <Input
+            error={password === ""}
+            placeholder="Password" type="password"
+            style={{ width: "15em" }}
+            onChange={(value) => setPassword(value.target.value)}
+          />
+
+          <Input
+            error={engine.contents === ""}
+            placeholder="Engine url"
+            defaultValue={engine}
+            style={{ width: "15em" }}
+            onChange={(value) => setEngine({ contents: value.target.value })}
+          />
+
           <Button onClick={async () => await login()}> Login </Button>
         </Stack>
       </Card>

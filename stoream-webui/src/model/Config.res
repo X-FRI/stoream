@@ -21,4 +21,11 @@ module Import: {
   }
 }
 
-let value: t = Import.value
+let config: ref<t> = ref(Import.value)
+let setConfig = (~engine: option<string>=?) => {
+  config.contents = {
+    engine: Option.getOr(engine, config.contents.engine),
+  }
+}
+
+let value = () => config.contents

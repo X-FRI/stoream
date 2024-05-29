@@ -57,12 +57,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <RouterProvider
           router={createBrowserRouter([
             {
-              path: "/login",
+              path: "/",
               element: <Login />,
               errorElement: <Error />
             },
             {
-              path: "/",
+              path: "/files",
               element: <App />,
               errorElement: <Error />,
 

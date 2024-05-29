@@ -28,7 +28,7 @@
 
 module Directory = {
   let tree = async (): Directory.t => {
-    await Fetch.fetch(`${Config.value.engine}/tree`, {mode: #cors})
+    await Fetch.fetch(`${Config.value().engine}/tree`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
@@ -36,7 +36,7 @@ module Directory = {
   }
 
   let capacity = async (): float => {
-    await Fetch.fetch(`${Config.value.engine}/capacity`, {mode: #cors})
+    await Fetch.fetch(`${Config.value().engine}/capacity`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       switch response->Js.Json.decodeObject->Option.getExn->Js_dict.get("Capacity") {
@@ -47,7 +47,7 @@ module Directory = {
   }
 
   let createdir = async (path: string): unit => {
-    await Fetch.fetch(`${Config.value.engine}/createdir?path=${path}`, {mode: #cors})
+    await Fetch.fetch(`${Config.value().engine}/createdir?path=${path}`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response => {
       response
@@ -64,7 +64,7 @@ module Directory = {
   }
 
   let deletedir = async (path: string): unit => {
-    await Fetch.fetch(`${Config.value.engine}/deletedir?path=${path}`, {mode: #cors})
+    await Fetch.fetch(`${Config.value().engine}/deletedir?path=${path}`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response => {
       response
@@ -84,14 +84,14 @@ module Directory = {
 module File = {
   let cat = async (file: File.t): Fetch.Blob.t => {
     await Fetch.fetch(
-      `${Config.value.engine}/cat?path=${file.filepath}`,
+      `${Config.value().engine}/cat?path=${file.filepath}`,
       {mode: #cors},
     )->Promise.then(Fetch.Response.blob)
   }
 
   let upload = async (filename: string, directory: string, filevalue: Fetch.FormData.t) => {
     await Fetch.fetch(
-      `http://localhost:5173/upload?path=${directory}/${filename}`,
+      `${Config.value().engine}/upload?path=${directory}/${filename}`,
       {
         method: #POST,
         mode: #cors,
@@ -114,7 +114,7 @@ module File = {
   }
 
   let deletefile = async (path: string): unit => {
-    await Fetch.fetch(`${Config.value.engine}/deletefile?path=${path}`, {mode: #cors})
+    await Fetch.fetch(`${Config.value().engine}/deletefile?path=${path}`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response => {
       response
@@ -140,7 +140,7 @@ module User = {
     ->(
       async user =>
         await Fetch.fetch(
-          `${Config.value.engine}/login?username=${user.username}&password=${user.password}`,
+          `${Config.value().engine}/login?username=${user.username}&password=${user.password}`,
           {mode: #cors},
         )
         ->Promise.then(Fetch.Response.json)
