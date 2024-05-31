@@ -28,21 +28,23 @@
 
 import * as Request from "../model/Request.res.mjs"
 import React from "react";
-import { Card, Center, PinInput, Space, Stack, Text } from '@mantine/core';
+import { Stack, Input, Button, Title, Card, Space } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Account = () => {
   const navigate = useNavigate()
-  const [pinErrorState, setPinErrorState] = React.useState(false);
 
-  const login = async (pin: string): Promise<void> => {
-    return await Request.Pin.request(pin).then(() => {
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const login = async (): Promise<void> => {
+    return await Request.User.request({ username, password }).then(() => {
       localStorage.setItem("isLogin", "true")
 
       notifications.show({
         title: "login successful",
-        message: "Successfully logged",
+        message: "Successfully logged in to user " + username,
         color: "green"
       })
 
@@ -54,31 +56,39 @@ const Login = () => {
         message: String(reason),
         color: "red"
       })
-      setPinErrorState(true)
     })
   };
 
   return (
-    <Stack
-      align="center"
-      justify="center"
-      ml={"1em"}
-      mr={"1em"}
-      h={"100vh"}
-    >
-      <Text fz={"h3"}> Please enter your PIN </Text>
-      <Card shadow="lg" radius="md" style={{ border: "1px solid orange" }} c="blue">
-        <Center>
-          <PinInput error={pinErrorState} size={"xs"} length={6} onChange={async (value) => {
-            setPinErrorState(false)
-            if (value.length === 6) {
-              await login(value)
-            }
-          }} />
-        </Center>
+    <Stack align="center" justify="center" gap="xl" onLoad={() => (localStorage.getItem("isLogin") === "true") ? navigate("/files") : null}>
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
+
+      <Card shadow="lg" padding="lg" radius="md" style={{ width: "20em", border: "1px solid orange" }} c="blue">
+        <Stack style={{ margin: "10% 10% 10% 10%" }} align="center" justify="center" gap="xl">
+          <Title order={2}>Login to Stoream</Title>
+
+          <Input
+            error={username === ""}
+            placeholder="Username"
+            style={{ width: "15em" }}
+            onChange={(value) => setUsername(value.target.value)}
+          />
+
+          <Input
+            error={password === ""}
+            placeholder="Password" type="password"
+            style={{ width: "15em" }}
+            onChange={(value) => setPassword(value.target.value)}
+          />
+
+          <Button onClick={async () => await login()} bg="orange" c="dark"> Login </Button>
+        </Stack>
       </Card>
+
     </Stack>
   );
 };
 
-export default Login;
+export default Account;
