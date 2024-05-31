@@ -83,10 +83,9 @@ module Directory = {
 
 module File = {
   let cat = async (file: File.t): Fetch.Blob.t => {
-    await Fetch.fetch(
-      `/cat?path=${file.filepath}`,
-      {mode: #cors},
-    )->Promise.then(Fetch.Response.blob)
+    await Fetch.fetch(`/cat?path=${file.filepath}`, {mode: #cors})->Promise.then(
+      Fetch.Response.blob,
+    )
   }
 
   let upload = async (filename: string, directory: string, filevalue: Fetch.FormData.t) => {
@@ -151,11 +150,30 @@ module User = {
             status => {
               switch status {
               | "OK" => ()
-              | _ => failwith("Wrong username or password")
+              | _ => Js.Exn.raiseError("Wrong username or password")
               }
             }
           )
         })
     )
+  }
+}
+
+module Pin = {
+  let request = async (pin: Pin.t): unit => {
+    await Fetch.fetch(`${Config.config.engine}/pin?value=${pin}`, {mode: #cors})
+    ->Promise.then(Fetch.Response.json)
+    ->Promise.thenResolve(response => {
+      response
+      ->Response.parseStatus
+      ->(
+        status => {
+          switch status {
+          | "OK" => ()
+          | _ => Js.Exn.raiseError("Wrong PIN code")
+          }
+        }
+      )
+    })
   }
 }

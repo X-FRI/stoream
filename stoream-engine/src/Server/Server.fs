@@ -36,6 +36,7 @@ open Suave.Filters
 open Suave.Operators
 open Config
 open Account
+open PIN
 open WebUI
 open Stoream.Engine.Storage.Storage
 
@@ -68,7 +69,8 @@ type Server () =
                   (* Please add new services here. *)
                   WebUI.App
                   Account.App
-                  Storage.GetApp ])
+                  Storage.GetApp
+                  PIN.App ])
         POST
         >=> fun context ->
           context
