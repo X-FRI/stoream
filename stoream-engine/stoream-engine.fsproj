@@ -23,6 +23,7 @@
         <Compile Include="src/Config/Config.fs" />
         <Compile Include="src/API/API.fs" />
         <Compile Include="src/API/Response.fs" />
+        <Compile Include="src/PIN/PIN.fs" />
         <Compile Include="src/Account/Account.fs" />
         <Compile Include="src/WebUI/WebUI.fs" />
         <Compile Include="src/Storage/Secure.fs" />

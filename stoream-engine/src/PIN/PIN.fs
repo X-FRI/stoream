@@ -27,41 +27,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-module Stoream.Engine.Config
+module Stoream.Engine.PIN
 
 open System
-open FSharp.Data
+open Suave
+open Suave.Filters
+open Suave.Successful
+open Suave.Operators
+open Config
+open API.Constraint
+open API.Response
+open Stoream.Engine.Logger.StoreamLogger
 
-(* Use FSharp.Data's JsonProvider to generate the Config type,
- * ensuring .NET Native AOT compatibility 
- * 
- * The configuration file of stoream-engine will be deserialized into the record
- * type defined under this module. 
- * 
- * NOTE: stoream-engine does not allow users to customize the path of the 
- * configuration file. Please check stoream-engine.json in the project root directory. *)
-type Config =
-  JsonProvider<"""
-{
-    "PIN": "294538",
-    "Account": {
-        "Username": "admin",
-        "Password": "admin"
-    },
-    "Server": {
-        "Hostname": "127.0.0.1",
-        "Port": 9993,
-        "WebUI": "http://localhost:5173"
-    },
-    "Storage": {
-        "Root": "/home/muqiu/Documents/Note",
-        "Capacity": 100
-    }
-}
-""">
+type PIN() = 
 
-let CONFIG =
-  [ "./stoream-engine/stoream-engine.json"; "./stoream-engine.json" ]
-  |> List.find IO.File.Exists
-  |> IO.File.ReadAllText
-  |> Config.Parse
+  (* Get the configuration file loaded at startup by the Stoream.Engine.Config module.
+   * SEE: Stoream.Engine.Config *)
+  static member inline public CONFIG = CONFIG.Pin
+
+  (* Implementing the API interface indicates that this type is an API service *)
+  interface IGetAPI with
+    static member public App = PIN.App
+
+  static member public App =
+    path "/pin" >=> GET >=> request PIN.PIN
+
+  static member private PIN (request: HttpRequest) =
+    StoreamLogger.Info $"request {PIN}"
+    
+    request.queryParamOpt("value").Value
+    |> snd
+    |> _.Value
+    |> fun pin -> 
+        if pin = PIN.CONFIG.ToString() then 
+            Response.OK () 
+        else
+            Response.ERROR (ArgumentException $"Invalid PIN {pin}")
