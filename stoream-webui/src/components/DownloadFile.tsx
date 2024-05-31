@@ -30,7 +30,7 @@ import { File } from "../model/File.gen"
 import { stringOfFileSize } from "../model/File.res.mjs"
 import * as Request from "../model/Request.res.mjs"
 import React from "react"
-import { Button, List, Center, Modal, rem, Box, LoadingOverlay } from "@mantine/core"
+import { Button, List, Center, Modal, rem, LoadingOverlay } from "@mantine/core"
 import { IconDownload } from "@tabler/icons-react"
 import { useDisclosure } from "@mantine/hooks"
 
