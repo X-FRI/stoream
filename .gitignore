@@ -2,3 +2,4 @@
 .idea/
 *.gz
 *.zip
+.fake
