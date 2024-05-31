@@ -31,7 +31,7 @@ import { Directory } from "../model/Directory.gen";
 import * as Request from "../model/Request.res.mjs";
 import { notifications } from "@mantine/notifications";
 import { fetch } from "./Files";
-import { Box, Button, Center, Fieldset, FileInput, LoadingOverlay, Modal, TextInput, Tooltip } from "@mantine/core";
+import { Button, Center, Fieldset, FileInput, LoadingOverlay, Modal, TextInput, Tooltip } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 interface UploadFileProps {

@@ -28,7 +28,7 @@
 
 import * as Request from "../model/Request.res.mjs"
 import React from "react";
-import { Card, Center, PinInput, Space, Stack, Text } from '@mantine/core';
+import { Card, Center, PinInput, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from "react-router-dom";
 

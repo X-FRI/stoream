@@ -26,7 +26,7 @@
 /// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 /// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import { Avatar, Card, Container, Drawer, Grid, GridCol, Group, Skeleton, Space, Stack, Text, Tooltip } from "@mantine/core";
+import { Avatar, Card, Container, Drawer, Grid, GridCol, Group, Skeleton, Space, Stack, Tooltip } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import About from "./About";
 import FileTypes from "./FileTypes";
