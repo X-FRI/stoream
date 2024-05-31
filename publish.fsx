@@ -310,7 +310,7 @@ let Exec: string -> CommandResult =
 let PublishWebUI () =
     Log.info "Building WebUI module..."
 
-    (Exec $"cd stoream-webui && pnpm build")
+    (Exec $"cd stoream-webui && pnpm install && pnpm build")
     <|> (Failure, (fun result -> Log.error $"{result.StandardError}"))
     <|> (Success, (fun result -> Log.info $"DONE"))
     |> ignore
