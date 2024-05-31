@@ -46,6 +46,21 @@ interface DownloadFileProps {
 
 const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalState }) => {
     const [downloadingWaitState, setDownloadingWaitState] = useDisclosure(false);
+
+    const download = async () => {
+        setDownloadingWaitState.open()
+        const link = URL.createObjectURL(await Request.$$File.cat(file))
+        const download = document.createElement("a")
+        download.href = link
+        download.download = file.filename
+        setDownloadingWaitState.open()
+        download.click()
+        URL.revokeObjectURL(link)
+        setModalState.close()
+        download.remove()
+        setDownloadingWaitState.close()
+    }
+
     return (
         <>
             <Modal
@@ -58,27 +73,19 @@ const DownloadFile: React.FC<DownloadFileProps> = ({ file, modalState, setModalS
                     backgroundOpacity: 0.55,
                     blur: 3,
                 }}>
-                <Box pos="relative">
-                    <LoadingOverlay visible={downloadingWaitState} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-                </Box>
+                <LoadingOverlay visible={downloadingWaitState} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                 <List>
                     <List.Item>File name: {file.filename}</List.Item>
                     <List.Item>File path: {file.filepath}</List.Item>
                     <List.Item>File size: {stringOfFileSize(file.filesize)}</List.Item>
                 </List>
                 <Center>
-                    <Button mt="lg" leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />} onClick={async () => {
-                        const link = URL.createObjectURL(await Request.$$File.cat(file))
-                        const download = document.createElement("a")
-                        download.href = link
-                        download.download = file.filename
-                        setDownloadingWaitState.open()
-                        download.click()
-                        URL.revokeObjectURL(link)
-                        setDownloadingWaitState.close()
-                        setModalState.close()
-                        download.remove()
-                    }}> Click to download </Button>
+                    <Button
+                        mt="lg"
+                        c="dark" bg="orange"
+                        leftSection={<IconDownload style={{ width: rem(14), height: rem(14) }} />}
+                        onClick={async () => await download()}
+                    > Click to download </Button>
                 </Center>
             </Modal>
         </>

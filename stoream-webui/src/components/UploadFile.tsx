@@ -58,6 +58,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
     const upload = async () => {
         const data = new FormData()
         data.append(uploadFile?.name as string, uploadFile as File)
+        setUploadingWaitState.open()
 
         await
             Request.$$File
@@ -95,9 +96,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ breadcrumbs, setBreadcrumbs, se
                 }}
                 w={"auto"}
             >
-                <Box pos="relative">
-                    <LoadingOverlay visible={uploadingWaitState} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-                </Box>
+                <LoadingOverlay visible={uploadingWaitState} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                 <Fieldset legend="Upload File">
                     <FileInput
                         value={uploadFile}

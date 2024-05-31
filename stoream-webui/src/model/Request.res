@@ -28,7 +28,7 @@
 
 module Directory = {
   let tree = async (): Directory.t => {
-    await Fetch.fetch(`/tree`, {mode: #cors})
+    await Fetch.fetch(`${Config.config.engine}/tree`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       response->Js.Json.decodeObject->Option.getExn->Response.Directory.parse
@@ -36,7 +36,7 @@ module Directory = {
   }
 
   let capacity = async (): float => {
-    await Fetch.fetch(`/capacity`, {mode: #cors})
+    await Fetch.fetch(`${Config.config.engine}/capacity`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response =>
       switch response->Js.Json.decodeObject->Option.getExn->Js_dict.get("Capacity") {
@@ -47,7 +47,7 @@ module Directory = {
   }
 
   let createdir = async (path: string): unit => {
-    await Fetch.fetch(`/createdir?path=${path}`, {mode: #cors})
+    await Fetch.fetch(`${Config.config.engine}/createdir?path=${path}`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response => {
       response
@@ -64,7 +64,7 @@ module Directory = {
   }
 
   let deletedir = async (path: string): unit => {
-    await Fetch.fetch(`/deletedir?path=${path}`, {mode: #cors})
+    await Fetch.fetch(`${Config.config.engine}/deletedir?path=${path}`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response => {
       response
@@ -114,7 +114,7 @@ module File = {
   }
 
   let deletefile = async (path: string): unit => {
-    await Fetch.fetch(`/deletefile?path=${path}`, {mode: #cors})
+    await Fetch.fetch(`${Config.config.engine}/deletefile?path=${path}`, {mode: #cors})
     ->Promise.then(Fetch.Response.json)
     ->Promise.thenResolve(response => {
       response
@@ -140,7 +140,7 @@ module User = {
     ->(
       async user =>
         await Fetch.fetch(
-          `/login?username=${user.username}&password=${user.password}`,
+          `${Config.config.engine}/login?username=${user.username}&password=${user.password}`,
           {mode: #cors},
         )
         ->Promise.then(Fetch.Response.json)

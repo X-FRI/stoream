@@ -2,6 +2,15 @@
 type t = {engine: string}
 
 @val @scope(("window", "location"))
-external engine: string = "host"
+external host: string = "host"
 
-let config: t = {engine: engine}
+@val @scope(("window", "localStorage"))
+external devMode: string = "devMode"
+
+let config: t = {
+  engine: if devMode == "true" {
+    "http://localhost:9993"
+  } else {
+    ""
+  },
+}
