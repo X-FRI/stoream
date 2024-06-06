@@ -5,3 +5,5 @@ obj/
 fable_modules/
 node_modules/
 dist/
+
+*.js
