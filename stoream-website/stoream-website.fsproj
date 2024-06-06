@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Fable.Core" Version="4.3.0" />
-    <PackageReference Include="Feliz.Bulma" Version="3.0.0" />
+    <PackageReference Include="Feliz" Version="2.7.0" />
   </ItemGroup>
 
 </Project>

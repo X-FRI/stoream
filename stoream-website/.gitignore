@@ -4,3 +4,4 @@ obj/
 .idea/
 fable_modules/
 node_modules/
+dist/
