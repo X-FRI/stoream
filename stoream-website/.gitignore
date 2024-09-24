@@ -1,9 +1,0 @@
-bin/
-obj/
-.vscode/
-.idea/
-fable_modules/
-node_modules/
-dist/
-
-*.js
