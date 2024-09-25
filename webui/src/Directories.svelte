@@ -1,39 +1,31 @@
 <script lang="ts">
-	import Folder from "@/components/Folder.svelte";
+	import * as Table from '$lib/components/ui/table';
 
-	let root = [
-		{
-			type: 'folder',
-			name: 'Important work stuff',
-			files: [{ type: 'file', name: 'quarterly-results.xlsx' }]
-		},
-		{
-			type: 'folder',
-			name: 'Animal GIFs',
-			files: [
-				{
-					type: 'folder',
-					name: 'Dogs',
-					files: [
-						{ type: 'file', name: 'treadmill.gif' },
-						{ type: 'file', name: 'rope-jumping.gif' }
-					]
-				},
-				{
-					type: 'folder',
-					name: 'Goats',
-					files: [
-						{ type: 'file', name: 'parkour.gif' },
-						{ type: 'file', name: 'rampage.gif' }
-					]
-				},
-				{ type: 'file', name: 'cat-roomba.gif' },
-				{ type: 'file', name: 'duck-shuffle.gif' },
-				{ type: 'file', name: 'monkey-on-a-pig.gif' }
-			]
-		},
-		{ type: 'file', name: 'TODO.md' }
+	const directories = [
+		{ dir_name: 'Daily', dir_size: '455MB' },
+		{ dir_name: 'Documents', dir_size: '991MB' },
+		{ dir_name: 'Computer Science', dir_size: '156MB' },
+		{ dir_name: 'Medicine', dir_size: '44MB' },
+		{ dir_name: 'Music', dir_size: '31MB' }
 	];
 </script>
 
-<Folder name="Home" files={root} expanded/>
+<div>
+	<Table.Root>
+		<Table.Caption>Folders in Notes</Table.Caption>
+		<Table.Header>
+			<Table.Row>
+				<Table.Head>NAME</Table.Head>
+				<Table.Head class="text-right">SIZE</Table.Head>
+			</Table.Row>
+		</Table.Header>
+		<Table.Body>
+			{#each directories as { dir_name, dir_size }}
+				<Table.Row>
+					<Table.Cell>{dir_name}</Table.Cell>
+					<Table.Cell class="text-right">{dir_size}</Table.Cell>
+				</Table.Row>
+			{/each}
+		</Table.Body>
+	</Table.Root>
+</div>

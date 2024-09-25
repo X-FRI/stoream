@@ -10,11 +10,11 @@
 			</Breadcrumb.Item>
 			<Breadcrumb.Separator />
 			<Breadcrumb.Item>
-				<Breadcrumb.Link href="/docs/components">Components</Breadcrumb.Link>
+				<Breadcrumb.Link href="/Documents">Documents</Breadcrumb.Link>
 			</Breadcrumb.Item>
 			<Breadcrumb.Separator />
 			<Breadcrumb.Item>
-				<Breadcrumb.Page>Breadcrumb</Breadcrumb.Page>
+				<Breadcrumb.Page>Notes</Breadcrumb.Page>
 			</Breadcrumb.Item>
 		</Breadcrumb.List>
 	</Breadcrumb.Root>

@@ -18,7 +18,7 @@
 
 <Resizable.PaneGroup direction="horizontal" class="w-full h-full rounded-lg border absolute" {onLayoutChange}>
 	<Resizable.Pane defaultSize={20}>
-		
+		<Directories />
 	</Resizable.Pane>
 	<Resizable.Handle />
 	<Resizable.Pane defaultSize={80}>
