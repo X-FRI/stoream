@@ -4,6 +4,7 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu/index.js';
 	import Icon from '@iconify/svelte';
 	import { Button } from '$lib/components/ui/button';
+	import Header from './Header.svelte';
 
 	const files = [
 		{
