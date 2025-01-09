@@ -5,7 +5,10 @@
     <ItemGroup>
         <None Include="index.html"/>
         <Compile Include="Extensions.fs"/>
+        <Compile Include="types\Router.fs"/>
         <Compile Include="routers\login\Components.fs"/>
+        <Compile Include="routers\errors\404.fs"/>
+        <Compile Include="routers\Router.fs"/>
         <Compile Include="Main.fs"/>
     </ItemGroup>
     <ItemGroup>
