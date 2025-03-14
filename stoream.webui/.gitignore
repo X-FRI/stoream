@@ -1,0 +1,11 @@
+node_modules
+
+[Bb]in/
+[Oo]bj/
+
+package-lock.json
+bundle.js
+*.fs.js
+.fake
+.ionide
+.vscode/settings.json

@@ -1,0 +1,18 @@
+{
+  "repository": {
+    "url": "https://github.com/x-fri/stoream"
+  },
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dotnet fable watch src/App --run vite serve",
+    "build": "dotnet fable src/App --run vite --mode production"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.14",
+    "tailwindcss": "^4.0.14"
+  },
+  "devDependencies": {
+    "vite": "^6.2.2"
+  }
+}
