@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "dotnet fable watch src/App --run vite serve",
-    "build": "dotnet fable src/App --run vite --mode production"
+    "dev:prod": "dotnet fable src/App --run vite --mode production",
+    "build": "dotnet fable src/App --run vite build",
+    "clean": "dotnet fable clean -y"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",

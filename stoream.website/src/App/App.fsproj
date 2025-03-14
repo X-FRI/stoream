@@ -6,9 +6,7 @@
     <Compile Include="Types.fs" />
     <Compile Include="Remote.fs" />
     <Compile Include="Router.fs" />
-    <Compile Include="Pages/Users/Users.fs" />
     <Compile Include="Pages/Home/Home.fs" />
-    <Compile Include="Pages/Login/Login.fs" />
     <Compile Include="State.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
