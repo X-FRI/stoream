@@ -12,3 +12,5 @@ bundle.js
 .fake
 .ionide
 .vscode/settings.json
+
+dist/

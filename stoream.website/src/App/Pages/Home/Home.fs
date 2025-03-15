@@ -270,7 +270,7 @@ let techStackSection () =
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
-                                Attr.src "src/assests/fsharp-logo.svg"
+                                Attr.src "/assests/fsharp-logo.svg"
                                 Attr.alt "F# Logo"
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
@@ -300,8 +300,8 @@ let techStackSection () =
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
-                                Attr.src "src/assests/fable-logo.png"
-                                Attr.alt "F# Logo"
+                                Attr.src "assests/fable-logo.png"
+                                Attr.alt "Fable logo"
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
@@ -329,8 +329,8 @@ let techStackSection () =
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
-                                Attr.src "src/assests/sutil-logo.png"
-                                Attr.alt "F# Logo"
+                                Attr.src "assests/sutil-logo.png"
+                                Attr.alt "Sutil Logo"
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
@@ -367,7 +367,7 @@ let techStackSection () =
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
-                                Attr.src "src/assests/giraffe-logo.png"
+                                Attr.src "/assests/giraffe-logo.png"
                                 Attr.alt "Giraffe Logo"
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
@@ -396,7 +396,7 @@ let techStackSection () =
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
-                                Attr.src "src/assests/dotnet-core-logo.png"
+                                Attr.src "/assests/dotnet-core-logo.png"
                                 Attr.alt ".NET Core Logo"
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
