@@ -55,7 +55,7 @@ let heroSection () =
         ]
 
         Html.div [
-            Attr.classes [ "container"; "mx-auto"; "px-6"; "relative"; "z-10"; "text-center";  "animate-fadeIn" ]
+            Attr.classes [ "container"; "mx-auto"; "px-6"; "relative"; "z-10"; "text-center"; "animate-fadeIn" ]
             Html.h1 [ Attr.classes [ "text-6xl"; "font-bold"; "mb-8"; "tracking-tight" ]; Html.text "Stoream" ]
             Html.h2 [ Attr.classes [ "text-3xl"; "font-medium"; "mb-6"; "text-gray-300" ]; Html.text "极简主义者的网盘系统" ]
             Html.p [
@@ -112,10 +112,7 @@ let featuresSection () =
         Attr.classes [ "py-20"; "px-6"; "bg-white" ]
         Html.div [
             Attr.classes [ "container"; "mx-auto" ]
-            Html.h2 [
-                Attr.classes [ "text-4xl"; "font-bold"; "text-center"; "mb-16"; "text-black" ]
-                Html.text "核心特性"
-            ]
+            Html.h2 [ Attr.classes [ "text-4xl"; "font-bold"; "text-center"; "mb-16"; "text-black" ]; Html.text "核心特性" ]
 
             Html.div [
                 Attr.classes [ "grid"; "grid-cols-1"; "md:grid-cols-2"; "lg:grid-cols-3"; "gap-10"; "mt-10" ]
@@ -243,22 +240,16 @@ let techStackSection () =
         Attr.classes [ "py-20"; "px-6"; "bg-gray-50" ]
         Html.div [
             Attr.classes [ "container"; "mx-auto" ]
-            Html.h2 [
-                Attr.classes [ "text-4xl"; "font-bold"; "text-center"; "mb-16"; "text-black" ]
-                Html.text "技术栈"
-            ]
+            Html.h2 [ Attr.classes [ "text-4xl"; "font-bold"; "text-center"; "mb-16"; "text-black" ]; Html.text "技术栈" ]
 
             // Frontend tech
             Html.div [
                 Attr.classes [ "mb-16"; "text-center" ]
-                Html.h3 [
-                    Attr.classes [ "text-2xl"; "font-semibold"; "mb-8"; "text-black" ]
-                    Html.text "前端"
-                ]
-                
+                Html.h3 [ Attr.classes [ "text-2xl"; "font-semibold"; "mb-8"; "text-black" ]; Html.text "前端" ]
+
                 Html.div [
                     Attr.classes [ "grid"; "grid-cols-2"; "md:grid-cols-3"; "gap-6"; "max-w-4xl"; "mx-auto" ]
-                    
+
                     // F# Tech Card
                     Html.div [
                         Attr.classes [
@@ -285,12 +276,9 @@ let techStackSection () =
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
-                        Html.span [
-                            Attr.classes [ "font-medium"; "text-gray-800" ]
-                            Html.text "F#"
-                        ]
+                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "F#" ]
                     ]
-                    
+
                     // Fable Tech Card
                     Html.div [
                         Attr.classes [
@@ -309,7 +297,7 @@ let techStackSection () =
                             "hover:shadow-md"
                             "hover:border-blue-300"
                         ]
-                        
+
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
@@ -318,12 +306,9 @@ let techStackSection () =
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
-                        Html.span [
-                            Attr.classes [ "font-medium"; "text-gray-800" ]
-                            Html.text "Fable"
-                        ]
+                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "Fable" ]
                     ]
-                    
+
                     // Sutil Tech Card
                     Html.div [
                         Attr.classes [
@@ -350,10 +335,7 @@ let techStackSection () =
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
-                        Html.span [
-                            Attr.classes [ "font-medium"; "text-gray-800" ]
-                            Html.text "Sutil"
-                        ]
+                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "Sutil" ]
                     ]
                 ]
             ]
@@ -361,14 +343,11 @@ let techStackSection () =
             // Backend tech
             Html.div [
                 Attr.classes [ "text-center" ]
-                Html.h3 [
-                    Attr.classes [ "text-2xl"; "font-semibold"; "mb-8"; "text-black" ]
-                    Html.text "后端"
-                ]
-                
+                Html.h3 [ Attr.classes [ "text-2xl"; "font-semibold"; "mb-8"; "text-black" ]; Html.text "后端" ]
+
                 Html.div [
                     Attr.classes [ "grid"; "grid-cols-2"; "md:grid-cols-2"; "gap-6"; "max-w-3xl"; "mx-auto" ]
-                    
+
                     // F# Tech Card
                     Html.div [
                         Attr.classes [
@@ -395,12 +374,9 @@ let techStackSection () =
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
-                        Html.span [
-                            Attr.classes [ "font-medium"; "text-gray-800" ]
-                            Html.text "F#"
-                        ]
+                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "F#" ]
                     ]
-                    
+
                     // Suave Tech Card
                     Html.div [
                         Attr.classes [
@@ -427,10 +403,7 @@ let techStackSection () =
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
-                        Html.span [
-                            Attr.classes [ "font-medium"; "text-gray-800" ]
-                            Html.text "Suave"
-                        ]
+                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "Suave" ]
                     ]
                 ]
             ]

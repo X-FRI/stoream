@@ -1,16 +1,12 @@
 module App
 
 open Sutil
-open Sutil.Styling
-open Sutil.CoreElements
 
 open Types
 open State
 open System
 open Remote
 open type Feliz.length
-open Feliz
-open Sutil.Transition
 open Fable.Core.JsInterop
 
 importSideEffects "../style.css"
@@ -49,7 +45,7 @@ let view () =
         // We could add a simple navbar here
 
         // This subscribe tracks the current page and displays the appropriate view
-        Bind.el(page, viewPage model dispatch)
+        Bind.el (page, viewPage model dispatch)
     ]
 
 // Start the app

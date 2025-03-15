@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>stoream.engine</AssemblyName>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0"/>
+    <PackageReference Include="Dapper.FSharp" Version="4.9.0"/>
+    <PackageReference Include="Giraffe" Version="6.4.0"/>
+    <PackageReference Include="Giraffe.ViewEngine" Version="1.4.*"/>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0-preview.1.25081.1"/>
+    <PackageReference Include="TinyLogger" Version="3.0.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="web.config" CopyToOutputDirectory="PreserveNewest"/>
+    <Compile Include="Module\Infrastructure\Logger.fs"/>
+    <Compile Include="Module\Infrastructure\DB.fs"/>
+    <Compile Include="Module\Auth\Entity\User.Entity.fs"/>
+    <Compile Include="Module\Auth\Repository\User.Repository.fs"/>
+    <Compile Include="Module\Auth\DTO\UserLogin.DTO.fs"/>
+    <Compile Include="Module\Auth\DTO\UserRegister.DTO.fs"/>
+    <Compile Include="Module\Auth\Mapper\UserLogin.Mapper.fs"/>
+    <Compile Include="Module\Auth\Mapper\UserRegister.Mapper.fs"/>
+    <Compile Include="Module\Auth\Auth.Service.fs"/>
+    <Compile Include="Module\Auth\Auth.Handler.fs"/>
+    <Compile Include="Module\Auth\Auth.Module.fs"/>
+    <Compile Include="App.fs"/>
+    <Content Include="WebRoot\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
