@@ -4,6 +4,9 @@ node_modules
 [Oo]bj/
 
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
 bundle.js
 *.fs.js
 .fake

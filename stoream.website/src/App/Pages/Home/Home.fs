@@ -150,8 +150,8 @@ let featuresSection () =
                             ]
                             Html.i [ Attr.classes [ "fas"; "fa-bolt"; "text-2xl" ] ]
                         ]
-                        Html.h3 [ Attr.classes [ "text-xl"; "font-semibold"; "mb-4"; "text-black" ]; Html.text "高效快速" ]
-                        Html.p [ Attr.classes [ "text-gray-600" ]; Html.text "优化的存储和传输机制，确保文件操作的高速响应" ]
+                        Html.h3 [ Attr.classes [ "text-xl"; "font-semibold"; "mb-4"; "text-black" ]; Html.text "极简快速" ]
+                        Html.p [ Attr.classes [ "text-gray-600" ]; Html.text "基于 .NET 9.0 强大的 Native AOT 支持和高效的 GC，内存占用低，性能强" ]
                     ]
                 ]
 
@@ -188,8 +188,8 @@ let featuresSection () =
                             ]
                             Html.i [ Attr.classes [ "fas"; "fa-lock"; "text-2xl" ] ]
                         ]
-                        Html.h3 [ Attr.classes [ "text-xl"; "font-semibold"; "mb-4"; "text-black" ]; Html.text "安全可靠" ]
-                        Html.p [ Attr.classes [ "text-gray-600" ]; Html.text "内置加密和权限管理，保障您的数据安全" ]
+                        Html.h3 [ Attr.classes [ "text-xl"; "font-semibold"; "mb-4"; "text-black" ]; Html.text "美观优雅" ]
+                        Html.p [ Attr.classes [ "text-gray-600" ]; Html.text "精心设计的前端页面和业务逻辑，极简却不简陋，优雅不失美感" ]
                     ]
                 ]
 
@@ -227,7 +227,7 @@ let featuresSection () =
                             Html.i [ Attr.classes [ "fas"; "fa-feather"; "text-2xl" ] ]
                         ]
                         Html.h3 [ Attr.classes [ "text-xl"; "font-semibold"; "mb-4"; "text-black" ]; Html.text "轻量部署" ]
-                        Html.p [ Attr.classes [ "text-gray-600" ]; Html.text "极低的系统资源占用，几分钟内完成安装" ]
+                        Html.p [ Attr.classes [ "text-gray-600" ]; Html.text "以 self-hosted 为目标开发，部署极其便捷" ]
                     ]
                 ]
             ]
@@ -245,7 +245,6 @@ let techStackSection () =
             // Frontend tech
             Html.div [
                 Attr.classes [ "mb-16"; "text-center" ]
-                Html.h3 [ Attr.classes [ "text-2xl"; "font-semibold"; "mb-8"; "text-black" ]; Html.text "前端" ]
 
                 Html.div [
                     Attr.classes [ "grid"; "grid-cols-2"; "md:grid-cols-3"; "gap-6"; "max-w-4xl"; "mx-auto" ]
@@ -343,12 +342,11 @@ let techStackSection () =
             // Backend tech
             Html.div [
                 Attr.classes [ "text-center" ]
-                Html.h3 [ Attr.classes [ "text-2xl"; "font-semibold"; "mb-8"; "text-black" ]; Html.text "后端" ]
 
                 Html.div [
                     Attr.classes [ "grid"; "grid-cols-2"; "md:grid-cols-2"; "gap-6"; "max-w-3xl"; "mx-auto" ]
 
-                    // F# Tech Card
+                    // Giraffe Tech Card
                     Html.div [
                         Attr.classes [
                             "bg-white"
@@ -369,15 +367,15 @@ let techStackSection () =
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
-                                Attr.src "src/assests/fsharp-logo.svg"
-                                Attr.alt "F# Logo"
+                                Attr.src "src/assests/giraffe-logo.png"
+                                Attr.alt "Giraffe Logo"
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
-                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "F#" ]
+                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "Giraffe" ]
                     ]
 
-                    // Suave Tech Card
+                    // .NET Core Tech Card
                     Html.div [
                         Attr.classes [
                             "bg-white"
@@ -398,12 +396,12 @@ let techStackSection () =
                         Html.div [
                             Attr.classes [ "w-16"; "h-16"; "mb-4" ]
                             Html.img [
-                                Attr.src "src/assests/suave-logo.png"
-                                Attr.alt "F# Logo"
+                                Attr.src "src/assests/dotnet-core-logo.png"
+                                Attr.alt ".NET Core Logo"
                                 Attr.classes [ "w-full"; "h-full"; "object-contain" ]
                             ]
                         ]
-                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text "Suave" ]
+                        Html.span [ Attr.classes [ "font-medium"; "text-gray-800" ]; Html.text ".NET Core" ]
                     ]
                 ]
             ]

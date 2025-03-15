@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "dotnet fable watch src/App --run vite serve",
+    "dev": "dotnet fable watch src/App --verbose --run vite serve",
     "dev:prod": "dotnet fable src/App --run vite --mode production",
     "build": "dotnet fable src/App --run vite build",
     "clean": "dotnet fable clean -y"
