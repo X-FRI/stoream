@@ -13,6 +13,12 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "stoream.engine", "stoream.e
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "stoream.engine.test", "stoream.engine.test\stoream.engine.test.fsproj", "{67AE12DF-4078-48F6-9E47-7D256B9E74A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stoream.webui", "stoream.webui", "{F872E2B7-29AA-BD94-BEC1-F1E4CC71F84B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{23A3E818-8473-30BF-A248-8167651A7EA1}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "App", "stoream.webui\src\App\App.fsproj", "{284CEDEB-259B-49ED-B190-8AD3B5BAA825}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +65,18 @@ Global
 		{67AE12DF-4078-48F6-9E47-7D256B9E74A0}.Release|x64.Build.0 = Release|Any CPU
 		{67AE12DF-4078-48F6-9E47-7D256B9E74A0}.Release|x86.ActiveCfg = Release|Any CPU
 		{67AE12DF-4078-48F6-9E47-7D256B9E74A0}.Release|x86.Build.0 = Release|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Debug|x64.Build.0 = Debug|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Debug|x86.Build.0 = Debug|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Release|x64.ActiveCfg = Release|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Release|x64.Build.0 = Release|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Release|x86.ActiveCfg = Release|Any CPU
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +84,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9529D91E-02FE-AE29-EDC2-F9AEA4739859} = {5F3309B0-CCCD-CB80-47B6-D9D87D9B4402}
 		{591A2CD7-A4A4-4D14-9263-2ABEA1536397} = {9529D91E-02FE-AE29-EDC2-F9AEA4739859}
+		{23A3E818-8473-30BF-A248-8167651A7EA1} = {F872E2B7-29AA-BD94-BEC1-F1E4CC71F84B}
+		{284CEDEB-259B-49ED-B190-8AD3B5BAA825} = {23A3E818-8473-30BF-A248-8167651A7EA1}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,20 @@
+{
+  "repository": {
+    "url": "https://github.com/muqiuhan/fable-sutil-tailwind-vite-template"
+  },
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dotnet fable watch src/App --verbose --run vite serve",
+    "dev:prod": "dotnet fable src/App --run vite --mode production",
+    "build": "dotnet fable src/App --run vite build",
+    "clean": "dotnet fable clean -y"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.14",
+    "tailwindcss": "^4.0.14"
+  },
+  "devDependencies": {
+    "vite": "^6.2.2"
+  }
+}
