@@ -21,10 +21,11 @@ let private safeInit (connection : IDbConnection) =
     Logger.LogInformation "Safe initializing database"
     Logger.LogInformation $"{connection.State}"
 
+    Dapper.FSharp.SQLite.OptionTypes.register ()
+    connection.Open ()
+
     match connection.State with
-    | ConnectionState.Open ->
-        Dapper.FSharp.SQLite.OptionTypes.register ()
-        (connection, false)
+    | ConnectionState.Open -> (connection, false)
     | _ ->
         Logger.LogWarning "The database file was not found. Do you want to create and initialize it? [Y/n]"
         match Console.ReadLine () |> _.ToLower() with
