@@ -8,12 +8,14 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.OpenApi.Models
 open Giraffe
+open Giraffe.EndpointRouting
 open stoream.engine.Module.Auth
 open stoream.engine.Module.Infrastructure
 open stoream.engine.Module.Infrastructure.Logger
 
-let App = choose [ AuthModule.Handlers; setStatusCode 404 >=> text "Not Found" ]
+let App = [ AuthModule.Endpoints ]
 
 let ErrorHandler (ex : Exception) (logger : ILogger) =
     logger.LogError (ex, "An unhandled exception has occurred while executing the request.")
@@ -31,10 +33,30 @@ let ConfigureApp (app : IApplicationBuilder) =
         | false -> app.UseGiraffeErrorHandler(ErrorHandler).UseHttpsRedirection ()
     end
         .UseCors(ConfigureCors)
-        .UseGiraffe
-        App
+        .UseRouting()
+        .UseSwagger()
+        .UseSwaggerUI()
+        .UseGiraffe(App)
+        .UseGiraffe (setStatusCode 404 >=> text "Not Found")
 
-let ConfigureServices (services : IServiceCollection) = services.AddCors().AddGiraffe().AddRouting () |> ignore
+let ConfigureServices (services : IServiceCollection) =
+    let openApiInfo = OpenApiInfo ()
+    openApiInfo.Description <- "stoream"
+    openApiInfo.Title <- "stoream"
+    openApiInfo.Version <- "v1"
+    openApiInfo.Contact <- OpenApiContact ()
+    openApiInfo.Contact.Name <- "Somhairle H. Marisol"
+    openApiInfo.Contact.Email <- "muqiu-han@outlook.com"
+
+    services
+        .AddCors()
+        .AddGiraffe()
+        .AddRouting()
+        .AddEndpointsApiExplorer()
+        .AddSwaggerGen (fun opt ->
+            opt.SwaggerDoc ("v1", openApiInfo)
+            opt.SupportNonNullableReferenceTypes ())
+    |> ignore
 
 let ConfigureLogging (builder : ILoggingBuilder) = builder.AddConsole().AddDebug () |> LoggingBuilder
 
@@ -51,8 +73,7 @@ let main args =
                 .UseContentRoot(contentRoot)
                 .Configure(Action<IApplicationBuilder> ConfigureApp)
                 .ConfigureServices(ConfigureServices)
-                .ConfigureLogging
-                ConfigureLogging
+                .ConfigureLogging (ConfigureLogging)
             |> ignore)
         .Build()
         .Run ()
