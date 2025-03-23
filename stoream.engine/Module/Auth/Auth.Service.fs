@@ -12,13 +12,13 @@ let UserLogin (userLoginRequestDTO : UserLoginRequestDTO) : Task<HttpHandler> = 
     let! user = Repository.User.FindUnique userLoginRequestDTO.Username
 
     if user.MoveNext () |> not then
-        Logger.LogWarning $"There is no user named '{userLoginRequestDTO.Username}' in the database"
+        Logger.LogError $"There is no user named '{userLoginRequestDTO.Username}' in the database"
         return RequestErrors.BAD_REQUEST "Wrong username or password!"
     else if BCrypt.Verify (userLoginRequestDTO.Password, user.Current.PasswordHash) then
         Logger.LogInformation $"User {userLoginRequestDTO.Username} successfully logged in"
-        return Successful.OK ""
+        return Successful.OK (json { Id = user.Current.Id.ToString () })
     else
-        Logger.LogWarning "User password is incorrect"
+        Logger.LogError "User password is incorrect"
         return RequestErrors.BAD_REQUEST "Wrong username or password!"
 }
 

@@ -20,9 +20,6 @@ let UserRegister : HttpHandler =
 let UserLogin : HttpHandler =
     fun (next : HttpFunc) (ctx : HttpContext) -> task {
         let! userLoginDTO = ctx.BindJsonAsync<UserLoginRequestDTO> ()
-
-        return!
-            userLoginDTO
-            |> AuthService.UserLogin
-            |> fun response -> json response next ctx
+        let! response = AuthService.UserLogin userLoginDTO
+        return! response next ctx
     }

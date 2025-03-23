@@ -7,18 +7,22 @@ open Giraffe.EndpointRouting
 open Giraffe.OpenApi
 
 let private TAG = "Auth"
-let private SUMMARY = "验证相关"
+let private SUMMARY = "User and authentication"
+
+let private commonEndpointConfiguration endpoint =
+    endpoint
+    |> configureEndpoint _.WithTags(TAG)
+    |> configureEndpoint _.WithSummary(SUMMARY)
 
 let Endpoints =
     POST [
         (route "/auth/login" AuthHandler.UserLogin)
-        |> configureEndpoint _.WithTags(TAG)
-        |> configureEndpoint _.WithSummary(SUMMARY)
-        |> configureEndpoint _.WithDescription("登陆")
+        |> commonEndpointConfiguration
         |> addOpenApi begin
-            OpenApiConfig (requestBody = RequestBody typeof<UserLoginRequestDTO>, responseBodies = [| ResponseBody typeof<string> |])
+            OpenApiConfig (requestBody = RequestBody typeof<UserLoginRequestDTO>, responseBodies = [| ResponseBody typeof<UserLoginResponseDTO> |])
         end
 
-        route "auth/register" AuthHandler.UserRegister
-        |> addOpenApi (OpenApiConfig (requestBody = RequestBody (typeof<UserRegisterRequestDTO>)))
+        route "/auth/register" AuthHandler.UserRegister
+        |> commonEndpointConfiguration
+        |> addOpenApi begin OpenApiConfig (requestBody = RequestBody typeof<UserRegisterRequestDTO>) end
     ]
