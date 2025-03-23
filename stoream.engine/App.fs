@@ -22,7 +22,11 @@ let ErrorHandler (ex : Exception) (logger : ILogger) =
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 let ConfigureCors (builder : CorsPolicyBuilder) =
-    builder.WithOrigins("http://localhost:5000", "https://localhost:5001").AllowAnyMethod().AllowAnyHeader ()
+    builder
+        .WithOrigins("http://localhost:5000", "https://localhost:5001", "http://localhost:5173")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials ()
     |> ignore
 
 let ConfigureApp (app : IApplicationBuilder) =
