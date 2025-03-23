@@ -15,6 +15,9 @@
   <ItemGroup>
     <PackageReference Include="Sutil" Version="2.*"/>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="EngineAPI\Engine.fsproj"/>
+  </ItemGroup>
   <Target Name="ReallyClean" AfterTargets="Clean">
     <!-- Remove obj folder -->
     <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>

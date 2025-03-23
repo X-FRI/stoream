@@ -1,6 +1,20 @@
 module Stoream.Webui.Pages.Login
 
+open System.Net.Http
+open Engine.Types
 open Sutil
+open Engine
+
+let UserLogin () =
+    let client = EngineClient "http://localhost:5000/"
+    async {
+        try
+            let! response = client.PostAuthLogin { username = Some "hell"; password = Some "123456" }
+            printfn $"{response}"
+        with :? HttpRequestException as e ->
+            printfn $"({e.StatusCode}): {e.Message}"
+    }
+    |> Async.Start
 
 let create () =
     // login container
@@ -56,6 +70,7 @@ let create () =
                         "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-zinc-700 hover:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 transition-colors duration-200 cursor-pointer"
                     Attr.type' "submit"
                     Attr.text "Login"
+                    Ev.onClick (fun _ -> UserLogin ())
                 ]
 
                 // Tip: If you don't have an account, click here to register.

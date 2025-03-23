@@ -11,7 +11,7 @@
     <PackageReference Include="Dapper.FSharp" Version="4.9.0"/>
     <PackageReference Include="Giraffe" Version="7.0.2"/>
     <PackageReference Include="Giraffe.OpenApi" Version="0.0.1"/>
-    <PackageReference Include="Giraffe.ViewEngine" Version="1.4.0" />
+    <PackageReference Include="Giraffe.ViewEngine" Version="1.4.0"/>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0-preview.1.25081.1"/>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0"/>
     <PackageReference Include="TinyLogger" Version="3.0.0"/>
